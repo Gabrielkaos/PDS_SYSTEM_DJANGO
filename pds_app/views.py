@@ -46,6 +46,20 @@ SECTIONS = {
 }
 
 
+from django.shortcuts import redirect, get_object_or_404
+from .models import CompleteForm
+
+def delete_form(request, form_id):
+    form = get_object_or_404(CompleteForm, id=form_id)
+    
+    if request.method == "POST":
+        form.delete()
+        return redirect('home') 
+    
+    
+    return redirect('home')
+
+
 def section_view(request, section):
     
     if section not in SECTIONS:
