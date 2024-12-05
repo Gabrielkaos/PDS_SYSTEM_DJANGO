@@ -1,7 +1,7 @@
 
 {% extends 'pds_app/home.html' %}
 
-{% block sidebar %}
+{% block sidebar1 %}
     {% for section, details in SECTIONS.items %}
         {% if section == active_section %}
             <span class="active">{{ details.name }}</span>
@@ -9,11 +9,11 @@
             <a href="#" class="disabled-link">{{ details.name }}</a>
         {% endif %}
     {% endfor %}
-{% endblock sidebar %}
+{% endblock sidebar1 %}
 
 
 <!-- Clickable -->
-{% block sidebar1 %}
+{% block sidebar %}
     {% for section, details in SECTIONS.items %}
         {% if section == active_section %}
             <span class="active">{{ details.name }}</span>
@@ -23,7 +23,7 @@
             </a>
         {% endif %}
     {% endfor %}
-{% endblock sidebar1 %}
+{% endblock sidebar %}
 
 {% block content %}
 {% endblock content %}
