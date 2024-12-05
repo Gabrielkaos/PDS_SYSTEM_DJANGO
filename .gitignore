@@ -1,2 +1,4 @@
 /.venv
 /db.sqlite3
+/*.pyc
+/pds_app/migrations/
