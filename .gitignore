@@ -2,3 +2,5 @@
 /db.sqlite3
 /*.pyc
 /pds_app/migrations/
+/pds/__pycache__/
+/pds_app/__pycache__/
