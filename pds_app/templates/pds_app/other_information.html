@@ -1,0 +1,242 @@
+{% extends 'pds_app/create_form.html' %}
+
+{% block content %}
+<h2>Other Information Form</h1>
+<form method="post" class="general-form" id="general-form">
+    {% csrf_token %}
+    <input type="hidden" id="hidden-form-name" name="form_name" value="">
+
+    
+    <fieldset>
+        <legend>Relatives by Consanguinity or Affinity</legend>
+        <div class="form-row">
+            <label>Within Third Degree:</label>
+            {{ form.with_third_degree }}
+        </div>
+        <div class="form-row">
+            <label>Within Fourth Degree:</label>
+            {{ form.with_fourth_degree }}
+        </div>
+        <div class="form-row">
+            <label>Details (if any):</label>
+            {{ form.fourth_degree_details }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Administrative and Criminal Offenses</legend>
+        <div class="form-row">
+            <label>Administrative Offense:</label>
+            {{ form.offense }}
+        </div>
+        <div class="form-row">
+            <label>Details:</label>
+            {{ form.offense_details }}
+        </div>
+        <div class="form-row">
+            <label>Criminally Charged:</label>
+            {{ form.criminal }}
+        </div>
+        <div class="form-row">
+            <label>Details:</label>
+            {{ form.criminal_details }}
+        </div>
+        <div class="form-row">
+            <label>Date of Criminal Charge:</label>
+            {{ form.criminal_date }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Conviction</legend>
+        <div class="form-row">
+            <label>Convicted of Crime:</label>
+            {{ form.convicted }}
+        </div>
+        <div class="form-row">
+            <label>Details:</label>
+            {{ form.convicted_details }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Service Separation</legend>
+        <div class="form-row">
+            <label>Separated from Service:</label>
+            {{ form.sep_service }}
+        </div>
+        <div class="form-row">
+            <label>Details:</label>
+            {{ form.sep_service_details }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Election-Related Questions</legend>
+        <div class="form-row">
+            <label>Candidate in Election:</label>
+            {{ form.candidate }}
+        </div>
+        <div class="form-row">
+            <label>Details:</label>
+            {{ form.candidate_details }}
+        </div>
+        <div class="form-row">
+            <label>Resigned for Campaign:</label>
+            {{ form.resign_candid }}
+        </div>
+        <div class="form-row">
+            <label>Details:</label>
+            {{ form.resign_candid_details }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Immigration or Permanent Residency</legend>
+        <div class="form-row">
+            <label>Immigrant/Permanent Resident:</label>
+            {{ form.immigrant_status }}
+        </div>
+        <div class="form-row">
+            <label>Details:</label>
+            {{ form.immigrant_details }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Membership and Status</legend>
+        <div class="form-row">
+            <label>Member of Indigenous Group:</label>
+            {{ form.indigenous_group_member }}
+        </div>
+        <div class="form-row">
+            <label>Person with Disability:</label>
+            {{ form.disability_status }}
+        </div>
+        <div class="form-row">
+            <label>Solo Parent:</label>
+            {{ form.solo_parent_status }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>References</legend>
+        <div class="form-row">
+            <label>Reference Name:</label>
+            {{ form.reference_name }}
+        </div>
+        <div class="form-row">
+            <label>Reference Address:</label>
+            {{ form.reference_address }}
+        </div>
+        <div class="form-row">
+            <label>Reference Contact:</label>
+            {{ form.reference_contact }}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Government Issued ID</legend>
+        <div class="form-row">
+            <label>ID Type:</label>
+            {{ form.government_id }}
+        </div>
+        <div class="form-row">
+            <label>ID Number:</label>
+            {{ form.government_id_number }}
+        </div>
+        <div class="form-row">
+            <label>Issue Date:</label>
+            {{ form.id_issue_date }}
+        </div>
+        <div class="form-row">
+            <label>Issue Place:</label>
+            {{ form.id_issue_place }}
+        </div>
+    </fieldset>
+
+    <!-- <button type="submit" class="submit-btn">Next</button> -->
+    <button id="openModalBtn" class="submit-btn" type="button" disabled>Finish Form</button>
+
+</form>
+
+<div id="attendanceModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span id="closeModalBtn" class="close">&times;</span>
+        <h3 style="text-align: center;">Save Form</h3>
+        <label for="form-name">Enter the name of the form:</label>
+        <input type="text" id="modal-form-name" name="form_name" placeholder="Form Name" required>
+        <br><br>
+        <button id="saveFormBtn" class="submit-btn">Save</button>
+    </div>
+</div>
+
+
+<script>
+    function validateForm() {
+        const form = document.querySelector('#general-form'); 
+        const inputs = form.querySelectorAll('input[required]'); // Select only required inputs
+        let allFilled = true;
+    
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                allFilled = false;
+            }
+        });
+    
+        const finishFormButton = document.getElementById('openModalBtn'); 
+        finishFormButton.disabled = !allFilled;
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        const modal = document.getElementById("attendanceModal");
+        const openModalBtn = document.getElementById("openModalBtn");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        
+    
+        // Open the modal
+        openModalBtn.addEventListener("click", function() {
+          modal.style.display = "flex";
+        });
+    
+        closeModalBtn.addEventListener("click", function() {
+          modal.style.display = "none";
+        });
+    
+        window.addEventListener("click", function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        });
+
+        const saveFormBtn = document.getElementById("saveFormBtn");
+        const hiddenFormNameInput = document.getElementById("hidden-form-name");
+        const modalFormNameInput = document.getElementById("modal-form-name");
+        const form = document.getElementById("general-form");
+
+        saveFormBtn.addEventListener("click", function(){
+            const formName = modalFormNameInput.value.trim();
+            if (formName) {
+                hiddenFormNameInput.value = formName;
+                alert("Saved!");
+                form.submit(); 
+            } else {
+                alert("Please enter a form name.");
+            }
+        });
+
+        // Attach change event listeners to all input fields
+        const inputs = document.querySelectorAll('#general-form input[required]');
+        inputs.forEach(input => {
+            input.addEventListener('input', validateForm);
+        });
+
+        validateForm();
+        
+      });
+    
+    
+</script>
+    
+{% endblock content %}

@@ -1,0 +1,75 @@
+{% extends 'pds_app/create_form.html' %}
+
+{% block content %}
+    <h2>Educational Background</h2>
+    <form method="post" class="educational-background-form">
+        {% csrf_token %}
+        <table class="educational-table">
+            <thead>
+                <tr>
+                    <th class="educational-table-header">Level</th>
+                    <th class="educational-table-header">Name of School</th>
+                    <th class="educational-table-header">Basic Ed/Degree/Course</th>
+                    <th class="educational-table-header">Period of Attendance (From)</th>
+                    <th class="educational-table-header">Period of Attendance (To)</th>
+                    <th class="educational-table-header">Highest Level/Units Earned</th>
+                    <th class="educational-table-header">Year Graduated</th>
+                    <th class="educational-table-header">Scholarship/Honors Received</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="educational-level">Elementary</td>
+                    <td>{{ form.elementary_name }}</td>
+                    <td>{{ form.elementary_degree_course }}</td>
+                    <td>{{ form.elementary_period_from }}</td>
+                    <td>{{ form.elementary_period_to }}</td>
+                    <td>{{ form.elementary_highest_level_units }}</td>
+                    <td>{{ form.elementary_year_graduated }}</td>
+                    <td>{{ form.elementary_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Secondary</td>
+                    <td>{{ form.secondary_name }}</td>
+                    <td>{{ form.secondary_degree_course }}</td>
+                    <td>{{ form.secondary_period_from }}</td>
+                    <td>{{ form.secondary_period_to }}</td>
+                    <td>{{ form.secondary_highest_level_units }}</td>
+                    <td>{{ form.secondary_year_graduated }}</td>
+                    <td>{{ form.secondary_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Vocational/Trade Course</td>
+                    <td>{{ form.vocational_name }}</td>
+                    <td>{{ form.vocational_degree_course }}</td>
+                    <td>{{ form.vocational_period_from }}</td>
+                    <td>{{ form.vocational_period_to }}</td>
+                    <td>{{ form.vocational_highest_level_units }}</td>
+                    <td>{{ form.vocational_year_graduated }}</td>
+                    <td>{{ form.vocational_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">College</td>
+                    <td>{{ form.college_name }}</td>
+                    <td>{{ form.college_degree_course }}</td>
+                    <td>{{ form.college_period_from }}</td>
+                    <td>{{ form.college_period_to }}</td>
+                    <td>{{ form.college_highest_level_units }}</td>
+                    <td>{{ form.college_year_graduated }}</td>
+                    <td>{{ form.college_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Graduate Studies</td>
+                    <td>{{ form.graduate_name }}</td>
+                    <td>{{ form.graduate_degree_course }}</td>
+                    <td>{{ form.graduate_period_from }}</td>
+                    <td>{{ form.graduate_period_to }}</td>
+                    <td>{{ form.graduate_highest_level_units }}</td>
+                    <td>{{ form.graduate_year_graduated }}</td>
+                    <td>{{ form.graduate_honors }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="submit-btn">Next</button>
+    </form>
+{% endblock content %}

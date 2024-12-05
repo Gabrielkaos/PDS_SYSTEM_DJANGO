@@ -1,0 +1,13 @@
+{% extends 'pds_app/home.html' %}
+
+
+{% block sidebar %}
+    {% for form in forms %}
+        <a href="{% url 'all_forms' form.id %}">{{form.name}}</a>
+    {% empty %}
+    <p>No forms created.</p>
+    {% endfor %}
+{% endblock sidebar %}
+
+{% block content %}
+{% endblock content %}

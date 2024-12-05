@@ -1,0 +1,96 @@
+{% extends 'pds_app/create_form.html' %}
+
+{% block content %}
+<h2>Family Background</h2>
+<form method="post" class="general-form">
+    {% csrf_token %}
+    
+    <!-- Spouse Information Section -->
+    <fieldset>
+        <legend>Spouse Information</legend>
+        <div class="form-row">
+            <label for="id_spouse_surname">Spouse's Surname:</label>
+            {{ form.spouse_surname }}
+        </div>
+        <div class="form-row">
+            <label for="id_spouse_firstname">Spouse's First Name:</label>
+            {{ form.spouse_firstname }}
+        </div>
+        <div class="form-row">
+            <label for="id_spouse_middlename">Spouse's Middle Name:</label>
+            {{ form.spouse_middlename }}
+        </div>
+        <div class="form-row">
+            <label for="id_spouse_name_extension">Spouse's Name Extension:</label>
+            {{ form.spouse_name_extension }}
+        </div>
+        <div class="form-row">
+            <label for="id_spouse_occupation">Spouse's Occupation:</label>
+            {{ form.spouse_occupation }}
+        </div>
+        <div class="form-row">
+            <label for="id_spouse_employer_business_name">Employer/Business Name:</label>
+            {{ form.spouse_employer_business_name }}
+        </div>
+        <div class="form-row">
+            <label for="id_spouse_business_address">Business Address:</label>
+            {{ form.spouse_business_address }}
+        </div>
+        <div class="form-row">
+            <label for="id_spouse_telephone_no">Telephone Number:</label>
+            {{ form.spouse_telephone_no }}
+        </div>
+    </fieldset>
+
+    <!-- Children Information Section -->
+    <fieldset>
+        <legend>Children Information</legend>
+        <div class="form-row">
+            <label for="id_children_name">Names of Children:</label>
+            {{ form.children_name }}
+        </div>
+        <div class="form-row">
+            <label for="id_children_date_of_birth">Children's Date of Birth:</label>
+            {{ form.children_date_of_birth }}
+        </div>
+    </fieldset>
+
+    <!-- Parents' Information Section -->
+    <fieldset>
+        <legend>Parents' Information</legend>
+        <h3>Father's Information</h3>
+        <div class="form-row">
+            <label for="id_father_surname">Father's Surname:</label>
+            {{ form.father_surname }}
+        </div>
+        <div class="form-row">
+            <label for="id_father_firstname">Father's First Name:</label>
+            {{ form.father_firstname }}
+        </div>
+        <div class="form-row">
+            <label for="id_father_middlename">Father's Middle Name:</label>
+            {{ form.father_middlename }}
+        </div>
+        <div class="form-row">
+            <label for="id_father_name_extension">Father's Name Extension:</label>
+            {{ form.father_name_extension }}
+        </div>
+
+        <h3>Mother's Information</h3>
+        <div class="form-row">
+            <label for="id_mother_maiden_lastname">Mother's Maiden Last Name:</label>
+            {{ form.mother_maiden_lastname }}
+        </div>
+        <div class="form-row">
+            <label for="id_mother_firstname">Mother's First Name:</label>
+            {{ form.mother_firstname }}
+        </div>
+        <div class="form-row">
+            <label for="id_mother_middlename">Mother's Middle Name:</label>
+            {{ form.mother_middlename }}
+        </div>
+    </fieldset>
+
+    <button type="submit" class="submit-btn">Next</button>
+</form>
+{% endblock content %}

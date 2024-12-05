@@ -1,0 +1,261 @@
+
+
+.modal {
+    position: fixed;          
+    top: 0;
+    left: 0;
+    width: 100%;               
+    height: 100%;              
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex;             
+    align-items: center;       
+    justify-content: center;   
+    z-index: 1001;          
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    width: 500px;                
+    max-width: 600px;          
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    position: relative;        
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 40px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover{
+    color:red;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    position: fixed;
+    margin-bottom: 85px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header p a {
+    color: #00aaff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+
+.container {
+    display: flex;
+    margin-top: 85px;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f1efef;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 85px);
+    position: fixed;
+}
+
+.sidebar a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+
+.sidebar a.active {
+    background-color: #00aaff;
+    color: white;
+    cursor: default;
+    pointer-events: none;
+}
+
+.sidebar span.active {
+    background-color: #00aaff;
+    color: white;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar a.disabled-link {
+    color: #aaa; /* Faded color to indicate disabled state */
+    cursor: not-allowed;
+    pointer-events: none; /* Prevent clicking */
+    text-decoration: none;
+}
+
+
+.content {
+    margin-left: 300px; 
+    width: 80%;
+    padding: 20px;
+}
+
+/* Personal Info Form*/
+/* General Form Styles */
+.general-form {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    /* background-color: #f9f9f9; */
+}
+
+/* Fieldset and Legend */
+fieldset {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    /* width: 100%; */
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+/* Form Rows */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form-row label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    /* width: 100%; */
+}
+
+/* Buttons */
+.submit-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+    }
+}
+
+
+
+
+.educational-form-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table design */
+.educational-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.educational-table-header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.educational-level {
+    font-weight: bold;
+    text-align: center;
+}
+
+td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+td input,
+td select {
+    /* width: 100%; */
+    padding: 8px;
+    margin: 4px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+
+.educational-background-form table {
+    margin-bottom: 20px;
+}
+
+
+/* Button Styling */
+.add-row-btn, .delete-row-btn {
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-row-btn:hover, .delete-row-btn:hover {
+    background-color: #0056b3;
+}
