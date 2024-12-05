@@ -186,6 +186,24 @@
     
         const finishFormButton = document.getElementById('openModalBtn'); 
         finishFormButton.disabled = !allFilled;
+        if(!allFilled){
+            alert("Fill missing required fields before Finishing!")
+        }
+    }
+
+    function validateFormInitial() {
+        const form = document.querySelector('#general-form'); 
+        const inputs = form.querySelectorAll('input[required]'); // Select only required inputs
+        let allFilled = true;
+    
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                allFilled = false;
+            }
+        });
+    
+        const finishFormButton = document.getElementById('openModalBtn'); 
+        finishFormButton.disabled = !allFilled;
     }
     
     document.addEventListener("DOMContentLoaded", function() {
@@ -226,13 +244,7 @@
             }
         });
 
-        // Attach change event listeners to all input fields
-        const inputs = document.querySelectorAll('#general-form input[required]');
-        inputs.forEach(input => {
-            input.addEventListener('input', validateForm);
-        });
-
-        validateForm();
+        validateFormInitial()
         
       });
     
