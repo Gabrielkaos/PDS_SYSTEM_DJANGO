@@ -3,7 +3,7 @@
 
 {% block sidebar %}
     {% for form in forms %}
-        <a href="{% url 'all_forms' form.id %}">{{form.name}}</a>
+        <a href="{% url 'all_forms' form.id %}"><strong>&#183; {{form.name}}</strong></a>
     {% empty %}
     <p>No forms created.</p>
     {% endfor %}
