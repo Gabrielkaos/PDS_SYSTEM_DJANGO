@@ -304,7 +304,4 @@ def home(request):
 
 
 def create_form(request):
-    form = CompleteForm.objects.create(name=f"Form {CompleteForm.objects.count() + 1}")
-    session_id = request.session.session_key or request.session.create()
-    FormSession.objects.create(session_id=session_id, complete_form=form)
     return redirect('section_view', section='personal_info')

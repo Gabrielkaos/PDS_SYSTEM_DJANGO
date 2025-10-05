@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+
 
 class PersonalInformation(models.Model):
 
@@ -22,8 +24,18 @@ class PersonalInformation(models.Model):
         ('Divorced', 'Divorced'),
         ('Separated', 'Separated')
     ])
-    height = models.DecimalField(max_digits=5, decimal_places=2, help_text="Height in cm")
-    weight = models.DecimalField(max_digits=5, decimal_places=2, help_text="Weight in kg")
+    height = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        validators=[MinValueValidator(50), MaxValueValidator(300)],  # reasonable range in cm
+        help_text="Height in cm"
+    )
+    weight = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2,
+        validators=[MinValueValidator(20), MaxValueValidator(300)],  # reasonable range in kg
+        help_text="Weight in kg"
+    )
     blood_type = models.CharField(max_length=3, choices=[
         ('A+', 'A+'), ('A-', 'A-'), 
         ('B+', 'B+'), ('B-', 'B-'), 
@@ -52,8 +64,28 @@ class PersonalInformation(models.Model):
 
     
     telephone_no = models.CharField(max_length=15, blank=True, null=True)
-    mobile_no = models.CharField(max_length=15)
-    email_address = models.EmailField(blank=True, null=True)
+    mobile_no = models.CharField(
+        max_length=15,
+        validators=[RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')]
+    )
+    email_address = models.EmailField(unique=True, blank=True, null=True)
+
+    @property
+    def full_name(self):
+        """Return full name"""
+        if self.middlename:
+            return f"{self.firstname} {self.middlename} {self.surname}"
+        return f"{self.firstname} {self.surname}"
+    
+    @property
+    def age(self):
+        """Calculate age from date of birth"""
+        from datetime import date
+        today = date.today()
+        return today.year - self.date_of_birth.year - (
+            (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day)
+        )
+    
 
     def __str__(self):
         return f"{self.firstname} {self.middlename or ''} {self.surname}"
@@ -61,6 +93,12 @@ class PersonalInformation(models.Model):
     class Meta:
         verbose_name = "Personal Information"
         verbose_name_plural = "Personal Information"
+        indexes = [
+            models.Index(fields=['surname', 'firstname']),
+            models.Index(fields=['agent_employee_number']),
+            models.Index(fields=['email_address']),
+        ]
+
 
 class FamilyBackground(models.Model):
 
@@ -76,9 +114,7 @@ class FamilyBackground(models.Model):
     spouse_telephone_no = models.CharField(max_length=15, blank=True, null=True)
 
    
-    children_name = models.TextField(blank=True, null=True, help_text="Enter names separated by commas")
-    children_date_of_birth = models.TextField(blank=True, null=True, help_text="Enter birth dates separated by commas (e.g., 2023-01-01)")
-
+    children = models.ManyToManyField('Child', blank=True)
     
     father_surname = models.CharField(max_length=100)
     father_firstname = models.CharField(max_length=100)
@@ -97,6 +133,12 @@ class FamilyBackground(models.Model):
         verbose_name = "Family Background"
         verbose_name_plural = "Family Backgrounds"
 
+class Child(models.Model):
+    name = models.CharField(max_length=100)
+    date_of_birth = models.DateField()
+    family_background = models.ForeignKey(FamilyBackground, on_delete=models.CASCADE)
+
+
 class VoluntaryWork(models.Model):
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
@@ -114,6 +156,7 @@ class VoluntaryWork(models.Model):
     class Meta:
         verbose_name = "Voluntary Work"
         verbose_name_plural = "Voluntary Works"
+        ordering = ['-from_date']
 
 class LearningDevelopment(models.Model):
 
@@ -160,9 +203,24 @@ class WorkExperience(models.Model):
     def __str__(self):
         return f"{self.position_title} - {self.department}"
 
+    @property
+    def duration_years(self):
+        """Calculate duration in years"""
+        from datetime import date
+        if self.to_date:
+            delta = self.to_date - self.from_date
+            return delta.days / 365.25
+        return (date.today() - self.from_date).days / 365.25
+
     class Meta:
         verbose_name = "Work Experience"
         verbose_name_plural = "Work Experiences"
+        ordering = ['-from_date']  
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.to_date and self.from_date > self.to_date:
+            raise ValidationError("End date cannot be before start date")
 
 
 class OtherInformation(models.Model):
@@ -277,18 +335,7 @@ class OtherInformation(models.Model):
     )
 
     # References
-    reference_name = models.TextField(
-        max_length=200, 
-        verbose_name="Reference Name"
-    )
-    reference_address = models.TextField(
-        max_length=200, 
-        verbose_name="Reference Address"
-    )
-    reference_contact = models.TextField(
-        max_length=200, 
-        verbose_name="Reference Contact"
-    )
+    references = models.ManyToManyField('Reference', blank=True)
 
     # Government Issued ID
     government_id = models.CharField(
@@ -317,6 +364,11 @@ class OtherInformation(models.Model):
     def __str__(self):
         return f"Other Information for {self.id}"
 
+class Reference(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.TextField()
+    contact_number = models.CharField(max_length=20)
+    other_information = models.ForeignKey(OtherInformation, on_delete=models.CASCADE)
 
 
 class CivilServiceEligibility(models.Model):
@@ -398,29 +450,29 @@ class EducationalBackground(models.Model):
         verbose_name_plural = "Educational Backgrounds"
 
 
-class CompleteForm(models.Model):
 
+
+class CompleteForm(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="forms")
     name = models.CharField(max_length=200)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-    personal_information = models.ForeignKey(PersonalInformation, on_delete=models.CASCADE)
-    other_information = models.ForeignKey(OtherInformation, on_delete=models.CASCADE)
-    family_background = models.ForeignKey(FamilyBackground, on_delete=models.CASCADE)
+    
+    # Make foreign keys optional for flexibility
+    personal_information = models.ForeignKey(PersonalInformation, on_delete=models.CASCADE, null=True, blank=True)
+    family_background = models.ForeignKey(FamilyBackground, on_delete=models.CASCADE, null=True, blank=True)
+    educational_background = models.ForeignKey(EducationalBackground, on_delete=models.CASCADE, null=True, blank=True)
+    other_information = models.ForeignKey(OtherInformation, on_delete=models.CASCADE, null=True, blank=True)
+    
+    # ManyToMany relationships are fine as is
     voluntary_work = models.ManyToManyField(VoluntaryWork, blank=True)
     learning_development = models.ManyToManyField(LearningDevelopment, blank=True)
     work_experience = models.ManyToManyField(WorkExperience, blank=True)
     civil_service = models.ManyToManyField(CivilServiceEligibility, blank=True)
-    educational_background = models.ForeignKey(EducationalBackground, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.user.username}"
 
-
-class FormSession(models.Model):
-    session_id = models.CharField(max_length=255, unique=True)
-    complete_form = models.OneToOneField('CompleteForm', on_delete=models.CASCADE, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-created_at']
