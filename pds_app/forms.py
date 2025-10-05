@@ -7,7 +7,7 @@ class OtherInformationForm(forms.ModelForm):
     class Meta:
         model = OtherInformation
         fields = '__all__'  # Include all fields from the model
-        exclude = ['date_accomplished']
+        exclude = ['date_accomplished', 'user']
         widgets = {
             'with_third_degree': forms.Select(),
             'with_fourth_degree': forms.Select(),
@@ -31,7 +31,7 @@ class EducationalBackgroundForm(forms.ModelForm):
     class Meta:
         model = EducationalBackground
         fields = '__all__'
-        exclude = ['name']
+        exclude = ['user']
         widgets = {
             'elementary_name': forms.TextInput(attrs={'placeholder': 'Name of Elementary School'}),
             'elementary_period_from': forms.TextInput(attrs={'placeholder': 'YYYY'}),
@@ -66,7 +66,7 @@ class PersonalInformationForm(forms.ModelForm):
     class Meta:
         model = PersonalInformation
         fields = '__all__'
-        exclude = ['form_id']
+        exclude = ['user']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
             'sex': forms.Select(),
@@ -88,7 +88,7 @@ class FamilyBackgroundForm(forms.ModelForm):
     class Meta:
         model = FamilyBackground
         fields = '__all__'
-        exclude = ['form_id']
+        exclude = ['user']
         widgets = {
             'spouse_business_address': forms.Textarea(attrs={'rows': 3}),
             'children_name': forms.Textarea(attrs={'rows': 3}),

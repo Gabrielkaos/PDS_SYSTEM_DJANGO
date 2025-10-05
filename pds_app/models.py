@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 
 
 class PersonalInformation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="personal_informations")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
     
@@ -102,7 +103,7 @@ class PersonalInformation(models.Model):
 
 class FamilyBackground(models.Model):
 
-    # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="family_backgrounds")
    
     spouse_surname = models.CharField(max_length=100, blank=True, null=True)
     spouse_firstname = models.CharField(max_length=100, blank=True, null=True)
@@ -140,6 +141,7 @@ class Child(models.Model):
 
 
 class VoluntaryWork(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voluntary_works")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -159,6 +161,7 @@ class VoluntaryWork(models.Model):
         ordering = ['-from_date']
 
 class LearningDevelopment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="learning_developments")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -178,6 +181,7 @@ class LearningDevelopment(models.Model):
         verbose_name_plural = "Learning and Development"
 
 class WorkExperience(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="work_experiences")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -224,6 +228,7 @@ class WorkExperience(models.Model):
 
 
 class OtherInformation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="other_informations")
     # Relatives by consanguinity or affinity
     with_third_degree = models.CharField(
         max_length=3, 
@@ -372,6 +377,7 @@ class Reference(models.Model):
 
 
 class CivilServiceEligibility(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="civil_service_eligibilities")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -396,7 +402,7 @@ class CivilServiceEligibility(models.Model):
         verbose_name_plural = "Civil Service Eligibilities"
 
 class EducationalBackground(models.Model):
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="educational_backgrounds")
     # name = models.CharField(max_length=255)
 
 
@@ -448,8 +454,6 @@ class EducationalBackground(models.Model):
     class Meta:
         verbose_name = "Educational Background"
         verbose_name_plural = "Educational Backgrounds"
-
-
 
 
 class CompleteForm(models.Model):
