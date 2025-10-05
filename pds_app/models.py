@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class PersonalInformation(models.Model):
 
@@ -163,103 +163,6 @@ class WorkExperience(models.Model):
     class Meta:
         verbose_name = "Work Experience"
         verbose_name_plural = "Work Experiences"
-
-# class OtherInformation(models.Model):
-#     # Are you related by consanguinity or affinity to the appointing or recommending authority, or to the
-#     # chief of bureau or office or to the person who has immediate supervision over you in the Office, 
-#     # Bureau or Department where you will be apppointed,
-
-#     # a. within the third degree?
-    
-#     with_third_degree = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Third Degree (Y/N)"
-#     )
-#     # b. within the fourth degree (for Local Government Unit - Career Employees)?
-#     with_fourth_degree = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Fourth Degree (Y/N)"
-#     )
-#     fourth_degree_details = models.TextField(max_length=200, blank=True, null=True)
-
-#     ##########################################################################
-#     # a. Have you ever been found guilty of any administrative offense?
-
-#     offense = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Administrative Offense (Y/N)"
-#     )
-#     offense_details = models.TextField(max_length=200, blank=True, null=True)
-#     # b. Have you been criminally charged before any court?     
-#     criminial = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Criminal Charged Before (Y/N)"
-#     )
-#     criminial_details = models.TextField(max_length=200, blank=True, null=True)
-#     criminal_date = models.DateField(null=True, blank=True)
-
-#     ##########################################################################
-#     # Have you ever been convicted of any crime or violation of any law, decree, ordinance or regulation by any court or tribunal?
-
-#     convicted = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Convicted Before (Y/N)"
-#     )
-#     convicted_details = models.TextField(max_length=200, blank=True, null=True)
-
-#     ##########################################################################
-#     # Have you ever been separated from the service in any of the following modes: resignation, retirement, dropped from the rolls, \
-#     # dismissal, termination, end of term, finished contract or phased out (abolition) in the public or private sector?
-#     sep_service = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Separated from Service (Y/N)"
-#     )
-#     sep_service_details = models.TextField(max_length=200, blank=True, null=True)
-
-#     ##########################################################################
-#     # a. Have you ever been a candidate in a national or local election held within the last year (except Barangay election)?
-#     candidate = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Government Candidate Before (Y/N)"
-#     )
-#     candidate_details = models.TextField(max_length=200, blank=True, null=True)
-#     # b. Have you resigned from the government service during the three (3)-month period before the last election to promote/actively campaign for a national or local candidate?
-#     resign_candid = models.CharField(
-#         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-#         verbose_name="Resign Government Candidate (Y/N)"
-#     )
-#     resign_candid_details = models.TextField(max_length=200, blank=True, null=True)
-
-#     ##########################################################################
-#     # Have you acquired the status of an immigrant or permanent resident of another country?
-
-#     ##########################################################################
-#     #Pursuant to: (a) Indigenous People's Act (RA 8371); (b) Magna Carta for Disabled Persons (RA 7277); and (c) Solo Parents Welfare Act of 2000 (RA 8972), please answer the following items:
-            
-#     # a. 		Are you a member of any indigenous group?
-            
-#     # b. 		Are you a person with disability?
-            
-#     # c. 		Are you a solo parent?
-
-
-#     ##########################################################################
-#     # REFERENCES
-#     # (just make this TextField)
-#     # Their Name
-#     # Their Addresses
-#     # Their Telephone Address
-
-#     ##########################################################################
-#     # Government Issued ID: 
-#     # ID/License/Passport No.: 
-#     # Date/Place of Issuance:
-    
-
-#     ##########################################################################
-#     # ID Picture 
-#     # Signature
-#     # Date Accomplished
 
 
 class OtherInformation(models.Model):
@@ -496,16 +399,28 @@ class EducationalBackground(models.Model):
 
 
 class CompleteForm(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="forms")
     name = models.CharField(max_length=200)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
     personal_information = models.ForeignKey(PersonalInformation, on_delete=models.CASCADE)
     other_information = models.ForeignKey(OtherInformation, on_delete=models.CASCADE)
     family_background = models.ForeignKey(FamilyBackground, on_delete=models.CASCADE)
-    voluntary_work = models.ManyToManyField(VoluntaryWork)
-    learning_development = models.ManyToManyField(LearningDevelopment)
-    work_experience = models.ManyToManyField(WorkExperience)
-    civil_service = models.ManyToManyField(CivilServiceEligibility)
+    voluntary_work = models.ManyToManyField(VoluntaryWork, blank=True)
+    learning_development = models.ManyToManyField(LearningDevelopment, blank=True)
+    work_experience = models.ManyToManyField(WorkExperience, blank=True)
+    civil_service = models.ManyToManyField(CivilServiceEligibility, blank=True)
     educational_background = models.ForeignKey(EducationalBackground, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
+
+class FormSession(models.Model):
+    session_id = models.CharField(max_length=255, unique=True)
+    complete_form = models.OneToOneField('CompleteForm', on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
