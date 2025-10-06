@@ -1,5 +1,123 @@
 
 
+/*
+ forms.html
+
+*/
+.forms-header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #007BFF;
+}
+
+.forms-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.3em;
+}
+
+.forms-count {
+    margin: 5px 0 0 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.forms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.form-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-color: #007BFF;
+}
+
+.form-link {
+    flex-grow: 1;
+    text-decoration: none;
+    color: inherit;
+}
+
+.form-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-date {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.delete-form {
+    margin-left: 10px;
+}
+
+.delete-btn {
+    background: #dc3545;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+.delete-btn svg {
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.empty-state p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.create-first-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.create-first-btn:hover {
+    background: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+
+/*
+*/
+
+
+
+
+
+
 .modal {
     position: fixed;          
     top: 0;
