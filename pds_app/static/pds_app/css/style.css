@@ -44,6 +44,18 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    position: fixed;
+    margin-bottom: 85px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    text-align: center;
+} */
 header {
     background-color: #333;
     color: white;
@@ -55,6 +67,10 @@ header {
     width: 100%;
     z-index: 1000;
     text-align: center;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 header h1 {

@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import *
 from .forms import PersonalInformationForm, FamilyBackgroundForm, EducationalBackgroundForm, OtherInformationForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 
 SECTIONS = {
@@ -521,16 +523,18 @@ def get_latest_objects(cls):
     
     return only
 
-
+@login_required
 def home(request):
-    forms1 = CompleteForm.objects.all()
-    return render(request,"pds_app/forms.html",{"forms":forms1})
+    forms1 = CompleteForm.objects.filter(user=request.user)
+    return render(request, "pds_app/forms.html", {"forms": forms1})
+    # forms1 = CompleteForm.objects.all()
+    # return render(request,"pds_app/forms.html",{"forms":forms1})
 
-
+@login_required
 def create_form(request):
     return redirect('section_view', section='personal_info')
 
-
+@login_required
 def all_forms(request, form_id):
     """View specific form - ensure user can only see their own forms"""
     form_instance = get_object_or_404(CompleteForm, id=form_id, user=request.user)
@@ -541,7 +545,7 @@ def all_forms(request, form_id):
         "forms": user_forms
     })
 
-
+@login_required
 def forms(request):
     """Show only user's forms"""
     user_forms = CompleteForm.objects.filter(user=request.user)
@@ -557,3 +561,9 @@ def delete_form(request, form_id):
         return redirect('forms')
     
     return redirect('forms')
+
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('login')

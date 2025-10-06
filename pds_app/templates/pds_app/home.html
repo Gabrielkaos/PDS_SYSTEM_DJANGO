@@ -6,14 +6,22 @@
     <title>Personal Data Sheet</title>
     {% load static %}
     <link rel="stylesheet" href="{%static 'pds_app/css/style.css' %}">
+    <link rel="stylesheet" href="{%static 'pds_app/css/logout.css' %}">
 </head>
 <body>
     <header>
         <h1>Pesonal Data Sheet System</h1>
         <p>
             <a href="{% url 'create_form' %}">Create Form</a> -
-            <a href="{% url 'forms' %}">See Forms</a>
+            <a href="{% url 'forms' %}">Dashboard</a>
         </p>
+
+        <div class="logout-section">
+            {% if user.is_authenticated %}
+                <span class="welcome-text">Welcome, {{ user.username }}!</span>
+                <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            {% endif %}
+        </div>
     </header>
     
 
