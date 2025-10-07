@@ -4,20 +4,23 @@
 <div class="edit-form-container">
     <h2>Edit Form: {{ form_instance.name }}</h2>
     
-    <form method="post" class="general-form">
+    <form method="post" class="general-form" id="general-form">
         {% csrf_token %}
+        <input type="hidden" id="hidden-form-name" name="form_name" value="{{ form_instance.name }}">
+        
         
         <!-- Form Name -->
         <fieldset>
             <legend>Form Name</legend>
             <div class="form-row">
-                <label for="id_form_name">Form Name:</label>
-                <input type="text" name="form_name" value="{{ form_instance.name }}" id="id_form_name" class="form-name-input">
+                <label for="modal-form-name">Form Name:</label>
+                <input type="text" id="modal-form-name" name="form_name" value="{{ form_instance.name }}" placeholder="Form Name" required>
             </div>
         </fieldset>
 
         <!-- Personal Information -->
         <h3 style="text-align:center;">Personal Information</h3>
+        
         <fieldset>
             <legend>Personal Details</legend>
             <div class="form-row">
@@ -136,6 +139,7 @@
 
         <!-- Family Background -->
         <h3 style="text-align:center;">Family Background</h3>
+        
         <fieldset>
             <legend>Spouse Information</legend>
             <div class="form-row">
@@ -186,6 +190,7 @@
 
         <fieldset>
             <legend>Parents' Information</legend>
+            <h3>Father's Information</h3>
             <div class="form-row">
                 <label for="id_father_surname">Father's Surname:</label>
                 {{ family_form.father_surname }}
@@ -202,6 +207,8 @@
                 <label for="id_father_name_extension">Father's Name Extension:</label>
                 {{ family_form.father_name_extension }}
             </div>
+
+            <h3>Mother's Information</h3>
             <div class="form-row">
                 <label for="id_mother_maiden_lastname">Mother's Maiden Last Name:</label>
                 {{ family_form.mother_maiden_lastname }}
@@ -216,46 +223,514 @@
             </div>
         </fieldset>
 
-        <!-- Educational Background -->
-        <h3 style="text-align:center;">Educational Background</h3>
-        <fieldset>
-            <legend>Elementary</legend>
-            <div class="form-row">
-                <label for="id_elementary_name">Name of School:</label>
-                {{ education_form.elementary_name }}
-            </div>
-            <div class="form-row">
-                <label for="id_elementary_degree_course">Degree/Course:</label>
-                {{ education_form.elementary_degree_course }}
-            </div>
-            <div class="form-row">
-                <label for="id_elementary_period_from">Period From:</label>
-                {{ education_form.elementary_period_from }}
-            </div>
-            <div class="form-row">
-                <label for="id_elementary_period_to">Period To:</label>
-                {{ education_form.elementary_period_to }}
-            </div>
-            <div class="form-row">
-                <label for="id_elementary_year_graduated">Year Graduated:</label>
-                {{ education_form.elementary_year_graduated }}
-            </div>
-            <div class="form-row">
-                <label for="id_elementary_honors">Honors:</label>
-                {{ education_form.elementary_honors }}
-            </div>
-        </fieldset>
-
-        <!-- Add similar fieldsets for Secondary, Vocational, College, Graduate -->
+        
 
         <!-- Other Information -->
         <h3 style="text-align:center;">Other Information</h3>
-        <!-- Add other information fieldsets following your create form structure -->
+        
+        <fieldset>
+            <legend>Relatives by Consanguinity or Affinity</legend>
+            <div class="form-row">
+                <label>Within Third Degree:</label>
+                {{ other_form.with_third_degree }}
+            </div>
+            <div class="form-row">
+                <label>Within Fourth Degree:</label>
+                {{ other_form.with_fourth_degree }}
+            </div>
+            <div class="form-row">
+                <label>Details (if any):</label>
+                {{ other_form.fourth_degree_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Administrative and Criminal Offenses</legend>
+            <div class="form-row">
+                <label>Administrative Offense:</label>
+                {{ other_form.offense }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ other_form.offense_details }}
+            </div>
+            <div class="form-row">
+                <label>Criminally Charged:</label>
+                {{ other_form.criminal }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ other_form.criminal_details }}
+            </div>
+            <div class="form-row">
+                <label>Date of Criminal Charge:</label>
+                {{ other_form.criminal_date }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Conviction</legend>
+            <div class="form-row">
+                <label>Convicted of Crime:</label>
+                {{ other_form.convicted }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ other_form.convicted_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Service Separation</legend>
+            <div class="form-row">
+                <label>Separated from Service:</label>
+                {{ other_form.sep_service }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ other_form.sep_service_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Election-Related Questions</legend>
+            <div class="form-row">
+                <label>Candidate in Election:</label>
+                {{ other_form.candidate }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ other_form.candidate_details }}
+            </div>
+            <div class="form-row">
+                <label>Resigned for Campaign:</label>
+                {{ other_form.resign_candid }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ other_form.resign_candid_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Immigration or Permanent Residency</legend>
+            <div class="form-row">
+                <label>Immigrant/Permanent Resident:</label>
+                {{ other_form.immigrant_status }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ other_form.immigrant_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Membership and Status</legend>
+            <div class="form-row">
+                <label>Member of Indigenous Group:</label>
+                {{ other_form.indigenous_group_member }}
+            </div>
+            <div class="form-row">
+                <label>Person with Disability:</label>
+                {{ other_form.disability_status }}
+            </div>
+            <div class="form-row">
+                <label>Solo Parent:</label>
+                {{ other_form.solo_parent_status }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>References</legend>
+            <div class="form-row">
+                <label>Reference Name:</label>
+                {{ other_form.reference_name }}
+            </div>
+            <div class="form-row">
+                <label>Reference Address:</label>
+                {{ other_form.reference_address }}
+            </div>
+            <div class="form-row">
+                <label>Reference Contact:</label>
+                {{ other_form.reference_contact }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Government Issued ID</legend>
+            <div class="form-row">
+                <label>ID Type:</label>
+                {{ other_form.government_id }}
+            </div>
+            <div class="form-row">
+                <label>ID Number:</label>
+                {{ other_form.government_id_number }}
+            </div>
+            <div class="form-row">
+                <label>Issue Date:</label>
+                {{ other_form.id_issue_date }}
+            </div>
+            <div class="form-row">
+                <label>Issue Place:</label>
+                {{ other_form.id_issue_place }}
+            </div>
+        </fieldset>
+        </div>
+
+        <!-- Educational Background -->
+        <h3 style="text-align:center;">Educational Background</h3>
+        
+        <div class="educational-background-form">
+            <table class="educational-table">
+                <thead>
+                    <tr>
+                        <th class="educational-table-header">Level</th>
+                        <th class="educational-table-header">Name of School</th>
+                        <th class="educational-table-header">Basic Ed/Degree/Course</th>
+                        <th class="educational-table-header">Period of Attendance (From)</th>
+                        <th class="educational-table-header">Period of Attendance (To)</th>
+                        <th class="educational-table-header">Highest Level/Units Earned</th>
+                        <th class="educational-table-header">Year Graduated</th>
+                        <th class="educational-table-header">Scholarship/Honors Received</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="educational-level">Elementary</td>
+                        <td>{{ education_form.elementary_name }}</td>
+                        <td>{{ education_form.elementary_degree_course }}</td>
+                        <td>{{ education_form.elementary_period_from }}</td>
+                        <td>{{ education_form.elementary_period_to }}</td>
+                        <td>{{ education_form.elementary_highest_level_units }}</td>
+                        <td>{{ education_form.elementary_year_graduated }}</td>
+                        <td>{{ education_form.elementary_honors }}</td>
+                    </tr>
+                    <tr>
+                        <td class="educational-level">Secondary</td>
+                        <td>{{ education_form.secondary_name }}</td>
+                        <td>{{ education_form.secondary_degree_course }}</td>
+                        <td>{{ education_form.secondary_period_from }}</td>
+                        <td>{{ education_form.secondary_period_to }}</td>
+                        <td>{{ education_form.secondary_highest_level_units }}</td>
+                        <td>{{ education_form.secondary_year_graduated }}</td>
+                        <td>{{ education_form.secondary_honors }}</td>
+                    </tr>
+                    <tr>
+                        <td class="educational-level">Vocational/Trade Course</td>
+                        <td>{{ education_form.vocational_name }}</td>
+                        <td>{{ education_form.vocational_degree_course }}</td>
+                        <td>{{ education_form.vocational_period_from }}</td>
+                        <td>{{ education_form.vocational_period_to }}</td>
+                        <td>{{ education_form.vocational_highest_level_units }}</td>
+                        <td>{{ education_form.vocational_year_graduated }}</td>
+                        <td>{{ education_form.vocational_honors }}</td>
+                    </tr>
+                    <tr>
+                        <td class="educational-level">College</td>
+                        <td>{{ education_form.college_name }}</td>
+                        <td>{{ education_form.college_degree_course }}</td>
+                        <td>{{ education_form.college_period_from }}</td>
+                        <td>{{ education_form.college_period_to }}</td>
+                        <td>{{ education_form.college_highest_level_units }}</td>
+                        <td>{{ education_form.college_year_graduated }}</td>
+                        <td>{{ education_form.college_honors }}</td>
+                    </tr>
+                    <tr>
+                        <td class="educational-level">Graduate Studies</td>
+                        <td>{{ education_form.graduate_name }}</td>
+                        <td>{{ education_form.graduate_degree_course }}</td>
+                        <td>{{ education_form.graduate_period_from }}</td>
+                        <td>{{ education_form.graduate_period_to }}</td>
+                        <td>{{ education_form.graduate_highest_level_units }}</td>
+                        <td>{{ education_form.graduate_year_graduated }}</td>
+                        <td>{{ education_form.graduate_honors }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Civil Service Eligibility -->
+        <h3 style="text-align:center;">Civil Service Eligibility</h3>
+
+        <div class="educational-background-form">
+            <table id="eligibility-table" class="educational-table">
+                <thead>
+                    <tr>
+                        <th class="educational-table-header">Career Service/Eligibility</th>
+                        <th class="educational-table-header">Rating</th>
+                        <th class="educational-table-header">Date of Examination/Conferment</th>
+                        <th class="educational-table-header">Place of Examination/Conferment</th>
+                        <th class="educational-table-header">License Number</th>
+                        <th class="educational-table-header">License Validity</th>
+                        <th class="educational-table-header">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for eligibility in form_instance.civil_service.all %}
+                    <tr>
+                        <td><input type="text" name="career_service[]" value="{{ eligibility.career_service }}" required></td>
+                        <td><input type="number" name="rating[]" value="{{ eligibility.rating }}" step="0.01"></td>
+                        <td><input type="date" name="exam_date[]" value="{{ eligibility.exam_date|date:'Y-m-d' }}" required></td>
+                        <td><input type="text" name="exam_place[]" value="{{ eligibility.exam_place }}" required></td>
+                        <td><input type="text" name="license_number[]" value="{{ eligibility.license_number }}"></td>
+                        <td><input type="date" name="license_validity[]" value="{{ eligibility.license_validity|date:'Y-m-d' }}"></td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td><input type="text" name="career_service[]" placeholder="Career Service/Eligibility" required></td>
+                        <td><input type="number" name="rating[]" step="0.01" placeholder="Rating"></td>
+                        <td><input type="date" name="exam_date[]" required></td>
+                        <td><input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment" required></td>
+                        <td><input type="text" name="license_number[]" placeholder="License Number"></td>
+                        <td><input type="date" name="license_validity[]"></td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+            <button type="button" class="add-row-btn" onclick="addCivilServiceRow()">Add Row</button>
+        </div>
+
+        <h3 style="text-align:center;">Work Experience</h3>
+
+        <div class="educational-background-form">
+            <table id="work-experience-table" class="educational-table">
+                <thead>
+                    <tr>
+                        <th class="educational-table-header">From</th>
+                        <th class="educational-table-header">To</th>
+                        <th class="educational-table-header">Position Title</th>
+                        <th class="educational-table-header">Department/Agency/Office/Company</th>
+                        <th class="educational-table-header">Monthly Salary</th>
+                        <th class="educational-table-header">Salary Grade & STEP</th>
+                        <th class="educational-table-header">Status of Appointment</th>
+                        <th class="educational-table-header">Govt Service (Y/N)</th>
+                        <th class="educational-table-header">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for experience in form_instance.work_experience.all %}
+                    <tr>
+                        <td><input type="date" name="work_from_date[]" value="{{ experience.from_date|date:'Y-m-d' }}" required></td>
+                        <td><input type="date" name="work_to_date[]" value="{{ experience.to_date|date:'Y-m-d' }}"></td>
+                        <td><input type="text" name="work_position_title[]" value="{{ experience.position_title }}" required></td>
+                        <td><input type="text" name="work_department[]" value="{{ experience.department }}" required></td>
+                        <td><input type="number" name="work_monthly_salary[]" value="{{ experience.monthly_salary }}" required></td>
+                        <td><input type="text" name="work_salary_grade[]" value="{{ experience.salary_grade }}"></td>
+                        <td><input type="text" name="work_status[]" value="{{ experience.status_of_appointment }}" required></td>
+                        <td>
+                            <select name="work_govt_service[]" required>
+                                <option value="Y" {% if experience.govt_service == 'Y' %}selected{% endif %}>Yes</option>
+                                <option value="N" {% if experience.govt_service == 'N' %}selected{% endif %}>No</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td><input type="date" name="work_from_date[]" required></td>
+                        <td><input type="date" name="work_to_date[]"></td>
+                        <td><input type="text" name="work_position_title[]" placeholder="Position Title" required></td>
+                        <td><input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company" required></td>
+                        <td><input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary" required></td>
+                        <td><input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP"></td>
+                        <td><input type="text" name="work_status[]" placeholder="Status of Appointment" required></td>
+                        <td>
+                            <select name="work_govt_service[]" required>
+                                <option value="Y">Yes</option>
+                                <option value="N">No</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+            <button type="button" class="add-row-btn" onclick="addWorkExperienceRow()">Add Row</button>
+        </div>
+
+        <!-- Voluntary Work -->
+        <h3 style="text-align:center;">Voluntary Work</h3>
+
+        <div class="educational-background-form">
+            <table id="voluntary-work-table" class="educational-table">
+                <thead>
+                    <tr>
+                        <th class="educational-table-header">Name and Address of Organization</th>
+                        <th class="educational-table-header">From</th>
+                        <th class="educational-table-header">To</th>
+                        <th class="educational-table-header">Number of Hours</th>
+                        <th class="educational-table-header">Position/Nature of Work</th>
+                        <th class="educational-table-header">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for work in form_instance.voluntary_work.all %}
+                    <tr>
+                        <td><input type="text" name="voluntary_org[]" value="{{ work.organization_name }}" required></td>
+                        <td><input type="date" name="voluntary_from[]" value="{{ work.from_date|date:'Y-m-d' }}" required></td>
+                        <td><input type="date" name="voluntary_to[]" value="{{ work.to_date|date:'Y-m-d' }}"></td>
+                        <td><input type="number" name="voluntary_hours[]" value="{{ work.number_of_hours }}" required></td>
+                        <td><input type="text" name="voluntary_nature[]" value="{{ work.nature_of_work }}" required></td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td><input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization" required></td>
+                        <td><input type="date" name="voluntary_from[]" required></td>
+                        <td><input type="date" name="voluntary_to[]"></td>
+                        <td><input type="number" name="voluntary_hours[]" placeholder="Number of Hours" required></td>
+                        <td><input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work" required></td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+            <button type="button" class="add-row-btn" onclick="addVoluntaryWorkRow()">Add Row</button>
+        </div>
+
+        <!-- Learning and Development -->
+        <h3 style="text-align:center;">Learning and Development</h3>
+
+        <div class="educational-background-form">
+            <table id="learning-development-table" class="educational-table">
+                <thead>
+                    <tr>
+                        <th class="educational-table-header">Title</th>
+                        <th class="educational-table-header">From</th>
+                        <th class="educational-table-header">To</th>
+                        <th class="educational-table-header">Number of Hours</th>
+                        <th class="educational-table-header">Type of LD</th>
+                        <th class="educational-table-header">Conducted/Sponsored By</th>
+                        <th class="educational-table-header">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for learning in form_instance.learning_development.all %}
+                    <tr>
+                        <td><input type="text" name="learning_title[]" value="{{ learning.title }}" required></td>
+                        <td><input type="date" name="learning_from[]" value="{{ learning.from_date|date:'Y-m-d' }}" required></td>
+                        <td><input type="date" name="learning_to[]" value="{{ learning.to_date|date:'Y-m-d' }}"></td>
+                        <td><input type="number" name="learning_hours[]" value="{{ learning.number_of_hours }}" required></td>
+                        <td><input type="text" name="learning_type[]" value="{{ learning.type_of_ld }}" required></td>
+                        <td><input type="text" name="learning_conducted[]" value="{{ learning.conducted_by }}" required></td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td><input type="text" name="learning_title[]" placeholder="Title" required></td>
+                        <td><input type="date" name="learning_from[]" required></td>
+                        <td><input type="date" name="learning_to[]"></td>
+                        <td><input type="number" name="learning_hours[]" placeholder="Number of Hours" required></td>
+                        <td><input type="text" name="learning_type[]" placeholder="Type of LD" required></td>
+                        <td><input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By" required></td>
+                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+            <button type="button" class="add-row-btn" onclick="addLearningDevelopmentRow()">Add Row</button>
+        </div>
+        
 
         <div class="form-actions">
             <button type="submit" class="submit-btn">Save Changes</button>
-            <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn"> Cancel</a>
+            <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn">Cancel</a>
         </div>
     </form>
-</div>
+
+<script>
+function addVoluntaryWorkRow() {
+    const table = document.getElementById('voluntary-work-table');
+    const newRow = table.insertRow(-1);
+
+    const columns = [
+        '<input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization" required>',
+        '<input type="date" name="voluntary_from[]" required>',
+        '<input type="date" name="voluntary_to[]">',
+        '<input type="number" name="voluntary_hours[]" placeholder="Number of Hours" required>',
+        '<input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work" required>',
+        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+    ];
+
+    columns.forEach((col, index) => {
+        const cell = newRow.insertCell(index);
+        cell.innerHTML = col;
+    });
+}
+</script>
+<script>
+function addWorkExperienceRow() {
+    const table = document.getElementById('work-experience-table');
+    const newRow = table.insertRow(-1);
+
+    const columns = [
+        '<input type="date" name="work_from_date[]" required>',
+        '<input type="date" name="work_to_date[]">',
+        '<input type="text" name="work_position_title[]" placeholder="Position Title" required>',
+        '<input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company" required>',
+        '<input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary" required>',
+        '<input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP">',
+        '<input type="text" name="work_status[]" placeholder="Status of Appointment" required>',
+        '<select name="work_govt_service[]" required><option value="Y">Yes</option><option value="N">No</option></select>',
+        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+    ];
+
+    columns.forEach((col, index) => {
+        const cell = newRow.insertCell(index);
+        cell.innerHTML = col;
+    });
+}
+</script>
+
+<script>
+function addCivilServiceRow() {
+    const table = document.getElementById('eligibility-table');
+    const newRow = table.insertRow(-1);
+
+    const columns = [
+        '<input type="text" name="career_service[]" placeholder="Career Service/Eligibility" required>',
+        '<input type="number" name="rating[]" step="0.01" placeholder="Rating">',
+        '<input type="date" name="exam_date[]" required>',
+        '<input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment" required>',
+        '<input type="text" name="license_number[]" placeholder="License Number">',
+        '<input type="date" name="license_validity[]">',
+        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+    ];
+
+    columns.forEach((col, index) => {
+        const cell = newRow.insertCell(index);
+        cell.innerHTML = col;
+    });
+}
+</script>
+
+
+<script>
+function addLearningDevelopmentRow() {
+    const table = document.getElementById('learning-development-table');
+    const newRow = table.insertRow(-1);
+
+    const columns = [
+        '<input type="text" name="learning_title[]" placeholder="Title" required>',
+        '<input type="date" name="learning_from[]" required>',
+        '<input type="date" name="learning_to[]">',
+        '<input type="number" name="learning_hours[]" placeholder="Number of Hours" required>',
+        '<input type="text" name="learning_type[]" placeholder="Type of LD" required>',
+        '<input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By" required>',
+        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+    ];
+
+    columns.forEach((col, index) => {
+        const cell = newRow.insertCell(index);
+        cell.innerHTML = col;
+    });
+}
+</script>
+
 {% endblock %}
