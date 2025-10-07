@@ -479,6 +479,7 @@
             <button type="button" class="add-row-btn" onclick="addCivilServiceRow()">Add Row</button>
         </div>
 
+        <!-- Work Experience -->
         <h3 style="text-align:center;">Work Experience</h3>
 
         <div class="educational-background-form">
@@ -626,7 +627,11 @@
 
         <div class="form-actions">
             <button type="submit" class="submit-btn">Save Changes</button>
-            <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn">Cancel</a>
+            {% if creating %}
+                <a href="{% url 'forms' %}" class="cancel-btn">Cancel</a>  {# Redirect to dashboard on create cancel #}
+            {% else %}
+                <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn">Cancel</a>  {# Redirect to form detail view on edit cancel #}
+            {% endif %}
         </div>
     </form>
 

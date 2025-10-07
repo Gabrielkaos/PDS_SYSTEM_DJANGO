@@ -691,13 +691,79 @@ def edit_form(request, form_id):
         education_form = EducationalBackgroundForm(instance=form_instance.educational_background)
         other_form = OtherInformationForm(instance=form_instance.other_information)
     
+    print(form_instance.civil_service.all)
     context = {
         'form_instance': form_instance,
         'personal_form': personal_form,
         'family_form': family_form,
         'education_form': education_form,
         'other_form': other_form,
-        'editing': True
+        'creating': False
     }
     
     return render(request, 'pds_app/edit_form.html', context)
+
+
+@login_required
+def create_form(request):
+    if request.method == 'POST':
+        personal_form = PersonalInformationForm(request.POST)
+        family_form = FamilyBackgroundForm(request.POST)
+        education_form = EducationalBackgroundForm(request.POST)
+        other_form = OtherInformationForm(request.POST)
+
+        # Validation
+        valid = all([personal_form.is_valid(), family_form.is_valid(), education_form.is_valid(), other_form.is_valid()])
+
+        # Save instances
+        personal_inst = personal_form.save(commit=False)
+        family_inst = family_form.save(commit=False)
+        education_inst = education_form.save(commit=False)
+        other_inst = other_form.save(commit=False)
+
+        for inst in [personal_inst, family_inst, education_inst, other_inst]:
+            inst.user = request.user
+            inst.save()
+
+        # Create CompleteForm
+        complete_form = CompleteForm.objects.create(
+            user=request.user,
+            name=request.POST.get('form_name', 'New Form'),
+            personal_information=personal_inst,
+            family_background=family_inst,
+            educational_background=education_inst,
+            other_information=other_inst,
+            complete_status='Complete' if valid else 'Incomplete'
+        )
+
+        # Save ManyToMany related objects
+        def save_related(model, manager, fields, prefix):
+            manager.all().delete()
+            objects = []
+            for i in range(len(request.POST.getlist(f'{prefix}_career_service[]'))):
+                data = {field: request.POST.getlist(f'{prefix}_{field}[]')[i] for field in fields}
+                obj = model(user=request.user, **data)
+                obj.save()
+                objects.append(obj)
+            manager.set(objects)
+
+        # Call save_related for each ManyToMany section
+        save_related(CivilServiceEligibility, complete_form.civil_service,
+                     ['career_service', 'rating', 'exam_date', 'exam_place', 'license_number', 'license_validity'], 'career_service')
+        save_related(WorkExperience, complete_form.work_experience,
+                     ['from_date', 'to_date', 'position_title', 'department', 'monthly_salary', 'salary_grade', 'status_of_appointment', 'govt_service'], 'work')
+        save_related(VoluntaryWork, complete_form.voluntary_work,
+                     ['organization_name', 'from_date', 'to_date', 'number_of_hours', 'nature_of_work'], 'voluntary')
+        save_related(LearningDevelopment, complete_form.learning_development,
+                     ['title', 'from_date', 'to_date', 'number_of_hours', 'type_of_ld', 'conducted_by'], 'learning')
+        return redirect('forms')
+
+    else:
+        context = {
+            'personal_form': PersonalInformationForm(),
+            'family_form': FamilyBackgroundForm(),
+            'education_form': EducationalBackgroundForm(),
+            'other_form': OtherInformationForm(),
+            'creating': True,
+        }
+        return render(request, 'pds_app/edit_form.html', context)
