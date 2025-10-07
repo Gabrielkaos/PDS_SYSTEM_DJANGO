@@ -115,7 +115,8 @@ class FamilyBackground(models.Model):
     spouse_telephone_no = models.CharField(max_length=15, blank=True, null=True)
 
    
-    children = models.ManyToManyField('Child', blank=True)
+    children = models.TextField(blank=True, null=True, verbose_name='Children (Enter names separated by commas or new lines)')
+
     
     father_surname = models.CharField(max_length=100)
     father_firstname = models.CharField(max_length=100)
@@ -340,7 +341,8 @@ class OtherInformation(models.Model):
     )
 
     # References
-    references = models.ManyToManyField('Reference', blank=True)
+    references = models.TextField(blank=True, null=True, verbose_name='References (Enter details separated by new lines or commas)')
+
 
     # Government Issued ID
     government_id = models.CharField(

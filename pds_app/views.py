@@ -579,6 +579,7 @@ def edit_form(request, form_id):
         family_form = FamilyBackgroundForm(request.POST, instance=form_instance.family_background)
         education_form = EducationalBackgroundForm(request.POST, instance=form_instance.educational_background)
         other_form = OtherInformationForm(request.POST, instance=form_instance.other_information)
+
         print("Personal form errors:", personal_form.errors)
         print("Family form errors:", family_form.errors)
         print("Education form errors:", education_form.errors)
@@ -586,7 +587,9 @@ def edit_form(request, form_id):
 
         print([personal_form.is_valid(), family_form.is_valid(), education_form.is_valid(), other_form.is_valid()])
         
-        if all([personal_form.is_valid(), family_form.is_valid(), education_form.is_valid(), other_form.is_valid()]):
+        if all([personal_form.is_valid(), family_form.is_valid(), other_form.is_valid(),
+                education_form.is_valid()]):
+
             personal_form.save()
             family_form.save()
             education_form.save()

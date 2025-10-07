@@ -24,6 +24,8 @@ class OtherInformationForm(forms.ModelForm):
             'criminal_date': forms.DateInput(attrs={'type': 'date'}),
             'date_accomplished': forms.DateInput(attrs={'type': 'date'}),
             'id_issue_date': forms.DateInput(attrs={'type': 'date'}),
+            'references': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter references, separated by commas or new lines'}),
+
         }
 
 
@@ -92,8 +94,7 @@ class FamilyBackgroundForm(forms.ModelForm):
         exclude = ['user']
         widgets = {
             'spouse_business_address': forms.Textarea(attrs={'rows': 3}),
-            'children_name': forms.Textarea(attrs={'rows': 3}),
-            'children_date_of_birth': forms.Textarea(attrs={'rows': 3}),
+            'children': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter children names, separated by commas or new lines'}),
         }
         labels = {
             'spouse_surname': "Spouse's Surname",
@@ -102,8 +103,6 @@ class FamilyBackgroundForm(forms.ModelForm):
             'spouse_name_extension': "Spouse's Name Extension",
             'spouse_employer_business_name': "Employer/Business Name",
             'spouse_business_address': "Business Address",
-            'children_name': "Name of Children",
-            'children_date_of_birth': "Children's Date of Birth",
             'father_surname': "Father's Surname",
             'father_firstname': "Father's First Name",
             'father_middlename': "Father's Middle Name",
@@ -112,3 +111,4 @@ class FamilyBackgroundForm(forms.ModelForm):
             'mother_firstname': "Mother's First Name",
             'mother_middlename': "Mother's Middle Name",
         }
+

@@ -179,15 +179,10 @@
         <fieldset>
             <legend>Children Information</legend>
             <div class="form-row">
-                <label for="id_children_name">Names of Children:</label>
-                {{ family_form.children_name }}
-            </div>
-            <div class="form-row">
-                <label for="id_children_date_of_birth">Children's Date of Birth:</label>
-                {{ family_form.children_date_of_birth }}
+                {{ family_form.children}}
             </div>
         </fieldset>
-
+        
         <fieldset>
             <legend>Parents' Information</legend>
             <h3>Father's Information</h3>
@@ -343,16 +338,7 @@
         <fieldset>
             <legend>References</legend>
             <div class="form-row">
-                <label>Reference Name:</label>
-                {{ other_form.reference_name }}
-            </div>
-            <div class="form-row">
-                <label>Reference Address:</label>
-                {{ other_form.reference_address }}
-            </div>
-            <div class="form-row">
-                <label>Reference Contact:</label>
-                {{ other_form.reference_contact }}
+                {{ other_form.references }}
             </div>
         </fieldset>
 
@@ -732,5 +718,7 @@ function addLearningDevelopmentRow() {
     });
 }
 </script>
+
+
 
 {% endblock %}

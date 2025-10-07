@@ -172,14 +172,11 @@
     <!-- Children Information Section -->
     <fieldset>
         <legend>Children Information</legend>
-        <div class="form-row">
-            <label for="id_children_name">Names of Children:</label>
-            {{ form.family_background.children_name }}
-        </div>
-        <div class="form-row">
-            <label for="id_children_date_of_birth">Children's Date of Birth:</label>
-            {{ form.family_background.children_date_of_birth }}
-        </div>
+        {% if form.family_background.children %}
+            <p>{{ form.family_background.children|linebreaksbr }}</p>
+        {% else %}
+            <p>No children recorded.</p>
+        {% endif %}
     </fieldset>
 
     <!-- Parents' Information Section -->
@@ -333,18 +330,11 @@
 
     <fieldset>
         <legend>References</legend>
-        <div class="form-row">
-            <label>Reference Name:</label>
-            {{ form.other_information.reference_name }}
-        </div>
-        <div class="form-row">
-            <label>Reference Address:</label>
-            {{ form.other_information.reference_address }}
-        </div>
-        <div class="form-row">
-            <label>Reference Contact:</label>
-            {{ form.other_information.reference_contact }}
-        </div>
+        {% if form.other_information.references %}
+            <p>{{ form.other_information.references|linebreaksbr }}</p>
+        {% else %}
+            <p>No references recorded.</p>
+        {% endif %}
     </fieldset>
 
     <fieldset>
@@ -488,7 +478,7 @@
                 <td>{{i.department}}</td>
                 <td>{{i.monthly_salary}}</td>
                 <td>{{i.salary_grade}}</td>
-                <td>{{i.status_of_appointment}}/td>
+                <td>{{i.status_of_appointment}}</td>
                 <td>
                     {{i.govt_service}}
                 </td>
