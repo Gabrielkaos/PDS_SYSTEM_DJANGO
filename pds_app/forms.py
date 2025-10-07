@@ -55,12 +55,13 @@ class EducationalBackgroundForm(forms.ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Make all fields required
-        for field_name, field in self.fields.items():
-            field.required = True
-            # Optionally, add 'required' attribute to widgets for frontend validation
-            if hasattr(field.widget.attrs, 'required'):
-                field.widget.attrs['required'] = 'required'
+        # # Make all fields required
+        # for field_name, field in self.fields.items():
+        #     field.required = True
+        #     # Optionally, add 'required' attribute to widgets for frontend validation
+        #     if hasattr(field.widget.attrs, 'required'):
+        #         field.widget.attrs['required'] = 'required'
+        pass
 
 class PersonalInformationForm(forms.ModelForm):
     class Meta:

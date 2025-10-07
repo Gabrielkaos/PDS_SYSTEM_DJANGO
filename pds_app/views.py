@@ -567,3 +567,54 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
     return redirect('login')
+
+
+
+def edit_form(request, form_id):
+    form_instance = get_object_or_404(CompleteForm, id=form_id, user=request.user)
+    
+    if request.method == 'POST':
+        print("POST")
+        personal_form = PersonalInformationForm(request.POST, instance=form_instance.personal_information)
+        family_form = FamilyBackgroundForm(request.POST, instance=form_instance.family_background)
+        education_form = EducationalBackgroundForm(request.POST, instance=form_instance.educational_background)
+        other_form = OtherInformationForm(request.POST, instance=form_instance.other_information)
+        print("Personal form errors:", personal_form.errors)
+        print("Family form errors:", family_form.errors)
+        print("Education form errors:", education_form.errors)
+        print("Other form errors:", other_form.errors)
+
+        print([personal_form.is_valid(), family_form.is_valid(), education_form.is_valid(), other_form.is_valid()])
+        
+        if all([personal_form.is_valid(), family_form.is_valid(), education_form.is_valid(), other_form.is_valid()]):
+            personal_form.save()
+            family_form.save()
+            education_form.save()
+            other_form.save()
+            print("Saved")
+            
+            # Update form name if provided
+            if 'form_name' in request.POST:
+                form_instance.name = request.POST['form_name']
+                form_instance.save()
+                print("saved form name")
+            
+            return redirect('all_forms', form_id=form_id)
+    
+    else:
+        # Pre-populate forms with existing data
+        personal_form = PersonalInformationForm(instance=form_instance.personal_information)
+        family_form = FamilyBackgroundForm(instance=form_instance.family_background)
+        education_form = EducationalBackgroundForm(instance=form_instance.educational_background)
+        other_form = OtherInformationForm(instance=form_instance.other_information)
+    
+    context = {
+        'form_instance': form_instance,
+        'personal_form': personal_form,
+        'family_form': family_form,
+        'education_form': education_form,
+        'other_form': other_form,
+        'editing': True
+    }
+    
+    return render(request, 'pds_app/edit_form.html', context)

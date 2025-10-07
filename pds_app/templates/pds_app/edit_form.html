@@ -1,0 +1,261 @@
+{% extends 'pds_app/home.html' %}
+
+{% block content %}
+<div class="edit-form-container">
+    <h2>Edit Form: {{ form_instance.name }}</h2>
+    
+    <form method="post" class="general-form">
+        {% csrf_token %}
+        
+        <!-- Form Name -->
+        <fieldset>
+            <legend>Form Name</legend>
+            <div class="form-row">
+                <label for="id_form_name">Form Name:</label>
+                <input type="text" name="form_name" value="{{ form_instance.name }}" id="id_form_name" class="form-name-input">
+            </div>
+        </fieldset>
+
+        <!-- Personal Information -->
+        <h3 style="text-align:center;">Personal Information</h3>
+        <fieldset>
+            <legend>Personal Details</legend>
+            <div class="form-row">
+                <label for="id_surname">Surname:</label>
+                {{ personal_form.surname }}
+            </div>
+            <div class="form-row">
+                <label for="id_firstname">First Name:</label>
+                {{ personal_form.firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_middlename">Middle Name:</label>
+                {{ personal_form.middlename }}
+            </div>
+            <div class="form-row">
+                <label for="id_date_of_birth">Date of Birth:</label>
+                {{ personal_form.date_of_birth }}
+            </div>
+            <div class="form-row">
+                <label for="id_place_of_birth">Place of Birth:</label>
+                {{ personal_form.place_of_birth }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Physical Details</legend>
+            <div class="form-row">
+                <label for="id_sex">Sex:</label>
+                {{ personal_form.sex }}
+            </div>
+            <div class="form-row">
+                <label for="id_civil_status">Civil Status:</label>
+                {{ personal_form.civil_status }}
+            </div>
+            <div class="form-row">
+                <label for="id_height">Height (cm):</label>
+                {{ personal_form.height }}
+            </div>
+            <div class="form-row">
+                <label for="id_weight">Weight (kg):</label>
+                {{ personal_form.weight }}
+            </div>
+            <div class="form-row">
+                <label for="id_blood_type">Blood Type:</label>
+                {{ personal_form.blood_type }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Contact Information</legend>
+            <div class="form-row">
+                <label for="id_residential_address">Residential Address:</label>
+                {{ personal_form.residential_address }}
+            </div>
+            <div class="form-row">
+                <label for="id_residential_zip_code">Residential Zip Code:</label>
+                {{ personal_form.residential_zip_code }}
+            </div>
+            <div class="form-row">
+                <label for="id_permanent_address">Permanent Address:</label>
+                {{ personal_form.permanent_address }}
+            </div>
+            <div class="form-row">
+                <label for="id_permanent_zip_code">Permanent Zip Code:</label>
+                {{ personal_form.permanent_zip_code }}
+            </div>
+            <div class="form-row">
+                <label for="id_telephone_no">Telephone Number:</label>
+                {{ personal_form.telephone_no }}
+            </div>
+            <div class="form-row">
+                <label for="id_mobile_no">Mobile Number:</label>
+                {{ personal_form.mobile_no }}
+            </div>
+            <div class="form-row">
+                <label for="id_email_address">Email Address:</label>
+                {{ personal_form.email_address }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Government IDs</legend>
+            <div class="form-row">
+                <label for="id_gsis">GSIS Number:</label>
+                {{ personal_form.gsis }}
+            </div>
+            <div class="form-row">
+                <label for="id_pag_ibig">Pag-IBIG Number:</label>
+                {{ personal_form.pag_ibig }}
+            </div>
+            <div class="form-row">
+                <label for="id_philhealth">PhilHealth Number:</label>
+                {{ personal_form.philhealth }}
+            </div>
+            <div class="form-row">
+                <label for="id_sss_no">SSS Number:</label>
+                {{ personal_form.sss_no }}
+            </div>
+            <div class="form-row">
+                <label for="id_tin_no">TIN Number:</label>
+                {{ personal_form.tin_no }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Other Information</legend>
+            <div class="form-row">
+                <label for="id_citizenship">Citizenship:</label>
+                {{ personal_form.citizenship }}
+            </div>
+            <div class="form-row">
+                <label for="id_agent_employee_number">Agent Employee Number:</label>
+                {{ personal_form.agent_employee_number }}
+            </div>
+        </fieldset>
+
+        <!-- Family Background -->
+        <h3 style="text-align:center;">Family Background</h3>
+        <fieldset>
+            <legend>Spouse Information</legend>
+            <div class="form-row">
+                <label for="id_spouse_surname">Spouse's Surname:</label>
+                {{ family_form.spouse_surname }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_firstname">Spouse's First Name:</label>
+                {{ family_form.spouse_firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_middlename">Spouse's Middle Name:</label>
+                {{ family_form.spouse_middlename }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_name_extension">Spouse's Name Extension:</label>
+                {{ family_form.spouse_name_extension }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_occupation">Spouse's Occupation:</label>
+                {{ family_form.spouse_occupation }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_employer_business_name">Employer/Business Name:</label>
+                {{ family_form.spouse_employer_business_name }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_business_address">Business Address:</label>
+                {{ family_form.spouse_business_address }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_telephone_no">Telephone Number:</label>
+                {{ family_form.spouse_telephone_no }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Children Information</legend>
+            <div class="form-row">
+                <label for="id_children_name">Names of Children:</label>
+                {{ family_form.children_name }}
+            </div>
+            <div class="form-row">
+                <label for="id_children_date_of_birth">Children's Date of Birth:</label>
+                {{ family_form.children_date_of_birth }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Parents' Information</legend>
+            <div class="form-row">
+                <label for="id_father_surname">Father's Surname:</label>
+                {{ family_form.father_surname }}
+            </div>
+            <div class="form-row">
+                <label for="id_father_firstname">Father's First Name:</label>
+                {{ family_form.father_firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_father_middlename">Father's Middle Name:</label>
+                {{ family_form.father_middlename }}
+            </div>
+            <div class="form-row">
+                <label for="id_father_name_extension">Father's Name Extension:</label>
+                {{ family_form.father_name_extension }}
+            </div>
+            <div class="form-row">
+                <label for="id_mother_maiden_lastname">Mother's Maiden Last Name:</label>
+                {{ family_form.mother_maiden_lastname }}
+            </div>
+            <div class="form-row">
+                <label for="id_mother_firstname">Mother's First Name:</label>
+                {{ family_form.mother_firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_mother_middlename">Mother's Middle Name:</label>
+                {{ family_form.mother_middlename }}
+            </div>
+        </fieldset>
+
+        <!-- Educational Background -->
+        <h3 style="text-align:center;">Educational Background</h3>
+        <fieldset>
+            <legend>Elementary</legend>
+            <div class="form-row">
+                <label for="id_elementary_name">Name of School:</label>
+                {{ education_form.elementary_name }}
+            </div>
+            <div class="form-row">
+                <label for="id_elementary_degree_course">Degree/Course:</label>
+                {{ education_form.elementary_degree_course }}
+            </div>
+            <div class="form-row">
+                <label for="id_elementary_period_from">Period From:</label>
+                {{ education_form.elementary_period_from }}
+            </div>
+            <div class="form-row">
+                <label for="id_elementary_period_to">Period To:</label>
+                {{ education_form.elementary_period_to }}
+            </div>
+            <div class="form-row">
+                <label for="id_elementary_year_graduated">Year Graduated:</label>
+                {{ education_form.elementary_year_graduated }}
+            </div>
+            <div class="form-row">
+                <label for="id_elementary_honors">Honors:</label>
+                {{ education_form.elementary_honors }}
+            </div>
+        </fieldset>
+
+        <!-- Add similar fieldsets for Secondary, Vocational, College, Graduate -->
+
+        <!-- Other Information -->
+        <h3 style="text-align:center;">Other Information</h3>
+        <!-- Add other information fieldsets following your create form structure -->
+
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Save Changes</button>
+            <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn"> Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

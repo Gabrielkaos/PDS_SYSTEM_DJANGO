@@ -2,6 +2,9 @@
 {% extends 'pds_app/forms.html' %}
 
 {% block content %}
+<div class="form-actions">
+    <a href="{% url 'edit_form' form.id %}" class="edit-btn">Edit Form</a>
+</div>
 <h2>Form: {{form.name}}</h2>
 
 <form class="general-form">
