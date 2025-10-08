@@ -1,14 +1,30 @@
-{% extends 'pds_app/home.html' %}
+{% extends 'pds_app/forms.html' %}
 
 {% block content %}
 <div class="edit-form-container">
-    <h2>Edit Form: {{ form_instance.name }}</h2>
+    {% if creating %}
+        <h2>Create Form</h2>
+    {% else %}
+        <h2>Edit Form: {{ form_instance.name }}</h2>
+    {% endif %}
+
+    
+
+    
     
     <form method="post" class="general-form" id="general-form">
         {% csrf_token %}
         <input type="hidden" id="hidden-form-name" name="form_name" value="{{ form_instance.name }}">
         
-        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         <!-- Form Name -->
         <fieldset>
             <legend>Form Name</legend>
@@ -361,23 +377,23 @@
                 {{ other_form.id_issue_place }}
             </div>
         </fieldset>
-        </div>
+        <!-- </div> -->
 
         <!-- Educational Background -->
         <h3 style="text-align:center;">Educational Background</h3>
         
-        <div class="educational-background-form">
-            <table class="educational-table">
+        <div class="background-form">
+            <table class="main-table">
                 <thead>
                     <tr>
-                        <th class="educational-table-header">Level</th>
-                        <th class="educational-table-header">Name of School</th>
-                        <th class="educational-table-header">Basic Ed/Degree/Course</th>
-                        <th class="educational-table-header">Period of Attendance (From)</th>
-                        <th class="educational-table-header">Period of Attendance (To)</th>
-                        <th class="educational-table-header">Highest Level/Units Earned</th>
-                        <th class="educational-table-header">Year Graduated</th>
-                        <th class="educational-table-header">Scholarship/Honors Received</th>
+                        <th class="main-table-header">Level</th>
+                        <th class="main-table-header">Name of School</th>
+                        <th class="main-table-header">Basic Ed/Degree/Course</th>
+                        <th class="main-table-header">Period of Attendance (From)</th>
+                        <th class="main-table-header">Period of Attendance (To)</th>
+                        <th class="main-table-header">Highest Level/Units Earned</th>
+                        <th class="main-table-header">Year Graduated</th>
+                        <th class="main-table-header">Scholarship/Honors Received</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -438,17 +454,17 @@
         <!-- Civil Service Eligibility -->
         <h3 style="text-align:center;">Civil Service Eligibility</h3>
 
-        <div class="educational-background-form">
-            <table id="eligibility-table" class="educational-table">
+        <div class="background-form">
+            <table id="eligibility-table" class="main-table">
                 <thead>
                     <tr>
-                        <th class="educational-table-header">Career Service/Eligibility</th>
-                        <th class="educational-table-header">Rating</th>
-                        <th class="educational-table-header">Date of Examination/Conferment</th>
-                        <th class="educational-table-header">Place of Examination/Conferment</th>
-                        <th class="educational-table-header">License Number</th>
-                        <th class="educational-table-header">License Validity</th>
-                        <th class="educational-table-header">Actions</th>
+                        <th class="main-table-header">Career Service/Eligibility</th>
+                        <th class="main-table-header">Rating</th>
+                        <th class="main-table-header">Date of Examination/Conferment</th>
+                        <th class="main-table-header">Place of Examination/Conferment</th>
+                        <th class="main-table-header">License Number</th>
+                        <th class="main-table-header">License Validity</th>
+                        <th class="main-table-header">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -482,19 +498,19 @@
         <!-- Work Experience -->
         <h3 style="text-align:center;">Work Experience</h3>
 
-        <div class="educational-background-form">
-            <table id="work-experience-table" class="educational-table">
+        <div class="background-form">
+            <table id="work-experience-table" class="main-table">
                 <thead>
                     <tr>
-                        <th class="educational-table-header">From</th>
-                        <th class="educational-table-header">To</th>
-                        <th class="educational-table-header">Position Title</th>
-                        <th class="educational-table-header">Department/Agency/Office/Company</th>
-                        <th class="educational-table-header">Monthly Salary</th>
-                        <th class="educational-table-header">Salary Grade & STEP</th>
-                        <th class="educational-table-header">Status of Appointment</th>
-                        <th class="educational-table-header">Govt Service (Y/N)</th>
-                        <th class="educational-table-header">Actions</th>
+                        <th class="main-table-header">From</th>
+                        <th class="main-table-header">To</th>
+                        <th class="main-table-header">Position Title</th>
+                        <th class="main-table-header">Department/Agency/Office/Company</th>
+                        <th class="main-table-header">Monthly Salary</th>
+                        <th class="main-table-header">Salary Grade & STEP</th>
+                        <th class="main-table-header">Status of Appointment</th>
+                        <th class="main-table-header">Govt Service (Y/N)</th>
+                        <th class="main-table-header">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -542,16 +558,16 @@
         <!-- Voluntary Work -->
         <h3 style="text-align:center;">Voluntary Work</h3>
 
-        <div class="educational-background-form">
-            <table id="voluntary-work-table" class="educational-table">
+        <div class="background-form">
+            <table id="voluntary-work-table" class="main-table">
                 <thead>
                     <tr>
-                        <th class="educational-table-header">Name and Address of Organization</th>
-                        <th class="educational-table-header">From</th>
-                        <th class="educational-table-header">To</th>
-                        <th class="educational-table-header">Number of Hours</th>
-                        <th class="educational-table-header">Position/Nature of Work</th>
-                        <th class="educational-table-header">Actions</th>
+                        <th class="main-table-header">Name and Address of Organization</th>
+                        <th class="main-table-header">From</th>
+                        <th class="main-table-header">To</th>
+                        <th class="main-table-header">Number of Hours</th>
+                        <th class="main-table-header">Position/Nature of Work</th>
+                        <th class="main-table-header">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -583,17 +599,17 @@
         <!-- Learning and Development -->
         <h3 style="text-align:center;">Learning and Development</h3>
 
-        <div class="educational-background-form">
-            <table id="learning-development-table" class="educational-table">
+        <div class="background-form">
+            <table id="learning-development-table" class="main-table">
                 <thead>
                     <tr>
-                        <th class="educational-table-header">Title</th>
-                        <th class="educational-table-header">From</th>
-                        <th class="educational-table-header">To</th>
-                        <th class="educational-table-header">Number of Hours</th>
-                        <th class="educational-table-header">Type of LD</th>
-                        <th class="educational-table-header">Conducted/Sponsored By</th>
-                        <th class="educational-table-header">Actions</th>
+                        <th class="main-table-header">Title</th>
+                        <th class="main-table-header">From</th>
+                        <th class="main-table-header">To</th>
+                        <th class="main-table-header">Number of Hours</th>
+                        <th class="main-table-header">Type of LD</th>
+                        <th class="main-table-header">Conducted/Sponsored By</th>
+                        <th class="main-table-header">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -634,7 +650,7 @@
             {% endif %}
         </div>
     </form>
-
+</div>
 <script>
 function addVoluntaryWorkRow() {
     const table = document.getElementById('voluntary-work-table');
@@ -681,8 +697,8 @@ function addWorkExperienceRow() {
 
 <script>
 function addCivilServiceRow() {
-    const table = document.getElementById('eligibility-table');
-    const newRow = table.insertRow(-1);
+    const tbody = document.querySelector('#eligibility-table tbody');  // ✅ target tbody
+    const newRow = tbody.insertRow(-1);
 
     const columns = [
         '<input type="text" name="career_service[]" placeholder="Career Service/Eligibility" required>',
@@ -699,6 +715,7 @@ function addCivilServiceRow() {
         cell.innerHTML = col;
     });
 }
+
 </script>
 
 

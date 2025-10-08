@@ -2,18 +2,18 @@
 
 {% block content %}
 <h2>Civil Service Eligibility</h2>
-<form method="post" class="educational-background-form">
+<form method="post" class="background-form">
     {% csrf_token %}
-    <table id="eligibility-table" class="educational-table">
+    <table id="eligibility-table" class="main-table">
         <thead>
             <tr>
-                <th  class="educational-table-header">Career Service/Eligibility</th>
-                <th  class="educational-table-header">Rating</th>
-                <th  class="educational-table-header">Date of Examination/Conferment</th>
-                <th  class="educational-table-header">Place of Examination/Conferment</th>
-                <th  class="educational-table-header">License Number</th>
-                <th  class="educational-table-header">License Validity</th>
-                <th  class="educational-table-header">Actions</th>
+                <th  class="main-table-header">Career Service/Eligibility</th>
+                <th  class="main-table-header">Rating</th>
+                <th  class="main-table-header">Date of Examination/Conferment</th>
+                <th  class="main-table-header">Place of Examination/Conferment</th>
+                <th  class="main-table-header">License Number</th>
+                <th  class="main-table-header">License Validity</th>
+                <th  class="main-table-header">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -53,6 +53,7 @@
             cell.innerHTML = col;
         });
     }
+
 
     function deleteRow(button) {
         const row = button.parentNode.parentNode; 

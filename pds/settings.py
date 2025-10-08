@@ -124,7 +124,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'pds_app/static'),
 ]
 
-LOGIN_REDIRECT_URL = '/'  # Where to redirect after login
+LOGIN_REDIRECT_URL = 'forms'  # Where to redirect after login
 LOGOUT_REDIRECT_URL = '/login/'  # Where to redirect after logout
 LOGIN_URL = '/login/'  # Where to redirect if login is required
 
