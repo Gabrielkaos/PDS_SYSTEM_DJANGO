@@ -52,7 +52,7 @@ class PersonalInformation(models.Model):
     tin_no = models.CharField(max_length=50, blank=True, null=True)
 
     
-    agent_employee_number = models.CharField(max_length=50, unique=True)
+    agent_employee_number = models.CharField(max_length=50, blank=True, null=True)
 
     
     citizenship = models.CharField(max_length=50)
@@ -66,10 +66,12 @@ class PersonalInformation(models.Model):
     
     telephone_no = models.CharField(max_length=15, blank=True, null=True)
     mobile_no = models.CharField(
+        blank=True,
+        null=True,
         max_length=15,
         validators=[RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')]
     )
-    email_address = models.EmailField(unique=True, blank=True, null=True)
+    email_address = models.EmailField(blank=True, null=True)
 
     @property
     def full_name(self):
@@ -135,17 +137,12 @@ class FamilyBackground(models.Model):
         verbose_name = "Family Background"
         verbose_name_plural = "Family Backgrounds"
 
-class Child(models.Model):
-    name = models.CharField(max_length=100)
-    date_of_birth = models.DateField()
-    family_background = models.ForeignKey(FamilyBackground, on_delete=models.CASCADE)
-
 
 class VoluntaryWork(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voluntary_works")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    # name = models.CharField(max_length=255)
 
     organization_name = models.CharField(max_length=255, verbose_name="Name and Address of Organization (Write in Full)")
     from_date = models.DateField(verbose_name="Inclusive Dates (From)")
@@ -165,14 +162,14 @@ class LearningDevelopment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="learning_developments")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    # name = models.CharField(max_length=255)
 
-    title = models.CharField(max_length=255, verbose_name="Title of Learning and Development Interventions/Training Programs (Write in Full)")
-    from_date = models.DateField(verbose_name="Inclusive Dates (From)")
-    to_date = models.DateField(verbose_name="Inclusive Dates (To)")
-    number_of_hours = models.PositiveIntegerField(verbose_name="Number of Hours")
-    type_of_ld = models.CharField(max_length=100, verbose_name="Type of LD (Managerial/Supervisory/Technical, etc.)")
-    conducted_by = models.CharField(max_length=255, verbose_name="Conducted/Sponsored By (Write in Full)")
+    title = models.CharField(max_length=255, verbose_name="Title of Learning and Development Interventions/Training Programs (Write in Full)",blank=True,null=True)
+    from_date = models.DateField(verbose_name="Inclusive Dates (From)",blank=True,null=True)
+    to_date = models.DateField(verbose_name="Inclusive Dates (To)",blank=True,null=True)
+    number_of_hours = models.PositiveIntegerField(verbose_name="Number of Hours",blank=True,null=True)
+    type_of_ld = models.CharField(max_length=100, verbose_name="Type of LD (Managerial/Supervisory/Technical, etc.)",blank=True,null=True)
+    conducted_by = models.CharField(max_length=255, verbose_name="Conducted/Sponsored By (Write in Full)",blank=True,null=True)
 
     def __str__(self):
         return f"{self.title} ({self.type_of_ld})"
@@ -185,24 +182,24 @@ class WorkExperience(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="work_experiences")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    # name = models.CharField(max_length=255)
 
-    from_date = models.DateField(verbose_name="Inclusive Dates (From)")
-    to_date = models.DateField(verbose_name="Inclusive Dates (To)")
-    position_title = models.CharField(max_length=255, verbose_name="Position Title (Write in Full)")
+    from_date = models.DateField(verbose_name="Inclusive Dates (From)",blank=True,null=True)
+    to_date = models.DateField(verbose_name="Inclusive Dates (To)",blank=True,null=True)
+    position_title = models.CharField(max_length=255, verbose_name="Position Title (Write in Full)",blank=True,null=True)
     department = models.CharField(
         max_length=255,
-        verbose_name="Department/Agency/Office/Company (Write in Full)"
+        verbose_name="Department/Agency/Office/Company (Write in Full)",blank=True,null=True
     )
-    monthly_salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Monthly Salary")
+    monthly_salary = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Monthly Salary",blank=True,null=True)
     salary_grade = models.CharField(
         max_length=10, blank=True, null=True,
         verbose_name="Salary/Job/Pay Grade & STEP (Format '00-0')/Increment"
     )
-    status_of_appointment = models.CharField(max_length=255, verbose_name="Status of Appointment")
+    status_of_appointment = models.CharField(max_length=255, verbose_name="Status of Appointment",blank=True,null=True)
     govt_service = models.CharField(
         max_length=3, choices=[('Y', 'Yes'), ('N', 'No')],
-        verbose_name="Government Service (Y/N)"
+        verbose_name="Government Service (Y/N)",blank=True,null=True
     )
 
     def __str__(self):
@@ -233,11 +230,13 @@ class OtherInformation(models.Model):
     # Relatives by consanguinity or affinity
     with_third_degree = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Within Third Degree (Y/N)"
     )
     with_fourth_degree = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Within Fourth Degree (Y/N)"
     )
@@ -249,6 +248,7 @@ class OtherInformation(models.Model):
     # Administrative and Criminal Offenses
     offense = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Administrative Offense (Y/N)"
     )
@@ -258,6 +258,7 @@ class OtherInformation(models.Model):
     )
     criminal = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Criminally Charged (Y/N)"
     )
@@ -273,6 +274,7 @@ class OtherInformation(models.Model):
     # Conviction
     convicted = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Convicted of Crime (Y/N)"
     )
@@ -284,6 +286,7 @@ class OtherInformation(models.Model):
     # Service Separation
     sep_service = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Separated from Service (Y/N)"
     )
@@ -295,6 +298,7 @@ class OtherInformation(models.Model):
     # Election-Related Questions
     candidate = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Candidate in Election (Y/N)"
     )
@@ -304,6 +308,7 @@ class OtherInformation(models.Model):
     )
     resign_candid = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Resigned for Election Campaign (Y/N)"
     )
@@ -315,6 +320,7 @@ class OtherInformation(models.Model):
     # Immigration or Permanent Residency
     immigrant_status = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Immigrant/Permanent Resident Status (Y/N)"
     )
@@ -326,16 +332,19 @@ class OtherInformation(models.Model):
     # Membership and Other Information
     indigenous_group_member = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Member of Indigenous Group (Y/N)"
     )
     disability_status = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Person with Disability (Y/N)"
     )
     solo_parent_status = models.CharField(
         max_length=3, 
+        default='N',
         choices=[('Y', 'Yes'), ('N', 'No')], 
         verbose_name="Solo Parent (Y/N)"
     )
@@ -346,11 +355,11 @@ class OtherInformation(models.Model):
 
     # Government Issued ID
     government_id = models.CharField(
-        max_length=50, 
+        max_length=50,null=True, blank=True,  
         verbose_name="Government Issued ID"
     )
     government_id_number = models.CharField(
-        max_length=100, 
+        max_length=100, null=True, blank=True, 
         verbose_name="ID/License/Passport Number"
     )
     id_issue_date = models.DateField(
@@ -358,7 +367,7 @@ class OtherInformation(models.Model):
         verbose_name="ID Issue Date"
     )
     id_issue_place = models.CharField(
-        max_length=100, 
+        max_length=100, null=True, blank=True, 
         verbose_name="ID Issue Place"
     )
 
@@ -371,28 +380,23 @@ class OtherInformation(models.Model):
     def __str__(self):
         return f"Other Information for {self.id}"
 
-class Reference(models.Model):
-    name = models.CharField(max_length=100)
-    address = models.TextField()
-    contact_number = models.CharField(max_length=20)
-    other_information = models.ForeignKey(OtherInformation, on_delete=models.CASCADE)
 
 
 class CivilServiceEligibility(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="civil_service_eligibilities")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    # name = models.CharField(max_length=255)
 
     career_service = models.CharField(
-        max_length=255,
+        max_length=255,null=True,blank=True,
         verbose_name="Career Service/RA 1080 (Board/Bar) under Special Laws/CES/CSEE/Barangay Eligibility/Driver's License"
     )
     rating = models.DecimalField(
         max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Rating (if applicable)"
     )
-    exam_date = models.DateField(verbose_name="Date of Examination/Conferment")
-    exam_place = models.CharField(max_length=255, verbose_name="Place of Examination/Conferment")
+    exam_date = models.DateField(verbose_name="Date of Examination/Conferment",null=True,blank=True)
+    exam_place = models.CharField(max_length=255, verbose_name="Place of Examination/Conferment",null=True,blank=True)
     license_number = models.CharField(max_length=50, blank=True, null=True, verbose_name="License Number (if applicable)")
     license_validity = models.DateField(blank=True, null=True, verbose_name="License Validity (if applicable)")
 
