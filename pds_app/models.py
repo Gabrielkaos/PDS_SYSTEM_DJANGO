@@ -144,11 +144,11 @@ class VoluntaryWork(models.Model):
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
     # name = models.CharField(max_length=255)
 
-    organization_name = models.CharField(max_length=255, verbose_name="Name and Address of Organization (Write in Full)")
-    from_date = models.DateField(verbose_name="Inclusive Dates (From)")
-    to_date = models.DateField(verbose_name="Inclusive Dates (To)")
-    number_of_hours = models.PositiveIntegerField(verbose_name="Number of Hours")
-    nature_of_work = models.CharField(max_length=255, verbose_name="Position/Nature of Work")
+    organization_name = models.CharField(max_length=255, verbose_name="Name and Address of Organization (Write in Full)",null=True,blank=True)
+    from_date = models.DateField(verbose_name="Inclusive Dates (From)",null=True,blank=True)
+    to_date = models.DateField(verbose_name="Inclusive Dates (To)",null=True,blank=True)
+    number_of_hours = models.PositiveIntegerField(verbose_name="Number of Hours",null=True,blank=True)
+    nature_of_work = models.CharField(max_length=255, verbose_name="Position/Nature of Work",null=True,blank=True)
 
     def __str__(self):
         return f"{self.organization_name} ({self.nature_of_work})"
@@ -203,6 +203,7 @@ class WorkExperience(models.Model):
     )
 
     def __str__(self):
+        
         return f"{self.position_title} - {self.department}"
 
     @property

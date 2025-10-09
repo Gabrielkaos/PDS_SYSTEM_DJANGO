@@ -470,20 +470,20 @@
                 <tbody>
                     {% for eligibility in form_instance.civil_service.all %}
                     <tr>
-                        <td><input type="text" name="career_service[]" value="{{ eligibility.career_service }}" required></td>
+                        <td><input type="text" name="career_service[]" value="{{ eligibility.career_service }}"></td>
                         <td><input type="number" name="rating[]" value="{{ eligibility.rating }}" step="0.01"></td>
-                        <td><input type="date" name="exam_date[]" value="{{ eligibility.exam_date|date:'Y-m-d' }}" required></td>
-                        <td><input type="text" name="exam_place[]" value="{{ eligibility.exam_place }}" required></td>
+                        <td><input type="date" name="exam_date[]" value="{{ eligibility.exam_date|date:'Y-m-d' }}"></td>
+                        <td><input type="text" name="exam_place[]" value="{{ eligibility.exam_place }}"></td>
                         <td><input type="text" name="license_number[]" value="{{ eligibility.license_number }}"></td>
                         <td><input type="date" name="license_validity[]" value="{{ eligibility.license_validity|date:'Y-m-d' }}"></td>
                         <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td><input type="text" name="career_service[]" placeholder="Career Service/Eligibility" required></td>
+                        <td><input type="text" name="career_service[]" placeholder="Career Service/Eligibility"></td>
                         <td><input type="number" name="rating[]" step="0.01" placeholder="Rating"></td>
-                        <td><input type="date" name="exam_date[]" required></td>
-                        <td><input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment" required></td>
+                        <td><input type="date" name="exam_date[]"></td>
+                        <td><input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment"></td>
                         <td><input type="text" name="license_number[]" placeholder="License Number"></td>
                         <td><input type="date" name="license_validity[]"></td>
                         <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
@@ -516,15 +516,15 @@
                 <tbody>
                     {% for experience in form_instance.work_experience.all %}
                     <tr>
-                        <td><input type="date" name="work_from_date[]" value="{{ experience.from_date|date:'Y-m-d' }}" required></td>
+                        <td><input type="date" name="work_from_date[]" value="{{ experience.from_date|date:'Y-m-d' }}"></td>
                         <td><input type="date" name="work_to_date[]" value="{{ experience.to_date|date:'Y-m-d' }}"></td>
-                        <td><input type="text" name="work_position_title[]" value="{{ experience.position_title }}" required></td>
-                        <td><input type="text" name="work_department[]" value="{{ experience.department }}" required></td>
-                        <td><input type="number" name="work_monthly_salary[]" value="{{ experience.monthly_salary }}" required></td>
+                        <td><input type="text" name="work_position_title[]" value="{{ experience.position_title }}"></td>
+                        <td><input type="text" name="work_department[]" value="{{ experience.department }}"></td>
+                        <td><input type="number" name="work_monthly_salary[]" value="{{ experience.monthly_salary }}"></td>
                         <td><input type="text" name="work_salary_grade[]" value="{{ experience.salary_grade }}"></td>
-                        <td><input type="text" name="work_status[]" value="{{ experience.status_of_appointment }}" required></td>
+                        <td><input type="text" name="work_status[]" value="{{ experience.status_of_appointment }}"></td>
                         <td>
-                            <select name="work_govt_service[]" required>
+                            <select name="work_govt_service[]">
                                 <option value="Y" {% if experience.govt_service == 'Y' %}selected{% endif %}>Yes</option>
                                 <option value="N" {% if experience.govt_service == 'N' %}selected{% endif %}>No</option>
                             </select>
@@ -533,15 +533,15 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td><input type="date" name="work_from_date[]" required></td>
+                        <td><input type="date" name="work_from_date[]"></td>
                         <td><input type="date" name="work_to_date[]"></td>
-                        <td><input type="text" name="work_position_title[]" placeholder="Position Title" required></td>
-                        <td><input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company" required></td>
-                        <td><input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary" required></td>
+                        <td><input type="text" name="work_position_title[]" placeholder="Position Title"></td>
+                        <td><input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company"></td>
+                        <td><input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary"></td>
                         <td><input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP"></td>
-                        <td><input type="text" name="work_status[]" placeholder="Status of Appointment" required></td>
+                        <td><input type="text" name="work_status[]" placeholder="Status of Appointment"></td>
                         <td>
-                            <select name="work_govt_service[]" required>
+                            <select name="work_govt_service[]">
                                 <option value="Y">Yes</option>
                                 <option value="N">No</option>
                             </select>
@@ -573,20 +573,20 @@
                 <tbody>
                     {% for work in form_instance.voluntary_work.all %}
                     <tr>
-                        <td><input type="text" name="voluntary_org[]" value="{{ work.organization_name }}" required></td>
-                        <td><input type="date" name="voluntary_from[]" value="{{ work.from_date|date:'Y-m-d' }}" required></td>
+                        <td><input type="text" name="voluntary_org[]" value="{{ work.organization_name }}"></td>
+                        <td><input type="date" name="voluntary_from[]" value="{{ work.from_date|date:'Y-m-d' }}"></td>
                         <td><input type="date" name="voluntary_to[]" value="{{ work.to_date|date:'Y-m-d' }}"></td>
-                        <td><input type="number" name="voluntary_hours[]" value="{{ work.number_of_hours }}" required></td>
-                        <td><input type="text" name="voluntary_nature[]" value="{{ work.nature_of_work }}" required></td>
+                        <td><input type="number" name="voluntary_hours[]" value="{{ work.number_of_hours }}"></td>
+                        <td><input type="text" name="voluntary_nature[]" value="{{ work.nature_of_work }}"></td>
                         <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td><input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization" required></td>
-                        <td><input type="date" name="voluntary_from[]" required></td>
+                        <td><input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization"></td>
+                        <td><input type="date" name="voluntary_from[]"></td>
                         <td><input type="date" name="voluntary_to[]"></td>
-                        <td><input type="number" name="voluntary_hours[]" placeholder="Number of Hours" required></td>
-                        <td><input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work" required></td>
+                        <td><input type="number" name="voluntary_hours[]" placeholder="Number of Hours"></td>
+                        <td><input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work"></td>
                         <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% endfor %}
@@ -615,22 +615,22 @@
                 <tbody>
                     {% for learning in form_instance.learning_development.all %}
                     <tr>
-                        <td><input type="text" name="learning_title[]" value="{{ learning.title }}" required></td>
-                        <td><input type="date" name="learning_from[]" value="{{ learning.from_date|date:'Y-m-d' }}" required></td>
+                        <td><input type="text" name="learning_title[]" value="{{ learning.title }}"></td>
+                        <td><input type="date" name="learning_from[]" value="{{ learning.from_date|date:'Y-m-d' }}"></td>
                         <td><input type="date" name="learning_to[]" value="{{ learning.to_date|date:'Y-m-d' }}"></td>
-                        <td><input type="number" name="learning_hours[]" value="{{ learning.number_of_hours }}" required></td>
-                        <td><input type="text" name="learning_type[]" value="{{ learning.type_of_ld }}" required></td>
-                        <td><input type="text" name="learning_conducted[]" value="{{ learning.conducted_by }}" required></td>
+                        <td><input type="number" name="learning_hours[]" value="{{ learning.number_of_hours }}"></td>
+                        <td><input type="text" name="learning_type[]" value="{{ learning.type_of_ld }}"></td>
+                        <td><input type="text" name="learning_conducted[]" value="{{ learning.conducted_by }}"></td>
                         <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td><input type="text" name="learning_title[]" placeholder="Title" required></td>
-                        <td><input type="date" name="learning_from[]" required></td>
+                        <td><input type="text" name="learning_title[]" placeholder="Title"></td>
+                        <td><input type="date" name="learning_from[]"></td>
                         <td><input type="date" name="learning_to[]"></td>
-                        <td><input type="number" name="learning_hours[]" placeholder="Number of Hours" required></td>
-                        <td><input type="text" name="learning_type[]" placeholder="Type of LD" required></td>
-                        <td><input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By" required></td>
+                        <td><input type="number" name="learning_hours[]" placeholder="Number of Hours"></td>
+                        <td><input type="text" name="learning_type[]" placeholder="Type of LD"></td>
+                        <td><input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By"></td>
                         <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% endfor %}
@@ -657,11 +657,11 @@ function addVoluntaryWorkRow() {
     const newRow = table.insertRow(-1);
 
     const columns = [
-        '<input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization" required>',
-        '<input type="date" name="voluntary_from[]" required>',
+        '<input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization">',
+        '<input type="date" name="voluntary_from[]">',
         '<input type="date" name="voluntary_to[]">',
-        '<input type="number" name="voluntary_hours[]" placeholder="Number of Hours" required>',
-        '<input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work" required>',
+        '<input type="number" name="voluntary_hours[]" placeholder="Number of Hours">',
+        '<input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work">',
         '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
     ];
 
@@ -677,14 +677,14 @@ function addWorkExperienceRow() {
     const newRow = table.insertRow(-1);
 
     const columns = [
-        '<input type="date" name="work_from_date[]" required>',
+        '<input type="date" name="work_from_date[]">',
         '<input type="date" name="work_to_date[]">',
-        '<input type="text" name="work_position_title[]" placeholder="Position Title" required>',
-        '<input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company" required>',
-        '<input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary" required>',
+        '<input type="text" name="work_position_title[]" placeholder="Position Title">',
+        '<input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company">',
+        '<input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary">',
         '<input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP">',
-        '<input type="text" name="work_status[]" placeholder="Status of Appointment" required>',
-        '<select name="work_govt_service[]" required><option value="Y">Yes</option><option value="N">No</option></select>',
+        '<input type="text" name="work_status[]" placeholder="Status of Appointment">',
+        '<select name="work_govt_service[]"><option value="Y">Yes</option><option value="N">No</option></select>',
         '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
     ];
 
@@ -701,10 +701,10 @@ function addCivilServiceRow() {
     const newRow = tbody.insertRow(-1);
 
     const columns = [
-        '<input type="text" name="career_service[]" placeholder="Career Service/Eligibility" required>',
+        '<input type="text" name="career_service[]" placeholder="Career Service/Eligibility">',
         '<input type="number" name="rating[]" step="0.01" placeholder="Rating">',
-        '<input type="date" name="exam_date[]" required>',
-        '<input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment" required>',
+        '<input type="date" name="exam_date[]">',
+        '<input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment">',
         '<input type="text" name="license_number[]" placeholder="License Number">',
         '<input type="date" name="license_validity[]">',
         '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
@@ -725,12 +725,12 @@ function addLearningDevelopmentRow() {
     const newRow = table.insertRow(-1);
 
     const columns = [
-        '<input type="text" name="learning_title[]" placeholder="Title" required>',
-        '<input type="date" name="learning_from[]" required>',
+        '<input type="text" name="learning_title[]" placeholder="Title">',
+        '<input type="date" name="learning_from[]">',
         '<input type="date" name="learning_to[]">',
-        '<input type="number" name="learning_hours[]" placeholder="Number of Hours" required>',
-        '<input type="text" name="learning_type[]" placeholder="Type of LD" required>',
-        '<input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By" required>',
+        '<input type="number" name="learning_hours[]" placeholder="Number of Hours">',
+        '<input type="text" name="learning_type[]" placeholder="Type of LD">',
+        '<input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By">',
         '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
     ];
 
