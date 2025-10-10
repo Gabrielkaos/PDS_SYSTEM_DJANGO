@@ -644,7 +644,7 @@
         <div class="form-actions">
             <button type="submit" class="submit-btn">Save Changes</button>
             {% if creating %}
-                <a href="{% url 'forms' %}" class="cancel-btn">Cancel</a>  {# Redirect to dashboard on create cancel #}
+                <a href="{% url 'home' %}" class="cancel-btn">Cancel</a>  {# Redirect to dashboard on create cancel #}
             {% else %}
                 <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn">Cancel</a>  {# Redirect to form detail view on edit cancel #}
             {% endif %}
