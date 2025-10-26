@@ -6,13 +6,13 @@
     <title>Login - Personal Data Sheet System</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'pds_app/css/login.css' %}">
+    <link rel="stylesheet" href="{%static 'pds_app/css/style.css' %}">
 </head>
 <body>
-    <div class="login-header">
+    <header>
         <h1>Personal Data Sheet System</h1>
-    </div>
-    
-    <div class="login-container">
+    </header>
+        <div class="login-container">
         <h2>Login to Your Account</h2>
         
         {% if messages %}
@@ -56,5 +56,6 @@
         <a href="#" class="login-link">Forgot Password?</a>
         {% endcomment %}
     </div>
+    
 </body>
 </html>

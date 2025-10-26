@@ -26,13 +26,19 @@
             </div>
         {% endfor %}
             <div class="form-item">
-                <a href="{% url 'create_form'  %}" class="form-link">
+                <a href="{% url 'create_form'  %}" class="form-link" id="createFormLink">
                     <div class="form-name">Create New</div>
                 </a>
-                <button class="add-btn">
-<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e3e3e3"><path d="M440-80v-340H120v-120h320v-340h80v340h320v120H520v340h-80Z"/></svg>                </button>
+                <button class="add-btn" id="createFormButton" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e3e3e3"><path d="M440-80v-340H120v-120h320v-340h80v340h320v120H520v340h-80Z"/></svg>                
+                </button>
             </div>
     </div>
+    <script>
+  document.getElementById('createFormButton').addEventListener('click', function() {
+    window.location = document.getElementById("createFormLink").href;
+  });
+</script>
 {% endblock sidebar %}
 
 {% block content %}
