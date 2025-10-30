@@ -169,7 +169,6 @@ def edit_form(request, form_id):
                         
             # Update form name if provided
             if 'form_name' in request.POST:
-                form_instance.name = request.POST['form_name']
                 form_instance.save()
                 print("saved form name")
             
@@ -306,7 +305,6 @@ def create_form(request):
             # Create the CompleteForm instance and save related objects after
             complete_form = CompleteForm.objects.create(
                 user=request.user,
-                name=request.POST.get('form_name', 'New Form'),
                 personal_information=personal_inst,
                 family_background=family_inst,
                 educational_background=education_inst,

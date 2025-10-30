@@ -450,6 +450,15 @@
                 <td>{{eligibility.license_number}}</td>
                 <td>{{eligibility.license_validity}}</td>
             </tr>
+            {% empty %}
+            <tr>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -483,6 +492,17 @@
                     {{i.govt_service}}
                 </td>
             </tr>
+            {% empty %}
+            <tr>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -506,6 +526,14 @@
                 <td>{{i.to_date}}</td>
                 <td>{{i.number_of_hours}}</td>
                 <td>{{i.nature_of_work}}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -532,6 +560,15 @@
                 <td>{{i.number_of_hours}}</td>
                 <td>{{i.type_of_ld}}</td>
                 <td>{{i.conducted_by}}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
             </tr>
             {% endfor %}
         </tbody>
