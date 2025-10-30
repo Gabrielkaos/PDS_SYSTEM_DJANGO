@@ -4,6 +4,7 @@
 {% block content %}
 <div class="form-actions">
     <a href="{% url 'edit_form' form.id %}" class="edit-btn">Edit Form</a>
+    <a href="{% url 'export_form' form.id %}" class="edit-btn" style="margin-left:14px;">Export</a>
 </div>
 <h2>Form: {{form.name}}</h2>
 

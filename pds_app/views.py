@@ -1,11 +1,168 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .models import *
 from .forms import PersonalInformationForm, FamilyBackgroundForm, EducationalBackgroundForm, OtherInformationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import redirect, get_object_or_404
+import openpyxl
+from openpyxl.utils import get_column_letter
 
+@login_required
+def export_form(request, form_id):
+    form = get_object_or_404(CompleteForm, id=form_id, user=request.user)
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Personal Data Sheet"
+
+    row = 1
+
+    # Helper for writing label/value
+    def write(label, value):
+        nonlocal row
+        ws.cell(row=row, column=1, value=label)
+        ws.cell(row=row, column=2, value=str(value) if value is not None else "")
+        row += 1
+
+    # Personal Information
+    p = form.personal_information
+    write("Surname", p.surname)
+    write("First Name", p.firstname)
+    write("Middle Name", p.middlename)
+    write("Date of Birth", p.date_of_birth)
+    write("Place of Birth", p.place_of_birth)
+    write("Sex", p.sex)
+    write("Civil Status", p.civil_status)
+    write("Height (cm)", p.height)
+    write("Weight (kg)", p.weight)
+    write("Blood Type", p.blood_type)
+    write("Residential Address", p.residential_address)
+    write("Residential Zip Code", p.residential_zip_code)
+    write("Permanent Address", p.permanent_address)
+    write("Permanent Zip Code", p.permanent_zip_code)
+    write("Telephone", p.telephone_no)
+    write("Mobile", p.mobile_no)
+    write("Email", p.email_address)
+    write("GSIS", p.gsis)
+    write("Pag-IBIG", p.pag_ibig)
+    write("PhilHealth", p.philhealth)
+    write("SSS", p.sss_no)
+    write("TIN", p.tin_no)
+    write("Agent Employee Number", p.agent_employee_number)
+    write("Citizenship", p.citizenship)
+
+    row += 1
+    write("== FAMILY BACKGROUND ==", "")
+
+    f = form.family_background
+    write("Spouse Surname", f.spouse_surname)
+    write("Spouse First Name", f.spouse_firstname)
+    write("Spouse Middle Name", f.spouse_middlename)
+    write("Spouse Ext.", f.spouse_name_extension)
+    write("Spouse Occupation", f.spouse_occupation)
+    write("Spouse Employer", f.spouse_employer_business_name)
+    write("Spouse Address", f.spouse_business_address)
+    write("Spouse Tel.", f.spouse_telephone_no)
+    write("Children", f.children)
+    write("Father Surname", f.father_surname)
+    write("Father First Name", f.father_firstname)
+    write("Father Middle Name", f.father_middlename)
+    write("Father Ext.", f.father_name_extension)
+    write("Mother Maiden Last Name", f.mother_maiden_lastname)
+    write("Mother First Name", f.mother_firstname)
+    write("Mother Middle Name", f.mother_middlename)
+
+    row += 1
+    write("== OTHER INFORMATION ==", "")
+
+    o = form.other_information
+    write("With Third Degree", o.with_third_degree)
+    write("With Fourth Degree", o.with_fourth_degree)
+    write("Fourth Degree Details", o.fourth_degree_details)
+    write("Offense", o.offense)
+    write("Offense Details", o.offense_details)
+    write("Criminal", o.criminal)
+    write("Criminal Details", o.criminal_details)
+    write("Criminal Date", o.criminal_date)
+    write("Convicted", o.convicted)
+    write("Convicted Details", o.convicted_details)
+    write("Separated from Service", o.sep_service)
+    write("Service Separation Details", o.sep_service_details)
+    write("Candidate", o.candidate)
+    write("Candidate Details", o.candidate_details)
+    write("Resigned for Campaign", o.resign_candid)
+    write("Campaign Resignation Details", o.resign_candid_details)
+    write("Immigration Status", o.immigrant_status)
+    write("Immigration Details", o.immigrant_details)
+    write("Indigenous Member", o.indigenous_group_member)
+    write("Disability Status", o.disability_status)
+    write("Solo Parent", o.solo_parent_status)
+    write("References", o.references)
+    write("Government ID", o.government_id)
+    write("Government ID Number", o.government_id_number)
+    write("ID Issue Date", o.id_issue_date)
+    write("ID Issue Place", o.id_issue_place)
+
+    row += 2
+
+    # EDUCATIONAL BACKGROUND (can be structured as table; example: Elementary row)
+    ws.cell(row=row, column=1, value="=== EDUCATIONAL BACKGROUND ==="); row += 1
+    e = form.educational_background
+
+    ws.append(["Level", "Name of School", "Degree/Course", "From", "To", "Highest Level/Units", "Year Graduated", "Honors"])
+    row += 1
+    ws.append(["Elementary", e.elementary_name, e.elementary_degree_course, e.elementary_period_from, e.elementary_period_to, e.elementary_highest_level_units, e.elementary_year_graduated, e.elementary_honors])
+    ws.append(["Secondary", e.secondary_name, e.secondary_degree_course, e.secondary_period_from, e.secondary_period_to, e.secondary_highest_level_units, e.secondary_year_graduated, e.secondary_honors])
+    ws.append(["Vocational", e.vocational_name, e.vocational_degree_course, e.vocational_period_from, e.vocational_period_to, e.vocational_highest_level_units, e.vocational_year_graduated, e.vocational_honors])
+    ws.append(["College", e.college_name, e.college_degree_course, e.college_period_from, e.college_period_to, e.college_highest_level_units, e.college_year_graduated, e.college_honors])
+    ws.append(["Graduate Studies", e.graduate_name, e.graduate_degree_course, e.graduate_period_from, e.graduate_period_to, e.graduate_highest_level_units, e.graduate_year_graduated, e.graduate_honors])
+
+    row = ws.max_row + 2
+
+    # CIVIL SERVICE ELIGIBILITY
+    ws.cell(row=row, column=1, value="=== CIVIL SERVICE ELIGIBILITY ==="); row += 1
+    ws.append(["Career Service", "Rating", "Exam Date", "Exam Place", "License #", "License Validity"])
+    for item in form.civil_service.all():
+        ws.append([item.career_service, item.rating, item.exam_date, item.exam_place, item.license_number, item.license_validity])
+    row = ws.max_row + 2
+
+    # WORK EXPERIENCE
+    ws.cell(row=row, column=1, value="=== WORK EXPERIENCE ==="); row += 1
+    ws.append(["From", "To", "Position Title", "Department/Agency", "Monthly Salary", "Salary Grade & STEP", "Status of Appointment", "Govt Service"])
+    for w in form.work_experience.all():
+        ws.append([w.from_date, w.to_date, w.position_title, w.department, w.monthly_salary, w.salary_grade, w.status_of_appointment, w.govt_service])
+    row = ws.max_row + 2
+
+    # VOLUNTARY WORK
+    ws.cell(row=row, column=1, value="=== VOLUNTARY WORK ==="); row += 1
+    ws.append(["Organization", "From", "To", "Hours", "Nature"])
+    for v in form.voluntary_work.all():
+        ws.append([v.organization_name, v.from_date, v.to_date, v.number_of_hours, v.nature_of_work])
+    row = ws.max_row + 2
+
+    # LEARNING AND DEVELOPMENT
+    ws.cell(row=row, column=1, value="=== LEARNING AND DEVELOPMENT ==="); row += 1
+    ws.append(["Title", "From", "To", "Hours", "Type", "Conducted By"])
+    for l in form.learning_development.all():
+        ws.append([l.title, l.from_date, l.to_date, l.number_of_hours, l.type_of_ld, l.conducted_by])
+    row = ws.max_row + 2
+
+    # Auto-adjust column width
+    for col in ws.columns:
+        max_length = 0
+        col_letter = get_column_letter(col[0].column)
+        for cell in col:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+        ws.column_dimensions[col_letter].width = max_length + 2
+
+    # Prepare response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    filename = f'PDS_{form.name}_{form.id}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    wb.save(response)
+    return response
 
 @login_required
 def home(request):
