@@ -5,6 +5,7 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
+    path('form/import_form/', views.import_form, name='import_form'),
     path('form/export/<int:form_id>/', views.export_form, name='export_form'),
     path('form/create_form/', views.create_form, name='create_form'),
     path('form/edit_form/<int:form_id>/', views.edit_form, name='edit_form'),

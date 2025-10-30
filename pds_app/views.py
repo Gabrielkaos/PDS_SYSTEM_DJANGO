@@ -7,6 +7,335 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect, get_object_or_404
 import openpyxl
 from openpyxl.utils import get_column_letter
+from .forms import ImportForm
+from decimal import Decimal, InvalidOperation
+import datetime
+
+
+@login_required
+def import_form(request):
+    if request.method == 'POST':
+        forms1 = CompleteForm.objects.filter(user=request.user)
+        form = ImportForm(request.POST, request.FILES)
+        print("I was here")
+        if form.is_valid():
+            print("Im valid")
+            excel_file = request.FILES['file']
+
+            try:
+                wb = openpyxl.load_workbook(excel_file)
+                ws = wb.active
+                print("loading file")
+
+                # Parse vertical data for PersonalInformation, FamilyBackground, OtherInformation, EducationalBackground
+                # Assuming first ~50 rows contain these label-value pairs
+
+                def parse_vert_section(sheet, start_row=1, max_row=50):
+                    data = {}
+                    for row in sheet.iter_rows(min_row=start_row, max_row=max_row, max_col=2, values_only=True):
+                        key, val = row
+                        if key:
+                            data[str(key).strip()] = val
+                    return data
+
+                data = parse_vert_section(ws)
+
+                # Create PersonalInformation
+                personal = PersonalInformation.objects.create(
+                    user=request.user,
+                    surname = data.get("Surname", ""),
+                    firstname = data.get("First Name", ""),
+                    middlename = data.get("Middle Name", ""),
+                    date_of_birth = data.get("Date of Birth"),
+                    place_of_birth = data.get("Place of Birth", ""),
+                    sex = data.get("Sex", ""),
+                    civil_status = data.get("Civil Status", ""),
+                    height = data.get("Height (cm)"),
+                    weight = data.get("Weight (kg)"),
+                    blood_type = data.get("Blood Type", ""),
+                    residential_address = data.get("Residential Address", ""),
+                    residential_zip_code = data.get("Residential Zip Code", ""),
+                    permanent_address = data.get("Permanent Address", ""),
+                    permanent_zip_code = data.get("Permanent Zip Code", ""),
+                    telephone_no = data.get("Telephone", ""),
+                    mobile_no = data.get("Mobile", ""),
+                    email_address = data.get("Email", ""),
+                    gsis = data.get("GSIS", ""),
+                    pag_ibig = data.get("Pag-IBIG", ""),
+                    philhealth = data.get("PhilHealth", ""),
+                    sss_no = data.get("SSS", ""),
+                    tin_no = data.get("TIN", ""),
+                    agent_employee_number = data.get("Agent Employee Number", ""),
+                    citizenship = data.get("Citizenship", ""),
+                )
+                print("1")
+
+                # Similarly parse FamilyBackground
+                family = FamilyBackground.objects.create(
+                    user=request.user,
+                    spouse_surname = data.get("Spouse Surname", ""),
+                    spouse_firstname = data.get("Spouse First Name", ""),
+                    spouse_middlename = data.get("Spouse Middle Name", ""),
+                    spouse_name_extension = data.get("Spouse Ext.", ""),
+                    spouse_occupation = data.get("Spouse Occupation", ""),
+                    spouse_employer_business_name = data.get("Spouse Employer", ""),
+                    spouse_business_address = data.get("Spouse Address", ""),
+                    spouse_telephone_no = data.get("Spouse Tel.", ""),
+                    children = data.get("Children", ""),
+                    father_surname = data.get("Father Surname", ""),
+                    father_firstname = data.get("Father First Name", ""),
+                    father_middlename = data.get("Father Middle Name", ""),
+                    father_name_extension = data.get("Father Ext.", ""),
+                    mother_maiden_lastname = data.get("Mother Maiden Last Name", ""),
+                    mother_firstname = data.get("Mother First Name", ""),
+                    mother_middlename = data.get("Mother Middle Name", ""),
+                )
+                print("2")
+
+                # Parse OtherInformation
+                other = OtherInformation.objects.create(
+                    user=request.user,
+                    with_third_degree = data.get("With Third Degree", "N"),
+                    with_fourth_degree = data.get("With Fourth Degree", "N"),
+                    fourth_degree_details = data.get("Fourth Degree Details", ""),
+                    offense = data.get("Offense", "N"),
+                    offense_details = data.get("Offense Details", ""),
+                    criminal = data.get("Criminal", "N"),
+                    criminal_details = data.get("Criminal Details", ""),
+                    criminal_date = data.get("Criminal Date"),
+                    convicted = data.get("Convicted", "N"),
+                    convicted_details = data.get("Convicted Details", ""),
+                    sep_service = data.get("Separated from Service", "N"),
+                    sep_service_details = data.get("Service Separation Details", ""),
+                    candidate = data.get("Candidate", "N"),
+                    candidate_details = data.get("Candidate Details", ""),
+                    resign_candid = data.get("Resigned for Campaign", "N"),
+                    resign_candid_details = data.get("Campaign Resignation Details", ""),
+                    immigrant_status = data.get("Immigration Status", "N"),
+                    immigrant_details = data.get("Immigration Details", ""),
+                    indigenous_group_member = data.get("Indigenous Member", "N"),
+                    disability_status = data.get("Disability Status", "N"),
+                    solo_parent_status = data.get("Solo Parent", "N"),
+                    references = data.get("References", ""),
+                    government_id = data.get("Government ID", ""),
+                    government_id_number = data.get("Government ID Number", ""),
+                    id_issue_date = data.get("ID Issue Date"),
+                    id_issue_place = data.get("ID Issue Place", ""),
+                )
+
+                print("3")
+
+                def safe_str(val):
+                    if val is None:
+                        return ""
+                    return str(val)
+
+                educational = EducationalBackground.objects.create(
+                    user=request.user,
+                    elementary_name = safe_str(data.get("Elementary Name")),
+                    elementary_degree_course = safe_str(data.get("Elementary Degree/Course")),
+                    elementary_period_from = safe_str(data.get("Elementary Period From")),
+                    elementary_period_to = safe_str(data.get("Elementary Period To")),
+                    elementary_highest_level_units = safe_str(data.get("Elementary Highest Level/Units")),
+                    elementary_year_graduated = safe_str(data.get("Elementary Year Graduated")),
+                    elementary_honors = safe_str(data.get("Elementary Honors")),
+
+                    secondary_name = safe_str(data.get("Secondary Name")),
+                    secondary_degree_course = safe_str(data.get("Secondary Degree/Course")),
+                    secondary_period_from = safe_str(data.get("Secondary Period From")),
+                    secondary_period_to = safe_str(data.get("Secondary Period To")),
+                    secondary_highest_level_units = safe_str(data.get("Secondary Highest Level/Units")),
+                    secondary_year_graduated = safe_str(data.get("Secondary Year Graduated")),
+                    secondary_honors = safe_str(data.get("Secondary Honors")),
+
+                    vocational_name = safe_str(data.get("Vocational Name")),
+                    vocational_degree_course = safe_str(data.get("Vocational Degree/Course")),
+                    vocational_period_from = safe_str(data.get("Vocational Period From")),
+                    vocational_period_to = safe_str(data.get("Vocational Period To")),
+                    vocational_highest_level_units = safe_str(data.get("Vocational Highest Level/Units")),
+                    vocational_year_graduated = safe_str(data.get("Vocational Year Graduated")),
+                    vocational_honors = safe_str(data.get("Vocational Honors")),
+
+                    college_name = safe_str(data.get("College Name")),
+                    college_degree_course = safe_str(data.get("College Degree/Course")),
+                    college_period_from = safe_str(data.get("College Period From")),
+                    college_period_to = safe_str(data.get("College Period To")),
+                    college_highest_level_units = safe_str(data.get("College Highest Level/Units")),
+                    college_year_graduated = safe_str(data.get("College Year Graduated")),
+                    college_honors = safe_str(data.get("College Honors")),
+
+                    graduate_name = safe_str(data.get("Graduate Name")),
+                    graduate_degree_course = safe_str(data.get("Graduate Degree/Course")),
+                    graduate_period_from = safe_str(data.get("Graduate Period From")),
+                    graduate_period_to = safe_str(data.get("Graduate Period To")),
+                    graduate_highest_level_units = safe_str(data.get("Graduate Highest Level/Units")),
+                    graduate_year_graduated = safe_str(data.get("Graduate Year Graduated")),
+                    graduate_honors = safe_str(data.get("Graduate Honors")),
+                )
+
+                print("4")
+
+                # Find starting rows for ManyToMany sections and parse them:
+                def find_section_start(ws, title):
+                    for i, row in enumerate(ws.iter_rows(values_only=True), start=1):
+                        if row and row[0] and title in str(row[0]):
+                            return i
+                    return None
+
+                # Helper to parse many cols to list of dicts until empty row or new section
+                def parse_table(ws, start_row, num_cols):
+                    data_list = []
+                    for row in ws.iter_rows(min_row=start_row + 1, values_only=True):
+                        if not any(row):
+                            break
+                        if len(row) < num_cols:
+                            break
+                        data_list.append(row[:num_cols])
+                    return data_list
+
+                # Parse Civil Service Eligibility
+                idx = find_section_start(ws, "CIVIL SERVICE ELIGIBILITY")
+                civil_services_objs = []
+                if idx:
+                    civil_data = parse_table(ws, idx, 6)
+                    for row in civil_data:
+                        # Safe parsing functions:
+                        def safe_decimal(val):
+                            try:
+                                if val in (None, ''):
+                                    return None
+                                return Decimal(val)
+                            except InvalidOperation:
+                                return None
+
+                        def safe_date(val):
+                            if isinstance(val, datetime.date):
+                                return val
+                            try:
+                                # Attempt to parse string if needed here (optional)
+                                return None
+                            except:
+                                return None
+
+                        civil_services_objs.append(CivilServiceEligibility.objects.create(
+                            user=request.user,
+                            career_service=row[0] or '',
+                            rating=safe_decimal(row[1]),
+                            exam_date=safe_date(row[2]),
+                            exam_place=row[3] or '',
+                            license_number=row[4] or '',
+                            license_validity=safe_date(row[5]),
+                        ))
+
+                print("5")
+
+                def safe_decimal(val):
+                    try:
+                        if val is None or val == '':
+                            return None
+                        return Decimal(val)
+                    except InvalidOperation:
+                        return None
+
+                def safe_date(val):
+                    if isinstance(val, datetime.date):
+                        return val
+                    try:
+                        # If string, parse it (optional)
+                        return None
+                    except:
+                        return None
+                
+                def safe_int(val):
+                    try:
+                        if val is None or val == '':
+                            return None
+                        return int(val)
+                    except (ValueError, TypeError):
+                        return None
+
+                # Parse Work Experience
+                idx = find_section_start(ws, "WORK EXPERIENCE")
+                work_experiences_objs = []
+                if idx:
+                    work_data = parse_table(ws, idx, 8)
+                    for row in work_data:
+                        work_experiences_objs.append(WorkExperience.objects.create(
+                            user=request.user,
+                            from_date=safe_date(row[0]),
+                            to_date=safe_date(row[1]),
+                            position_title=row[2] or '',
+                            department=row[3] or '',
+                            monthly_salary=safe_decimal(row[4]),
+                            salary_grade=row[5] or '',
+                            status_of_appointment=row[6] or '',
+                            govt_service=row[7] or 'N',
+                        ))
+
+                print("6")
+
+                # Parse Voluntary Work
+                idx = find_section_start(ws, "VOLUNTARY WORK")
+                voluntary_works_objs = []
+                if idx:
+                    voluntary_data = parse_table(ws, idx, 5)
+                    for row in voluntary_data:
+                        voluntary_works_objs.append(VoluntaryWork.objects.create(
+                            user=request.user,
+                            organization_name=row[0] or '',
+                            from_date=safe_date(row[1]),
+                            to_date=safe_date(row[2]),
+                            number_of_hours=safe_int(row[3]) or 0,
+                            nature_of_work=row[4] or '',
+                        ))
+
+                print("7")
+
+                # Parse Learning and Development
+                idx = find_section_start(ws, "LEARNING AND DEVELOPMENT")
+                learning_developments_objs = []
+                if idx:
+                    learning_data = parse_table(ws, idx, 6)
+                    for row in learning_data:
+                        learning_developments_objs.append(LearningDevelopment.objects.create(
+                            user=request.user,
+                            title=row[0] or '',
+                            from_date=safe_date(row[1]),
+                            to_date=safe_date(row[2]),
+                            number_of_hours=safe_int(row[3]) or 0,
+                            type_of_ld=row[4] or '',
+                            conducted_by=row[5] or '',
+                        ))
+
+                print("8")
+
+                # Create complete form linking related objects
+                complete_form = CompleteForm.objects.create(
+                    user=request.user,
+                    personal_information=personal,
+                    family_background=family,
+                    other_information=other,
+                    educational_background=educational,
+                )
+                print("9")
+                complete_form.civil_service.set(civil_services_objs)
+                complete_form.work_experience.set(work_experiences_objs)
+                complete_form.voluntary_work.set(voluntary_works_objs)
+                complete_form.learning_development.set(learning_developments_objs)
+                print("Hello there bitch")
+
+                messages.success(request, "Form imported successfully!")
+                return redirect('forms')
+
+            except Exception as e:
+                messages.error(request, f"Failed to import Excel: {e}")
+
+    else:
+        forms1 = CompleteForm.objects.filter(user=request.user)
+        form = ImportForm()
+
+    return render(request, 'pds_app/forms.html', {'form': form, "forms":forms1})
+
 
 @login_required
 def export_form(request, form_id):
@@ -52,7 +381,7 @@ def export_form(request, form_id):
     write("Citizenship", p.citizenship)
 
     row += 1
-    write("== FAMILY BACKGROUND ==", "")
+    write("familybackground", "")
 
     f = form.family_background
     write("Spouse Surname", f.spouse_surname)
@@ -73,7 +402,7 @@ def export_form(request, form_id):
     write("Mother Middle Name", f.mother_middlename)
 
     row += 1
-    write("== OTHER INFORMATION ==", "")
+    write("otherinformation", "")
 
     o = form.other_information
     write("With Third Degree", o.with_third_degree)
@@ -106,7 +435,7 @@ def export_form(request, form_id):
     row += 2
 
     # EDUCATIONAL BACKGROUND (can be structured as table; example: Elementary row)
-    ws.cell(row=row, column=1, value="=== EDUCATIONAL BACKGROUND ==="); row += 1
+    ws.cell(row=row, column=1, value="EDUCATIONAL BACKGROUND"); row += 1
     e = form.educational_background
 
     ws.append(["Level", "Name of School", "Degree/Course", "From", "To", "Highest Level/Units", "Year Graduated", "Honors"])
@@ -120,28 +449,28 @@ def export_form(request, form_id):
     row = ws.max_row + 2
 
     # CIVIL SERVICE ELIGIBILITY
-    ws.cell(row=row, column=1, value="=== CIVIL SERVICE ELIGIBILITY ==="); row += 1
+    ws.cell(row=row, column=1, value="CIVIL SERVICE ELIGIBILITY"); row += 1
     ws.append(["Career Service", "Rating", "Exam Date", "Exam Place", "License #", "License Validity"])
     for item in form.civil_service.all():
         ws.append([item.career_service, item.rating, item.exam_date, item.exam_place, item.license_number, item.license_validity])
     row = ws.max_row + 2
 
     # WORK EXPERIENCE
-    ws.cell(row=row, column=1, value="=== WORK EXPERIENCE ==="); row += 1
+    ws.cell(row=row, column=1, value="WORK EXPERIENCE"); row += 1
     ws.append(["From", "To", "Position Title", "Department/Agency", "Monthly Salary", "Salary Grade & STEP", "Status of Appointment", "Govt Service"])
     for w in form.work_experience.all():
         ws.append([w.from_date, w.to_date, w.position_title, w.department, w.monthly_salary, w.salary_grade, w.status_of_appointment, w.govt_service])
     row = ws.max_row + 2
 
     # VOLUNTARY WORK
-    ws.cell(row=row, column=1, value="=== VOLUNTARY WORK ==="); row += 1
+    ws.cell(row=row, column=1, value="VOLUNTARY WORK"); row += 1
     ws.append(["Organization", "From", "To", "Hours", "Nature"])
     for v in form.voluntary_work.all():
         ws.append([v.organization_name, v.from_date, v.to_date, v.number_of_hours, v.nature_of_work])
     row = ws.max_row + 2
 
     # LEARNING AND DEVELOPMENT
-    ws.cell(row=row, column=1, value="=== LEARNING AND DEVELOPMENT ==="); row += 1
+    ws.cell(row=row, column=1, value="LEARNING AND DEVELOPMENT"); row += 1
     ws.append(["Title", "From", "To", "Hours", "Type", "Conducted By"])
     for l in form.learning_development.all():
         ws.append([l.title, l.from_date, l.to_date, l.number_of_hours, l.type_of_ld, l.conducted_by])
@@ -167,7 +496,8 @@ def export_form(request, form_id):
 @login_required
 def home(request):
     forms1 = CompleteForm.objects.filter(user=request.user)
-    return render(request, "pds_app/forms.html", {"forms": forms1})
+    form = ImportForm()
+    return render(request, "pds_app/forms.html", {"forms": forms1, "form":form})
     # forms1 = CompleteForm.objects.all()
     # return render(request,"pds_app/forms.html",{"forms":forms1})
 

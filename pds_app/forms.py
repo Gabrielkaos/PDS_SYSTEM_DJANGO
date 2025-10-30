@@ -2,6 +2,8 @@ from django import forms
 from .models import PersonalInformation, EducationalBackground, FamilyBackground
 from .models import OtherInformation
 
+class ImportForm(forms.Form):
+    file = forms.FileField(label="Choose Excel File")
 
 class OtherInformationForm(forms.ModelForm):
     class Meta:
