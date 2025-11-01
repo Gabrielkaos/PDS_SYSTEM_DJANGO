@@ -330,9 +330,12 @@ header p a {
     width: 250px;
     background-color: #f1efef;
     padding: 20px;
+    padding-bottom: 40px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     height: calc(100vh - 85px);
     position: fixed;
+    overflow-y: auto;      
+    overflow-x: hidden;    
 }
 
 .sidebar a {
@@ -342,6 +345,14 @@ header p a {
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 5px;
+    
+}
+
+.sidebar::after {
+    content: "";
+    display: block;
+    height: 60px; 
+    flex-shrink: 0;
 }
 
 
