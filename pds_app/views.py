@@ -17,20 +17,51 @@ def import_form(request):
     if request.method == 'POST':
         forms1 = CompleteForm.objects.filter(user=request.user)
         form = ImportForm(request.POST, request.FILES)
-        print("I was here")
         if form.is_valid():
-            print("Im valid")
             excel_file = request.FILES['file']
 
             try:
-                wb = openpyxl.load_workbook(excel_file)
+                import datetime
+                from decimal import Decimal, InvalidOperation
+                import openpyxl
+
+                wb = openpyxl.load_workbook(excel_file, data_only=True)
                 ws = wb.active
-                print("loading file")
 
-                # Parse vertical data for PersonalInformation, FamilyBackground, OtherInformation, EducationalBackground
-                # Assuming first ~50 rows contain these label-value pairs
+                print("Workbook loaded successfully")
 
-                def parse_vert_section(sheet, start_row=1, max_row=50):
+                # --- Utility conversion helpers ---
+                def safe_str(val):
+                    return "" if val is None else str(val).strip()
+
+                def safe_decimal(val):
+                    try:
+                        if val in (None, ''):
+                            return None
+                        return Decimal(val)
+                    except InvalidOperation:
+                        return None
+
+                def safe_int(val):
+                    try:
+                        if val in (None, ''):
+                            return None
+                        return int(val)
+                    except (ValueError, TypeError):
+                        return None
+
+                def safe_date(val):
+                    if isinstance(val, datetime.date):
+                        return val
+                    if not val:
+                        return None
+                    try:
+                        return datetime.datetime.strptime(str(val), "%Y-%m-%d").date()
+                    except Exception:
+                        return None
+
+                # --- Parse top vertical key/value section (A:B columns) ---
+                def parse_vert_section(sheet, start_row=1, max_row=80):
                     data = {}
                     for row in sheet.iter_rows(min_row=start_row, max_row=max_row, max_col=2, values_only=True):
                         key, val = row
@@ -39,277 +70,220 @@ def import_form(request):
                     return data
 
                 data = parse_vert_section(ws)
+                print("Parsed vertical section")
 
-                # Create PersonalInformation
+                # --- Create PersonalInformation ---
                 personal = PersonalInformation.objects.create(
                     user=request.user,
-                    surname = data.get("Surname", ""),
-                    firstname = data.get("First Name", ""),
-                    middlename = data.get("Middle Name", ""),
-                    date_of_birth = data.get("Date of Birth"),
-                    place_of_birth = data.get("Place of Birth", ""),
-                    sex = data.get("Sex", ""),
-                    civil_status = data.get("Civil Status", ""),
-                    height = data.get("Height (cm)"),
-                    weight = data.get("Weight (kg)"),
-                    blood_type = data.get("Blood Type", ""),
-                    residential_address = data.get("Residential Address", ""),
-                    residential_zip_code = data.get("Residential Zip Code", ""),
-                    permanent_address = data.get("Permanent Address", ""),
-                    permanent_zip_code = data.get("Permanent Zip Code", ""),
-                    telephone_no = data.get("Telephone", ""),
-                    mobile_no = data.get("Mobile", ""),
-                    email_address = data.get("Email", ""),
-                    gsis = data.get("GSIS", ""),
-                    pag_ibig = data.get("Pag-IBIG", ""),
-                    philhealth = data.get("PhilHealth", ""),
-                    sss_no = data.get("SSS", ""),
-                    tin_no = data.get("TIN", ""),
-                    agent_employee_number = data.get("Agent Employee Number", ""),
-                    citizenship = data.get("Citizenship", ""),
+                    surname=safe_str(data.get("Surname")),
+                    firstname=safe_str(data.get("First Name")),
+                    middlename=safe_str(data.get("Middle Name")),
+                    date_of_birth=safe_date(data.get("Date of Birth")),
+                    place_of_birth=safe_str(data.get("Place of Birth")),
+                    sex=safe_str(data.get("Sex")),
+                    civil_status=safe_str(data.get("Civil Status")),
+                    height=safe_decimal(data.get("Height (cm)")) or 0,
+                    weight=safe_decimal(data.get("Weight (kg)")) or 0,
+                    blood_type=safe_str(data.get("Blood Type")),
+                    residential_address=safe_str(data.get("Residential Address")),
+                    residential_zip_code=safe_str(data.get("Residential Zip Code")),
+                    permanent_address=safe_str(data.get("Permanent Address")),
+                    permanent_zip_code=safe_str(data.get("Permanent Zip Code")),
+                    telephone_no=safe_str(data.get("Telephone")),
+                    mobile_no=safe_str(data.get("Mobile")),
+                    email_address=safe_str(data.get("Email")),
+                    gsis=safe_str(data.get("GSIS")),
+                    pag_ibig=safe_str(data.get("Pag-IBIG")),
+                    philhealth=safe_str(data.get("PhilHealth")),
+                    sss_no=safe_str(data.get("SSS")),
+                    tin_no=safe_str(data.get("TIN")),
+                    agent_employee_number=safe_str(data.get("Agent Employee Number")),
+                    citizenship=safe_str(data.get("Citizenship")),
                 )
-                print("1")
 
-                # Similarly parse FamilyBackground
+                # --- Create FamilyBackground ---
                 family = FamilyBackground.objects.create(
                     user=request.user,
-                    spouse_surname = data.get("Spouse Surname", ""),
-                    spouse_firstname = data.get("Spouse First Name", ""),
-                    spouse_middlename = data.get("Spouse Middle Name", ""),
-                    spouse_name_extension = data.get("Spouse Ext.", ""),
-                    spouse_occupation = data.get("Spouse Occupation", ""),
-                    spouse_employer_business_name = data.get("Spouse Employer", ""),
-                    spouse_business_address = data.get("Spouse Address", ""),
-                    spouse_telephone_no = data.get("Spouse Tel.", ""),
-                    children = data.get("Children", ""),
-                    father_surname = data.get("Father Surname", ""),
-                    father_firstname = data.get("Father First Name", ""),
-                    father_middlename = data.get("Father Middle Name", ""),
-                    father_name_extension = data.get("Father Ext.", ""),
-                    mother_maiden_lastname = data.get("Mother Maiden Last Name", ""),
-                    mother_firstname = data.get("Mother First Name", ""),
-                    mother_middlename = data.get("Mother Middle Name", ""),
+                    spouse_surname=safe_str(data.get("Spouse Surname")),
+                    spouse_firstname=safe_str(data.get("Spouse First Name")),
+                    spouse_middlename=safe_str(data.get("Spouse Middle Name")),
+                    spouse_name_extension=safe_str(data.get("Spouse Ext.")),
+                    spouse_occupation=safe_str(data.get("Spouse Occupation")),
+                    spouse_employer_business_name=safe_str(data.get("Spouse Employer")),
+                    spouse_business_address=safe_str(data.get("Spouse Address")),
+                    spouse_telephone_no=safe_str(data.get("Spouse Tel.")),
+                    children=safe_str(data.get("Children")),
+                    father_surname=safe_str(data.get("Father Surname")),
+                    father_firstname=safe_str(data.get("Father First Name")),
+                    father_middlename=safe_str(data.get("Father Middle Name")),
+                    father_name_extension=safe_str(data.get("Father Ext.")),
+                    mother_maiden_lastname=safe_str(data.get("Mother Maiden Last Name")),
+                    mother_firstname=safe_str(data.get("Mother First Name")),
+                    mother_middlename=safe_str(data.get("Mother Middle Name")),
                 )
-                print("2")
 
-                # Parse OtherInformation
+                # --- Create OtherInformation ---
                 other = OtherInformation.objects.create(
                     user=request.user,
-                    with_third_degree = data.get("With Third Degree", "N"),
-                    with_fourth_degree = data.get("With Fourth Degree", "N"),
-                    fourth_degree_details = data.get("Fourth Degree Details", ""),
-                    offense = data.get("Offense", "N"),
-                    offense_details = data.get("Offense Details", ""),
-                    criminal = data.get("Criminal", "N"),
-                    criminal_details = data.get("Criminal Details", ""),
-                    criminal_date = data.get("Criminal Date"),
-                    convicted = data.get("Convicted", "N"),
-                    convicted_details = data.get("Convicted Details", ""),
-                    sep_service = data.get("Separated from Service", "N"),
-                    sep_service_details = data.get("Service Separation Details", ""),
-                    candidate = data.get("Candidate", "N"),
-                    candidate_details = data.get("Candidate Details", ""),
-                    resign_candid = data.get("Resigned for Campaign", "N"),
-                    resign_candid_details = data.get("Campaign Resignation Details", ""),
-                    immigrant_status = data.get("Immigration Status", "N"),
-                    immigrant_details = data.get("Immigration Details", ""),
-                    indigenous_group_member = data.get("Indigenous Member", "N"),
-                    disability_status = data.get("Disability Status", "N"),
-                    solo_parent_status = data.get("Solo Parent", "N"),
-                    references = data.get("References", ""),
-                    government_id = data.get("Government ID", ""),
-                    government_id_number = data.get("Government ID Number", ""),
-                    id_issue_date = data.get("ID Issue Date"),
-                    id_issue_place = data.get("ID Issue Place", ""),
+                    with_third_degree=safe_str(data.get("With Third Degree")) or "N",
+                    with_fourth_degree=safe_str(data.get("With Fourth Degree")) or "N",
+                    fourth_degree_details=safe_str(data.get("Fourth Degree Details")),
+                    offense=safe_str(data.get("Offense")) or "N",
+                    offense_details=safe_str(data.get("Offense Details")),
+                    criminal=safe_str(data.get("Criminal")) or "N",
+                    criminal_details=safe_str(data.get("Criminal Details")),
+                    criminal_date=safe_date(data.get("Criminal Date")),
+                    convicted=safe_str(data.get("Convicted")) or "N",
+                    convicted_details=safe_str(data.get("Convicted Details")),
+                    sep_service=safe_str(data.get("Separated from Service")) or "N",
+                    sep_service_details=safe_str(data.get("Service Separation Details")),
+                    candidate=safe_str(data.get("Candidate")) or "N",
+                    candidate_details=safe_str(data.get("Candidate Details")),
+                    resign_candid=safe_str(data.get("Resigned for Campaign")) or "N",
+                    resign_candid_details=safe_str(data.get("Campaign Resignation Details")),
+                    immigrant_status=safe_str(data.get("Immigration Status")) or "N",
+                    immigrant_details=safe_str(data.get("Immigration Details")),
+                    indigenous_group_member=safe_str(data.get("Indigenous Member")) or "N",
+                    disability_status=safe_str(data.get("Disability Status")) or "N",
+                    solo_parent_status=safe_str(data.get("Solo Parent")) or "N",
+                    references=safe_str(data.get("References")),
+                    government_id=safe_str(data.get("Government ID")),
+                    government_id_number=safe_str(data.get("Government ID Number")),
+                    id_issue_date=safe_date(data.get("ID Issue Date")),
+                    id_issue_place=safe_str(data.get("ID Issue Place")),
                 )
 
-                print("3")
-
-                def safe_str(val):
-                    if val is None:
-                        return ""
-                    return str(val)
-
-                educational = EducationalBackground.objects.create(
-                    user=request.user,
-                    elementary_name = safe_str(data.get("Elementary Name")),
-                    elementary_degree_course = safe_str(data.get("Elementary Degree/Course")),
-                    elementary_period_from = safe_str(data.get("Elementary Period From")),
-                    elementary_period_to = safe_str(data.get("Elementary Period To")),
-                    elementary_highest_level_units = safe_str(data.get("Elementary Highest Level/Units")),
-                    elementary_year_graduated = safe_str(data.get("Elementary Year Graduated")),
-                    elementary_honors = safe_str(data.get("Elementary Honors")),
-
-                    secondary_name = safe_str(data.get("Secondary Name")),
-                    secondary_degree_course = safe_str(data.get("Secondary Degree/Course")),
-                    secondary_period_from = safe_str(data.get("Secondary Period From")),
-                    secondary_period_to = safe_str(data.get("Secondary Period To")),
-                    secondary_highest_level_units = safe_str(data.get("Secondary Highest Level/Units")),
-                    secondary_year_graduated = safe_str(data.get("Secondary Year Graduated")),
-                    secondary_honors = safe_str(data.get("Secondary Honors")),
-
-                    vocational_name = safe_str(data.get("Vocational Name")),
-                    vocational_degree_course = safe_str(data.get("Vocational Degree/Course")),
-                    vocational_period_from = safe_str(data.get("Vocational Period From")),
-                    vocational_period_to = safe_str(data.get("Vocational Period To")),
-                    vocational_highest_level_units = safe_str(data.get("Vocational Highest Level/Units")),
-                    vocational_year_graduated = safe_str(data.get("Vocational Year Graduated")),
-                    vocational_honors = safe_str(data.get("Vocational Honors")),
-
-                    college_name = safe_str(data.get("College Name")),
-                    college_degree_course = safe_str(data.get("College Degree/Course")),
-                    college_period_from = safe_str(data.get("College Period From")),
-                    college_period_to = safe_str(data.get("College Period To")),
-                    college_highest_level_units = safe_str(data.get("College Highest Level/Units")),
-                    college_year_graduated = safe_str(data.get("College Year Graduated")),
-                    college_honors = safe_str(data.get("College Honors")),
-
-                    graduate_name = safe_str(data.get("Graduate Name")),
-                    graduate_degree_course = safe_str(data.get("Graduate Degree/Course")),
-                    graduate_period_from = safe_str(data.get("Graduate Period From")),
-                    graduate_period_to = safe_str(data.get("Graduate Period To")),
-                    graduate_highest_level_units = safe_str(data.get("Graduate Highest Level/Units")),
-                    graduate_year_graduated = safe_str(data.get("Graduate Year Graduated")),
-                    graduate_honors = safe_str(data.get("Graduate Honors")),
-                )
-
-                print("4")
-
-                # Find starting rows for ManyToMany sections and parse them:
+                # --- Section locators and table parsers ---
                 def find_section_start(ws, title):
                     for i, row in enumerate(ws.iter_rows(values_only=True), start=1):
-                        if row and row[0] and title in str(row[0]):
+                        if row and row[0] and title.strip().upper() in str(row[0]).upper():
                             return i
                     return None
 
-                # Helper to parse many cols to list of dicts until empty row or new section
                 def parse_table(ws, start_row, num_cols):
                     data_list = []
                     for row in ws.iter_rows(min_row=start_row + 1, values_only=True):
                         if not any(row):
                             break
-                        if len(row) < num_cols:
-                            break
-                        data_list.append(row[:num_cols])
+                        data_list.append(list(row[:num_cols]))
                     return data_list
 
-                # Parse Civil Service Eligibility
-                idx = find_section_start(ws, "CIVIL SERVICE ELIGIBILITY")
-                civil_services_objs = []
+                # --- EDUCATIONAL BACKGROUND ---
+                idx = find_section_start(ws, "EDUCATIONAL BACKGROUND")
+                educational = None
                 if idx:
-                    civil_data = parse_table(ws, idx, 6)
-                    for row in civil_data:
-                        # Safe parsing functions:
-                        def safe_decimal(val):
-                            try:
-                                if val in (None, ''):
-                                    return None
-                                return Decimal(val)
-                            except InvalidOperation:
-                                return None
+                    edu_data = parse_table(ws, idx + 1, 8)  # +1 to skip headers row
+                    edu_dict = {}
+                    for row in edu_data:
+                        if not row[0]:
+                            continue
+                        level = str(row[0]).strip().lower()
+                        edu_dict[level] = row[1:]
 
-                        def safe_date(val):
-                            if isinstance(val, datetime.date):
-                                return val
-                            try:
-                                # Attempt to parse string if needed here (optional)
-                                return None
-                            except:
-                                return None
+                    educational = EducationalBackground.objects.create(
+                        user=request.user,
+                        elementary_name=safe_str(edu_dict.get("elementary", [""])[0]),
+                        elementary_degree_course=safe_str(edu_dict.get("elementary", ["", ""])[1]),
+                        elementary_period_from=safe_str(edu_dict.get("elementary", ["", "", ""])[2]),
+                        elementary_period_to=safe_str(edu_dict.get("elementary", ["", "", "", ""])[3]),
+                        elementary_highest_level_units=safe_str(edu_dict.get("elementary", ["", "", "", "", ""])[4]),
+                        elementary_year_graduated=safe_str(edu_dict.get("elementary", ["", "", "", "", "", ""])[5]),
+                        elementary_honors=safe_str(edu_dict.get("elementary", ["", "", "", "", "", "", ""])[6]),
+                        secondary_name=safe_str(edu_dict.get("secondary", [""])[0]),
+                        secondary_degree_course=safe_str(edu_dict.get("secondary", ["", ""])[1]),
+                        secondary_period_from=safe_str(edu_dict.get("secondary", ["", "", ""])[2]),
+                        secondary_period_to=safe_str(edu_dict.get("secondary", ["", "", "", ""])[3]),
+                        secondary_highest_level_units=safe_str(edu_dict.get("secondary", ["", "", "", "", ""])[4]),
+                        secondary_year_graduated=safe_str(edu_dict.get("secondary", ["", "", "", "", "", ""])[5]),
+                        secondary_honors=safe_str(edu_dict.get("secondary", ["", "", "", "", "", "", ""])[6]),
+                        vocational_name=safe_str(edu_dict.get("vocational", [""])[0]),
+                        vocational_degree_course=safe_str(edu_dict.get("vocational", ["", ""])[1]),
+                        vocational_period_from=safe_str(edu_dict.get("vocational", ["", "", ""])[2]),
+                        vocational_period_to=safe_str(edu_dict.get("vocational", ["", "", "", ""])[3]),
+                        vocational_highest_level_units=safe_str(edu_dict.get("vocational", ["", "", "", "", ""])[4]),
+                        vocational_year_graduated=safe_str(edu_dict.get("vocational", ["", "", "", "", "", ""])[5]),
+                        vocational_honors=safe_str(edu_dict.get("vocational", ["", "", "", "", "", "", ""])[6]),
+                        college_name=safe_str(edu_dict.get("college", [""])[0]),
+                        college_degree_course=safe_str(edu_dict.get("college", ["", ""])[1]),
+                        college_period_from=safe_str(edu_dict.get("college", ["", "", ""])[2]),
+                        college_period_to=safe_str(edu_dict.get("college", ["", "", "", ""])[3]),
+                        college_highest_level_units=safe_str(edu_dict.get("college", ["", "", "", "", ""])[4]),
+                        college_year_graduated=safe_str(edu_dict.get("college", ["", "", "", "", "", ""])[5]),
+                        college_honors=safe_str(edu_dict.get("college", ["", "", "", "", "", "", ""])[6]),
+                        graduate_name=safe_str(edu_dict.get("graduate studies", [""])[0]),
+                        graduate_degree_course=safe_str(edu_dict.get("graduate studies", ["", ""])[1]),
+                        graduate_period_from=safe_str(edu_dict.get("graduate studies", ["", "", ""])[2]),
+                        graduate_period_to=safe_str(edu_dict.get("graduate studies", ["", "", "", ""])[3]),
+                        graduate_highest_level_units=safe_str(edu_dict.get("graduate studies", ["", "", "", "", ""])[4]),
+                        graduate_year_graduated=safe_str(edu_dict.get("graduate studies", ["", "", "", "", "", ""])[5]),
+                        graduate_honors=safe_str(edu_dict.get("graduate studies", ["", "", "", "", "", "", ""])[6]),
+                    )
+                else:
+                    messages.warning(request, "Educational background section not found.")
+                    educational = EducationalBackground.objects.create(user=request.user)
 
-                        civil_services_objs.append(CivilServiceEligibility.objects.create(
+                # --- CIVIL SERVICE ---
+                civil_objs = []
+                idx = find_section_start(ws, "CIVIL SERVICE ELIGIBILITY")
+                if idx:
+                    for row in parse_table(ws, idx + 1, 6):
+                        civil_objs.append(CivilServiceEligibility.objects.create(
                             user=request.user,
-                            career_service=row[0] or '',
+                            career_service=safe_str(row[0]),
                             rating=safe_decimal(row[1]),
                             exam_date=safe_date(row[2]),
-                            exam_place=row[3] or '',
-                            license_number=row[4] or '',
+                            exam_place=safe_str(row[3]),
+                            license_number=safe_str(row[4]),
                             license_validity=safe_date(row[5]),
                         ))
 
-                print("5")
-
-                def safe_decimal(val):
-                    try:
-                        if val is None or val == '':
-                            return None
-                        return Decimal(val)
-                    except InvalidOperation:
-                        return None
-
-                def safe_date(val):
-                    if isinstance(val, datetime.date):
-                        return val
-                    try:
-                        # If string, parse it (optional)
-                        return None
-                    except:
-                        return None
-                
-                def safe_int(val):
-                    try:
-                        if val is None or val == '':
-                            return None
-                        return int(val)
-                    except (ValueError, TypeError):
-                        return None
-
-                # Parse Work Experience
+                # --- WORK EXPERIENCE ---
+                work_objs = []
                 idx = find_section_start(ws, "WORK EXPERIENCE")
-                work_experiences_objs = []
                 if idx:
-                    work_data = parse_table(ws, idx, 8)
-                    for row in work_data:
-                        work_experiences_objs.append(WorkExperience.objects.create(
+                    for row in parse_table(ws, idx + 1, 8):
+                        work_objs.append(WorkExperience.objects.create(
                             user=request.user,
                             from_date=safe_date(row[0]),
                             to_date=safe_date(row[1]),
-                            position_title=row[2] or '',
-                            department=row[3] or '',
+                            position_title=safe_str(row[2]),
+                            department=safe_str(row[3]),
                             monthly_salary=safe_decimal(row[4]),
-                            salary_grade=row[5] or '',
-                            status_of_appointment=row[6] or '',
-                            govt_service=row[7] or 'N',
+                            salary_grade=safe_str(row[5]),
+                            status_of_appointment=safe_str(row[6]),
+                            govt_service=safe_str(row[7]) or "N",
                         ))
 
-                print("6")
-
-                # Parse Voluntary Work
+                # --- VOLUNTARY WORK ---
+                vol_objs = []
                 idx = find_section_start(ws, "VOLUNTARY WORK")
-                voluntary_works_objs = []
                 if idx:
-                    voluntary_data = parse_table(ws, idx, 5)
-                    for row in voluntary_data:
-                        voluntary_works_objs.append(VoluntaryWork.objects.create(
+                    for row in parse_table(ws, idx + 1, 5):
+                        vol_objs.append(VoluntaryWork.objects.create(
                             user=request.user,
-                            organization_name=row[0] or '',
+                            organization_name=safe_str(row[0]),
                             from_date=safe_date(row[1]),
                             to_date=safe_date(row[2]),
-                            number_of_hours=safe_int(row[3]) or 0,
-                            nature_of_work=row[4] or '',
+                            number_of_hours=safe_int(row[3]),
+                            nature_of_work=safe_str(row[4]),
                         ))
 
-                print("7")
-
-                # Parse Learning and Development
+                # --- LEARNING & DEVELOPMENT ---
+                ld_objs = []
                 idx = find_section_start(ws, "LEARNING AND DEVELOPMENT")
-                learning_developments_objs = []
                 if idx:
-                    learning_data = parse_table(ws, idx, 6)
-                    for row in learning_data:
-                        learning_developments_objs.append(LearningDevelopment.objects.create(
+                    for row in parse_table(ws, idx + 1, 6):
+                        ld_objs.append(LearningDevelopment.objects.create(
                             user=request.user,
-                            title=row[0] or '',
+                            title=safe_str(row[0]),
                             from_date=safe_date(row[1]),
                             to_date=safe_date(row[2]),
-                            number_of_hours=safe_int(row[3]) or 0,
-                            type_of_ld=row[4] or '',
-                            conducted_by=row[5] or '',
+                            number_of_hours=safe_int(row[3]),
+                            type_of_ld=safe_str(row[4]),
+                            conducted_by=safe_str(row[5]),
                         ))
 
-                print("8")
-
-                # Create complete form linking related objects
+                # --- CompleteForm creation ---
                 complete_form = CompleteForm.objects.create(
                     user=request.user,
                     personal_information=personal,
@@ -317,24 +291,24 @@ def import_form(request):
                     other_information=other,
                     educational_background=educational,
                 )
-                print("9")
-                complete_form.civil_service.set(civil_services_objs)
-                complete_form.work_experience.set(work_experiences_objs)
-                complete_form.voluntary_work.set(voluntary_works_objs)
-                complete_form.learning_development.set(learning_developments_objs)
-                print("Hello there bitch")
+                complete_form.civil_service.set(civil_objs)
+                complete_form.work_experience.set(work_objs)
+                complete_form.voluntary_work.set(vol_objs)
+                complete_form.learning_development.set(ld_objs)
 
                 messages.success(request, "Form imported successfully!")
                 return redirect('forms')
 
             except Exception as e:
+                import traceback
+                traceback.print_exc()
                 messages.error(request, f"Failed to import Excel: {e}")
 
     else:
         forms1 = CompleteForm.objects.filter(user=request.user)
         form = ImportForm()
 
-    return render(request, 'pds_app/forms.html', {'form': form, "forms":forms1})
+    return render(request, 'pds_app/forms.html', {'form': form, "forms": forms1})
 
 
 @login_required
