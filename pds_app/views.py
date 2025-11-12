@@ -799,7 +799,8 @@ def create_form(request):
         'education_form': education_form,
         'other_form': other_form,
         'creating': True,
-        "forms": CompleteForm.objects.filter(user=request.user)
+        "forms": CompleteForm.objects.filter(user=request.user),
+        "form":ImportForm()
     }
 
     return render(request, 'pds_app/edit_form.html', context)
