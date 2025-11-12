@@ -1,3 +1,15 @@
+
+
+.open-modal-button{
+    border: none;
+    border-radius: 4px;
+    padding: 10px 8px;
+    cursor: pointer;
+    margin-bottom: 2.5px;
+    margin-top: 2.5px;
+    margin-left: 60px;
+}
+
 .no-scroll {
     overflow: hidden;
     height: 100vh;

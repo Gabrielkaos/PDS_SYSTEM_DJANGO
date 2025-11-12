@@ -81,6 +81,7 @@ all_forms.html
 .form-actions {
     display: flex;
     gap: 10px;
+    margin-top:20px;
     margin-bottom: 20px;
 }
 
@@ -388,14 +389,33 @@ header p a {
 /* Personal Info Form*/
 /* General Form Styles */
 .general-form {
-    max-width: 800px;
+    max-width: fit-content;
     margin: 0 auto;
+    margin-right: 10px;
+    max-width: 100%;
+    overflow-x: auto;
     font-family: Arial, sans-serif;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 8px;
     /* background-color: #f9f9f9; */
 }
+
+.general-form table input,
+.general-form table select,
+.general-form table textarea {
+  width: 100%;           /* fill their cell */
+  box-sizing: border-box; /* ensures padding/border don’t expand width */
+  min-width: 0;           /* allows shrinking when table shrinks */
+}
+
+
+.general-form table {
+  width: 100%;
+  table-layout: fixed; /* forces cells to respect available width */
+  word-wrap: break-word;
+}
+
 
 /* Fieldset and Legend */
 fieldset {
@@ -505,12 +525,11 @@ td select {
 }
 
 
-.background-form table {
-    margin-bottom: 20px;
-}
-
-
 /* Button Styling */
+
+.add-row-btn{
+    margin-top:10px;
+}
 .add-row-btn, .delete-row-btn {
     padding: 6px 12px;
     background-color: #007bff;

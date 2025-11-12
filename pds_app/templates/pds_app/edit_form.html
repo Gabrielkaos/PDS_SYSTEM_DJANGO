@@ -741,6 +741,13 @@ function addLearningDevelopmentRow() {
 }
 </script>
 
+<script>
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('delete-row-btn')) {
+        e.target.closest('tr').remove();
+    }
+});
+</script>
 
 
 {% endblock %}
