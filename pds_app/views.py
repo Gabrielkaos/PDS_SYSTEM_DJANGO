@@ -490,7 +490,8 @@ def all_forms(request, form_id):
 def forms(request):
     """Show only user's forms"""
     user_forms = CompleteForm.objects.filter(user=request.user)
-    return render(request, "pds_app/forms.html", {"forms": user_forms})
+    form = ImportForm()
+    return render(request, "pds_app/forms.html", {"forms": user_forms,"form":form})
 
 @login_required
 def delete_form(request, form_id):
