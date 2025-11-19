@@ -28,13 +28,13 @@ class PersonalInformation(models.Model):
     height = models.DecimalField(
         max_digits=5, 
         decimal_places=2, 
-        validators=[MinValueValidator(50), MaxValueValidator(300)],  # reasonable range in cm
+        validators=[MinValueValidator(50), MaxValueValidator(300)], 
         help_text="Height in cm"
     )
     weight = models.DecimalField(
         max_digits=5, 
         decimal_places=2,
-        validators=[MinValueValidator(20), MaxValueValidator(300)],  # reasonable range in kg
+        validators=[MinValueValidator(20), MaxValueValidator(300)],  
         help_text="Weight in kg"
     )
     blood_type = models.CharField(max_length=3, choices=[
@@ -228,7 +228,6 @@ class WorkExperience(models.Model):
 
 class OtherInformation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="other_informations")
-    # Relatives by consanguinity or affinity
     with_third_degree = models.CharField(
         max_length=3, 
         default='N',
@@ -246,7 +245,6 @@ class OtherInformation(models.Model):
         verbose_name="Details for Fourth Degree (if any)"
     )
 
-    # Administrative and Criminal Offenses
     offense = models.CharField(
         max_length=3, 
         default='N',
@@ -272,7 +270,6 @@ class OtherInformation(models.Model):
         verbose_name="Date of Criminal Charge"
     )
 
-    # Conviction
     convicted = models.CharField(
         max_length=3, 
         default='N',
@@ -284,7 +281,6 @@ class OtherInformation(models.Model):
         verbose_name="Details of Conviction"
     )
 
-    # Service Separation
     sep_service = models.CharField(
         max_length=3, 
         default='N',
@@ -296,7 +292,6 @@ class OtherInformation(models.Model):
         verbose_name="Details of Service Separation"
     )
 
-    # Election-Related Questions
     candidate = models.CharField(
         max_length=3, 
         default='N',
@@ -318,7 +313,6 @@ class OtherInformation(models.Model):
         verbose_name="Details of Election Campaign Resignation"
     )
 
-    # Immigration or Permanent Residency
     immigrant_status = models.CharField(
         max_length=3, 
         default='N',
@@ -330,7 +324,6 @@ class OtherInformation(models.Model):
         verbose_name="Details of Immigration Status"
     )
 
-    # Membership and Other Information
     indigenous_group_member = models.CharField(
         max_length=3, 
         default='N',
@@ -350,11 +343,11 @@ class OtherInformation(models.Model):
         verbose_name="Solo Parent (Y/N)"
     )
 
-    # References
+    
     references = models.TextField(blank=True, null=True, verbose_name='References (Enter details separated by new lines or commas)')
 
 
-    # Government Issued ID
+    
     government_id = models.CharField(
         max_length=50,null=True, blank=True,  
         verbose_name="Government Issued ID"
@@ -372,7 +365,7 @@ class OtherInformation(models.Model):
         verbose_name="ID Issue Place"
     )
 
-    # Final Details
+    
     date_accomplished = models.DateField(
         auto_now_add=True, 
         verbose_name="Date Accomplished"
@@ -465,15 +458,15 @@ class EducationalBackground(models.Model):
 
 class CompleteForm(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="forms")
-    # name = models.CharField(max_length=200)
     
-    # Make foreign keys optional for flexibility
+    
+    
     personal_information = models.ForeignKey(PersonalInformation, on_delete=models.CASCADE, null=True, blank=True)
     family_background = models.ForeignKey(FamilyBackground, on_delete=models.CASCADE, null=True, blank=True)
     educational_background = models.ForeignKey(EducationalBackground, on_delete=models.CASCADE, null=True, blank=True)
     other_information = models.ForeignKey(OtherInformation, on_delete=models.CASCADE, null=True, blank=True)
     
-    # ManyToMany relationships are fine as is
+    
     voluntary_work = models.ManyToManyField(VoluntaryWork, blank=True)
     learning_development = models.ManyToManyField(LearningDevelopment, blank=True)
     work_experience = models.ManyToManyField(WorkExperience, blank=True)

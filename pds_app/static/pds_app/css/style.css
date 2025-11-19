@@ -1,4 +1,41 @@
 /*
+Search
+
+
+*/
+.search-section{
+    margin-bottom: 20px;
+}
+
+.search-section form{
+    display: flex; 
+    gap: 10px; 
+    align-items: center;
+}
+
+.search-section input{
+    flex: 1;
+    padding: 8px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px;
+    width: 30px;
+}
+
+.search-section button{
+    padding: 8px 20px; 
+    background: #007bff; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+.search-section p{
+    margin-top: 10px; 
+    color: #666;
+}
+
+/*
 Errors
 
 */
@@ -32,11 +69,6 @@ Errors
     border: 1px solid #bee5eb;
 }
 
-/*
-*/
-
-
-
 
 /*
 edit_form.html
@@ -69,9 +101,7 @@ edit_form.html
 .cancel-btn:hover {
     background: #545b62;
 }
-/*
 
-*/
 
 
 /*
@@ -233,13 +263,6 @@ all_forms.html
 }
 
 
-/*
-*/
-
-
-
-
-
 
 .modal {
     position: fixed;          
@@ -285,18 +308,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* header {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    position: fixed;
-    margin-bottom: 85px;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    text-align: center;
-} */
 header {
     background-color: #333;
     color: white;
@@ -376,9 +387,9 @@ header p a {
 }
 
 .sidebar a.disabled-link {
-    color: #aaa; /* Faded color to indicate disabled state */
+    color: #aaa; 
     cursor: not-allowed;
-    pointer-events: none; /* Prevent clicking */
+    pointer-events: none;
     text-decoration: none;
 }
 
@@ -389,8 +400,7 @@ header p a {
     padding: 20px;
 }
 
-/* Personal Info Form*/
-/* General Form Styles */
+
 .general-form {
     max-width: fit-content;
     margin: 0 auto;
@@ -407,20 +417,20 @@ header p a {
 .general-form table input,
 .general-form table select,
 .general-form table textarea {
-  width: 100%;           /* fill their cell */
-  box-sizing: border-box; /* ensures padding/border don’t expand width */
-  min-width: 0;           /* allows shrinking when table shrinks */
+  width: 100%;          
+  box-sizing: border-box; 
+  min-width: 0;        
 }
 
 
 .general-form table {
   width: 100%;
-  table-layout: fixed; /* forces cells to respect available width */
+  table-layout: fixed; 
   word-wrap: break-word;
 }
 
 
-/* Fieldset and Legend */
+
 fieldset {
     margin-bottom: 20px;
     padding: 15px;
@@ -435,7 +445,7 @@ legend {
     padding: 0 10px;
 }
 
-/* Form Rows */
+
 .form-row {
     display: flex;
     flex-direction: column;
@@ -458,7 +468,7 @@ legend {
     /* width: 100%; */
 }
 
-/* Buttons */
+
 .submit-btn {
     display: inline-block;
     padding: 10px 20px;
@@ -493,7 +503,6 @@ legend {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Table design */
 .main-table {
     width: 100%;
     border-collapse: collapse;
@@ -528,7 +537,7 @@ td select {
 }
 
 
-/* Button Styling */
+
 
 .add-row-btn{
     margin-top:10px;

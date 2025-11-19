@@ -1,4 +1,4 @@
-/* Login Page Styles - Consistent with main site */
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -100,7 +100,7 @@ body {
     border: 1px solid #bee5eb;
 }
 
-/* Header-like element for login page */
+
 .login-header {
     background-color: #333;
     color: white;
@@ -118,7 +118,7 @@ body {
     font-size: 1.5em;
 }
 
-/* Fieldset style for login form */
+
 .login-fieldset {
     margin-bottom: 20px;
     padding: 15px;
@@ -133,7 +133,6 @@ body {
     color: #333;
 }
 
-/* Link styling */
 .login-link {
     color: #00aaff;
     text-decoration: none;
@@ -147,24 +146,7 @@ body {
     text-decoration: underline;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-    .login-container {
-        width: 95%;
-        padding: 1.5rem;
-        margin: 20px;
-    }
-    
-    .form-group {
-        flex-direction: column;
-    }
-    
-    .login-header h1 {
-        font-size: 1.3em;
-    }
-}
 
-/* Additional styling to match your general form styles */
 .login-container fieldset {
     margin-bottom: 20px;
     padding: 15px;
@@ -178,7 +160,7 @@ body {
     padding: 0 10px;
 }
 
-/* Ensure consistency with your modal styles */
+
 .login-container {
     position: relative;
 }

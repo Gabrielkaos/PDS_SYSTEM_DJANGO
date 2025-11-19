@@ -21,6 +21,32 @@
     <p class="forms-count">{{ forms|length }} form{{ forms|pluralize }}</p>
 </div>
 
+<div class="search-section">
+    <a href="{% url 'create_form' %}" hidden id="hidden_a" style="margin: -10px;"></a>
+    <form method="get" action="{% url 'home' %}" id="form-search">
+        <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}" 
+            placeholder="Search by personal info"
+        >
+        <button type="submit">
+            Search
+        </button>
+        {% if search_query %}
+        <button type="button" id="button_clear">
+            Clear
+        </button>
+        {% endif %}
+    </form>
+    
+    {% if search_query %}
+    <p>
+        {{ total_forms }} result{{ total_forms|pluralize }} for "{{ search_query }}"
+    </p>
+    {% endif %}
+</div>
+
 <div class="forms-list">
     {% for form in forms %}
         <div class="form-item" id="mainFormLink">
@@ -57,6 +83,16 @@
             </button>
         </div>
 </div>
+
+<script>
+
+    const button_clear = document.getElementById("button_clear")
+
+    button_clear.addEventListener("click",()=>{
+        window.location = document.getElementById("hidden_a").href
+    })
+</script>
+
 <script>
   document.getElementById('createFormButton').addEventListener('click', function() {
     window.location = document.getElementById("createFormLink").href;

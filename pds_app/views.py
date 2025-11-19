@@ -8,8 +8,7 @@ from django.shortcuts import redirect, get_object_or_404
 import openpyxl
 from openpyxl.utils import get_column_letter
 from .forms import ImportForm
-from decimal import Decimal, InvalidOperation
-import datetime
+from django.db.models import Q
 
 
 @login_required
@@ -30,7 +29,7 @@ def import_form(request):
 
                 print("Workbook loaded successfully")
 
-                # --- Utility conversion helpers ---
+                
                 def safe_str(val):
                     return "" if val is None else str(val).strip()
 
@@ -60,7 +59,7 @@ def import_form(request):
                     except Exception:
                         return None
 
-                # --- Parse top vertical key/value section (A:B columns) ---
+                
                 def parse_vert_section(sheet, start_row=1, max_row=80):
                     data = {}
                     for row in sheet.iter_rows(min_row=start_row, max_row=max_row, max_col=2, values_only=True):
@@ -72,7 +71,7 @@ def import_form(request):
                 data = parse_vert_section(ws)
                 print("Parsed vertical section")
 
-                # --- Create PersonalInformation ---
+                
                 personal = PersonalInformation.objects.create(
                     user=request.user,
                     surname=safe_str(data.get("Surname")),
@@ -101,7 +100,7 @@ def import_form(request):
                     citizenship=safe_str(data.get("Citizenship")),
                 )
 
-                # --- Create FamilyBackground ---
+                
                 family = FamilyBackground.objects.create(
                     user=request.user,
                     spouse_surname=safe_str(data.get("Spouse Surname")),
@@ -122,7 +121,7 @@ def import_form(request):
                     mother_middlename=safe_str(data.get("Mother Middle Name")),
                 )
 
-                # --- Create OtherInformation ---
+                
                 other = OtherInformation.objects.create(
                     user=request.user,
                     with_third_degree=safe_str(data.get("With Third Degree")) or "N",
@@ -153,7 +152,7 @@ def import_form(request):
                     id_issue_place=safe_str(data.get("ID Issue Place")),
                 )
 
-                # --- Section locators and table parsers ---
+                
                 def find_section_start(ws, title):
                     for i, row in enumerate(ws.iter_rows(values_only=True), start=1):
                         if row and row[0] and title.strip().upper() in str(row[0]).upper():
@@ -168,11 +167,11 @@ def import_form(request):
                         data_list.append(list(row[:num_cols]))
                     return data_list
 
-                # --- EDUCATIONAL BACKGROUND ---
+                
                 idx = find_section_start(ws, "EDUCATIONAL BACKGROUND")
                 educational = None
                 if idx:
-                    edu_data = parse_table(ws, idx + 1, 8)  # +1 to skip headers row
+                    edu_data = parse_table(ws, idx + 1, 8)
                     edu_dict = {}
                     for row in edu_data:
                         if not row[0]:
@@ -222,7 +221,7 @@ def import_form(request):
                     messages.warning(request, "Educational background section not found.")
                     educational = EducationalBackground.objects.create(user=request.user)
 
-                # --- CIVIL SERVICE ---
+                
                 civil_objs = []
                 idx = find_section_start(ws, "CIVIL SERVICE ELIGIBILITY")
                 if idx:
@@ -237,7 +236,7 @@ def import_form(request):
                             license_validity=safe_date(row[5]),
                         ))
 
-                # --- WORK EXPERIENCE ---
+                
                 work_objs = []
                 idx = find_section_start(ws, "WORK EXPERIENCE")
                 if idx:
@@ -254,7 +253,7 @@ def import_form(request):
                             govt_service=safe_str(row[7]) or "N",
                         ))
 
-                # --- VOLUNTARY WORK ---
+                
                 vol_objs = []
                 idx = find_section_start(ws, "VOLUNTARY WORK")
                 if idx:
@@ -268,7 +267,7 @@ def import_form(request):
                             nature_of_work=safe_str(row[4]),
                         ))
 
-                # --- LEARNING & DEVELOPMENT ---
+                
                 ld_objs = []
                 idx = find_section_start(ws, "LEARNING AND DEVELOPMENT")
                 if idx:
@@ -283,7 +282,7 @@ def import_form(request):
                             conducted_by=safe_str(row[5]),
                         ))
 
-                # --- CompleteForm creation ---
+                
                 complete_form = CompleteForm.objects.create(
                     user=request.user,
                     personal_information=personal,
@@ -320,14 +319,14 @@ def export_form(request, form_id):
 
     row = 1
 
-    # Helper for writing label/value
+    
     def write(label, value):
         nonlocal row
         ws.cell(row=row, column=1, value=label)
         ws.cell(row=row, column=2, value=str(value) if value is not None else "")
         row += 1
 
-    # Personal Information
+    
     p = form.personal_information
     write("Surname", p.surname)
     write("First Name", p.firstname)
@@ -408,7 +407,6 @@ def export_form(request, form_id):
 
     row += 2
 
-    # EDUCATIONAL BACKGROUND (can be structured as table; example: Elementary row)
     ws.cell(row=row, column=1, value="EDUCATIONAL BACKGROUND"); row += 1
     e = form.educational_background
 
@@ -422,35 +420,30 @@ def export_form(request, form_id):
 
     row = ws.max_row + 2
 
-    # CIVIL SERVICE ELIGIBILITY
     ws.cell(row=row, column=1, value="CIVIL SERVICE ELIGIBILITY"); row += 1
     ws.append(["Career Service", "Rating", "Exam Date", "Exam Place", "License #", "License Validity"])
     for item in form.civil_service.all():
         ws.append([item.career_service, item.rating, item.exam_date, item.exam_place, item.license_number, item.license_validity])
     row = ws.max_row + 2
 
-    # WORK EXPERIENCE
     ws.cell(row=row, column=1, value="WORK EXPERIENCE"); row += 1
     ws.append(["From", "To", "Position Title", "Department/Agency", "Monthly Salary", "Salary Grade & STEP", "Status of Appointment", "Govt Service"])
     for w in form.work_experience.all():
         ws.append([w.from_date, w.to_date, w.position_title, w.department, w.monthly_salary, w.salary_grade, w.status_of_appointment, w.govt_service])
     row = ws.max_row + 2
 
-    # VOLUNTARY WORK
     ws.cell(row=row, column=1, value="VOLUNTARY WORK"); row += 1
     ws.append(["Organization", "From", "To", "Hours", "Nature"])
     for v in form.voluntary_work.all():
         ws.append([v.organization_name, v.from_date, v.to_date, v.number_of_hours, v.nature_of_work])
     row = ws.max_row + 2
 
-    # LEARNING AND DEVELOPMENT
     ws.cell(row=row, column=1, value="LEARNING AND DEVELOPMENT"); row += 1
     ws.append(["Title", "From", "To", "Hours", "Type", "Conducted By"])
     for l in form.learning_development.all():
         ws.append([l.title, l.from_date, l.to_date, l.number_of_hours, l.type_of_ld, l.conducted_by])
     row = ws.max_row + 2
 
-    # Auto-adjust column width
     for col in ws.columns:
         max_length = 0
         col_letter = get_column_letter(col[0].column)
@@ -459,7 +452,6 @@ def export_form(request, form_id):
                 max_length = max(max_length, len(str(cell.value)))
         ws.column_dimensions[col_letter].width = max_length + 2
 
-    # Prepare response
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     filename = f'PDS_{form.name}_{form.id}.xlsx'
@@ -469,11 +461,33 @@ def export_form(request, form_id):
 
 @login_required
 def home(request):
-    forms1 = CompleteForm.objects.filter(user=request.user)
+    forms_list = CompleteForm.objects.filter(user=request.user).select_related(
+        'personal_information'
+    )
+    
+    search_query = request.GET.get('search', '').strip()
+    if search_query:
+        forms_list = forms_list.filter(
+            Q(personal_information__surname__icontains=search_query) |
+            Q(personal_information__firstname__icontains=search_query) |
+            Q(personal_information__email_address__icontains=search_query) |
+            Q(personal_information__mobile_no__icontains=search_query)
+        ).distinct()
+    
+    sort_by = request.GET.get('sort', '-created_at')
+    if sort_by in ['name', '-name', 'created_at', '-created_at']:
+        forms_list = forms_list.order_by(sort_by)
+    
     form = ImportForm()
-    return render(request, "pds_app/forms.html", {"forms": forms1, "form":form})
-    # forms1 = CompleteForm.objects.all()
-    # return render(request,"pds_app/forms.html",{"forms":forms1})
+    
+    context = {
+        'forms': forms_list,
+        'form': form,
+        'search_query': search_query,
+        'total_forms' : forms_list.__len__()
+    }
+    
+    return render(request, "pds_app/forms.html", context)
 
 @login_required
 def all_forms(request, form_id):
@@ -488,14 +502,12 @@ def all_forms(request, form_id):
 
 @login_required
 def forms(request):
-    """Show only user's forms"""
     user_forms = CompleteForm.objects.filter(user=request.user)
     form = ImportForm()
     return render(request, "pds_app/forms.html", {"forms": user_forms,"form":form})
 
 @login_required
 def delete_form(request, form_id):
-    """Ensure users can only delete their own forms"""
     form = get_object_or_404(CompleteForm, id=form_id, user=request.user)
     
     if request.method == "POST":
@@ -537,11 +549,8 @@ def edit_form(request, form_id):
             other_form.save()
             print("Saved")
 
-            # save civil service eligibility
-            # Delete existing civil service records
             form_instance.civil_service.all().delete()
 
-            # Save new civil service records
             career_services = request.POST.getlist('career_service[]')
             ratings = request.POST.getlist('rating[]')
             exam_dates = request.POST.getlist('exam_date[]')
@@ -572,7 +581,6 @@ def edit_form(request, form_id):
             form_instance.civil_service.set(civil_services)
 
 
-            # Delete and recreate Work Experience
             form_instance.work_experience.all().delete()
             work_from_dates = request.POST.getlist('work_from_date[]')
             work_experiences = []
@@ -592,7 +600,6 @@ def edit_form(request, form_id):
                     work_experiences.append(work_exp)
             form_instance.work_experience.set(work_experiences)
 
-            # Delete and recreate Voluntary Work
             form_instance.voluntary_work.all().delete()
             voluntary_orgs = request.POST.getlist('voluntary_org[]')
             voluntary_works = []
@@ -609,7 +616,6 @@ def edit_form(request, form_id):
                     voluntary_works.append(voluntary)
             form_instance.voluntary_work.set(voluntary_works)
 
-            # Delete and recreate Learning Development
             form_instance.learning_development.all().delete()
             learning_titles = request.POST.getlist('learning_title[]')
 
@@ -629,7 +635,6 @@ def edit_form(request, form_id):
             form_instance.learning_development.set(learning_developments)
 
                         
-            # Update form name if provided
             if 'form_name' in request.POST:
                 form_instance.save()
                 print("saved form name")
@@ -644,7 +649,6 @@ def edit_form(request, form_id):
                         for error in errors:
                             messages.error(request, f"{form[field].label}: {error}")
     else:
-        # Pre-populate forms with existing data
         personal_form = PersonalInformationForm(instance=form_instance.personal_information)
         family_form = FamilyBackgroundForm(instance=form_instance.family_background)
         education_form = EducationalBackgroundForm(instance=form_instance.educational_background)
@@ -690,10 +694,7 @@ def create_form(request):
                 inst.save()
             print("Saved")
 
-            
-
-            # Save ManyToMany related objects
-            # Civil Service Eligibility
+        
             career_services = request.POST.getlist('career_service[]')
             ratings = request.POST.getlist('rating[]')
             exam_dates = request.POST.getlist('exam_date[]')
@@ -715,7 +716,6 @@ def create_form(request):
                     civil_services.append(civil_service)
             
 
-            # Work Experience
             work_from_dates = request.POST.getlist('work_from_date[]')
             work_experiences = []
             for i in range(len(work_from_dates)):
@@ -733,7 +733,6 @@ def create_form(request):
                     )
                     work_experiences.append(work_exp)
 
-            # Voluntary Work
             voluntary_orgs = request.POST.getlist('voluntary_org[]')
             voluntary_works = []
             for i in range(len(voluntary_orgs)):
@@ -748,7 +747,6 @@ def create_form(request):
                     )
                     voluntary_works.append(voluntary)
 
-            # Learning and Development
             learning_titles = request.POST.getlist('learning_title[]')
             learning_developments = []
             for i in range(len(learning_titles)):
@@ -764,7 +762,6 @@ def create_form(request):
                     )
                     learning_developments.append(learning)
 
-            # Create the CompleteForm instance and save related objects after
             complete_form = CompleteForm.objects.create(
                 user=request.user,
                 personal_information=personal_inst,
@@ -787,7 +784,6 @@ def create_form(request):
                             messages.error(request, f"{form[field].label}: {error}")
 
     else:
-        # Pre-populate empty forms
         personal_form = PersonalInformationForm()
         family_form = FamilyBackgroundForm()
         education_form = EducationalBackgroundForm()

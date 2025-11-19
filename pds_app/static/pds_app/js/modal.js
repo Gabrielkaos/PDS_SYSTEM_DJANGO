@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const openModalBtn = document.getElementById("openModalBtn");
     const closeModalBtn = document.getElementById("closeModalBtn");
 
-    // Open the modal
+    
     openModalBtn.addEventListener("click", function() {
       modal.style.display = "flex";
       document.body.classList.add("no-scroll");
