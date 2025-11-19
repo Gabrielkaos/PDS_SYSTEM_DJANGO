@@ -3,10 +3,10 @@
 
 {% block content %}
 <div class="form-actions">
-    <a href="{% url 'edit_form' form.id %}" class="edit-btn">Edit Form</a>
-    <a href="{% url 'export_form' form.id %}" class="edit-btn" style="margin-left:14px;">Export</a>
+    <a href="{% url 'edit_form' this_form.id %}" class="edit-btn">Edit Form</a>
+    <a href="{% url 'export_form' this_form.id %}" class="edit-btn" style="margin-left:14px;">Export</a>
 </div>
-<h2>Form: {{form.name}}</h2>
+<h2>Form: {{this_form.name}}</h2>
 
 <form class="general-form">
     <br>
@@ -16,23 +16,23 @@
         <legend>Personal Details</legend>
         <div class="form-row">
             <label for="id_surname">Surname:</label>
-            {{ form.personal_information.surname }}
+            {{ this_form.personal_information.surname }}
         </div>
         <div class="form-row">
             <label for="id_firstname">First Name:</label>
-            {{ form.personal_information.firstname }}
+            {{ this_form.personal_information.firstname }}
         </div>
         <div class="form-row">
             <label for="id_middlename">Middle Name:</label>
-            {{ form.personal_information.middlename }}
+            {{ this_form.personal_information.middlename }}
         </div>
         <div class="form-row">
             <label for="id_date_of_birth">Date of Birth:</label>
-            {{ form.personal_information.date_of_birth }}
+            {{ this_form.personal_information.date_of_birth }}
         </div>
         <div class="form-row">
             <label for="id_place_of_birth">Place of Birth:</label>
-            {{ form.personal_information.place_of_birth }}
+            {{ this_form.personal_information.place_of_birth }}
         </div>
     </fieldset>
     
@@ -41,23 +41,23 @@
         <legend>Physical Details</legend>
         <div class="form-row">
             <label for="id_sex">Sex:</label>
-            {{ form.personal_information.sex }}
+            {{ this_form.personal_information.sex }}
         </div>
         <div class="form-row">
             <label for="id_civil_status">Civil Status:</label>
-            {{ form.personal_information.civil_status }}
+            {{ this_form.personal_information.civil_status }}
         </div>
         <div class="form-row">
             <label for="id_height">Height (cm):</label>
-            {{ form.personal_information.height }}
+            {{ this_form.personal_information.height }}
         </div>
         <div class="form-row">
             <label for="id_weight">Weight (kg):</label>
-            {{ form.personal_information.weight }}
+            {{ this_form.personal_information.weight }}
         </div>
         <div class="form-row">
             <label for="id_blood_type">Blood Type:</label>
-            {{ form.personal_information.blood_type }}
+            {{ this_form.personal_information.blood_type }}
         </div>
     </fieldset>
     
@@ -66,31 +66,31 @@
         <legend>Contact Information</legend>
         <div class="form-row">
             <label for="id_residential_address">Residential Address:</label>
-            {{ form.personal_information.residential_address }}
+            {{ this_form.personal_information.residential_address }}
         </div>
         <div class="form-row">
             <label for="id_residential_zip_code">Residential Zip Code:</label>
-            {{ form.personal_information.residential_zip_code }}
+            {{ this_form.personal_information.residential_zip_code }}
         </div>
         <div class="form-row">
             <label for="id_permanent_address">Permanent Address:</label>
-            {{ form.personal_information.permanent_address }}
+            {{ this_form.personal_information.permanent_address }}
         </div>
         <div class="form-row">
             <label for="id_permanent_zip_code">Permanent Zip Code:</label>
-            {{ form.personal_information.permanent_zip_code }}
+            {{ this_form.personal_information.permanent_zip_code }}
         </div>
         <div class="form-row">
             <label for="id_telephone_no">Telephone Number:</label>
-            {{ form.personal_information.telephone_no }}
+            {{ this_form.personal_information.telephone_no }}
         </div>
         <div class="form-row">
             <label for="id_mobile_no">Mobile Number:</label>
-            {{ form.personal_information.mobile_no }}
+            {{ this_form.personal_information.mobile_no }}
         </div>
         <div class="form-row">
             <label for="id_email_address">Email Address:</label>
-            {{ form.personal_information.email_address }}
+            {{ this_form.personal_information.email_address }}
         </div>
     </fieldset>
     
@@ -99,23 +99,23 @@
         <legend>Government IDs</legend>
         <div class="form-row">
             <label for="id_gsis">GSIS Number:</label>
-            {{ form.personal_information.gsis }}
+            {{ this_form.personal_information.gsis }}
         </div>
         <div class="form-row">
             <label for="id_pag_ibig">Pag-IBIG Number:</label>
-            {{ form.personal_information.pag_ibig }}
+            {{ this_form.personal_information.pag_ibig }}
         </div>
         <div class="form-row">
             <label for="id_philhealth">PhilHealth Number:</label>
-            {{ form.personal_information.philhealth }}
+            {{ this_form.personal_information.philhealth }}
         </div>
         <div class="form-row">
             <label for="id_sss_no">SSS Number:</label>
-            {{ form.personal_information.sss_no }}
+            {{ this_form.personal_information.sss_no }}
         </div>
         <div class="form-row">
             <label for="id_tin_no">TIN Number:</label>
-            {{ form.personal_information.tin_no }}
+            {{ this_form.personal_information.tin_no }}
         </div>
     </fieldset>
     
@@ -124,11 +124,11 @@
         <legend>Other Information</legend>
         <div class="form-row">
             <label for="id_citizenship">Citizenship:</label>
-            {{ form.personal_information.citizenship }}
+            {{ this_form.personal_information.citizenship }}
         </div>
         <div class="form-row">
             <label for="id_agent_employee_number">Agent Employee Number:</label>
-            {{ form.personal_information.agent_employee_number }}
+            {{ this_form.personal_information.agent_employee_number }}
         </div>
     </fieldset>
     <br>
@@ -138,43 +138,43 @@
         <legend>Spouse Information</legend>
         <div class="form-row">
             <label for="id_spouse_surname">Spouse's Surname:</label>
-            {{ form.family_background.spouse_surname }}
+            {{ this_form.family_background.spouse_surname }}
         </div>
         <div class="form-row">
             <label for="id_spouse_firstname">Spouse's First Name:</label>
-            {{ form.family_background.spouse_firstname }}
+            {{ this_form.family_background.spouse_firstname }}
         </div>
         <div class="form-row">
             <label for="id_spouse_middlename">Spouse's Middle Name:</label>
-            {{ form.family_background.spouse_middlename }}
+            {{ this_form.family_background.spouse_middlename }}
         </div>
         <div class="form-row">
             <label for="id_spouse_name_extension">Spouse's Name Extension:</label>
-            {{ form.family_background.spouse_name_extension }}
+            {{ this_form.family_background.spouse_name_extension }}
         </div>
         <div class="form-row">
             <label for="id_spouse_occupation">Spouse's Occupation:</label>
-            {{ form.family_background.spouse_occupation }}
+            {{ this_form.family_background.spouse_occupation }}
         </div>
         <div class="form-row">
             <label for="id_spouse_employer_business_name">Employer/Business Name:</label>
-            {{ form.family_background.spouse_employer_business_name }}
+            {{ this_form.family_background.spouse_employer_business_name }}
         </div>
         <div class="form-row">
             <label for="id_spouse_business_address">Business Address:</label>
-            {{ form.family_background.spouse_business_address }}
+            {{ this_form.family_background.spouse_business_address }}
         </div>
         <div class="form-row">
             <label for="id_spouse_telephone_no">Telephone Number:</label>
-            {{ form.family_background.spouse_telephone_no }}
+            {{ this_form.family_background.spouse_telephone_no }}
         </div>
     </fieldset>
 
     <!-- Children Information Section -->
     <fieldset>
         <legend>Children Information</legend>
-        {% if form.family_background.children %}
-            <p>{{ form.family_background.children|linebreaksbr }}</p>
+        {% if this_form.family_background.children %}
+            <p>{{ this_form.family_background.children|linebreaksbr }}</p>
         {% else %}
             <p>No children recorded.</p>
         {% endif %}
@@ -186,33 +186,33 @@
         <h3 style="text-align:center;">Father's Information</h3>
         <div class="form-row">
             <label for="id_father_surname">Father's Surname:</label>
-            {{ form.family_background.father_surname }}
+            {{ this_form.family_background.father_surname }}
         </div>
         <div class="form-row">
             <label for="id_father_firstname">Father's First Name:</label>
-            {{ form.family_background.father_firstname }}
+            {{ this_form.family_background.father_firstname }}
         </div>
         <div class="form-row">
             <label for="id_father_middlename">Father's Middle Name:</label>
-            {{ form.family_background.father_middlename }}
+            {{ this_form.family_background.father_middlename }}
         </div>
         <div class="form-row">
             <label for="id_father_name_extension">Father's Name Extension:</label>
-            {{ form.family_background.father_name_extension }}
+            {{ this_form.family_background.father_name_extension }}
         </div>
 
         <h3 style="text-align:center;">Mother's Information</h3>
         <div class="form-row">
             <label for="id_mother_maiden_lastname">Mother's Maiden Last Name:</label>
-            {{ form.family_background.mother_maiden_lastname }}
+            {{ this_form.family_background.mother_maiden_lastname }}
         </div>
         <div class="form-row">
             <label for="id_mother_firstname">Mother's First Name:</label>
-            {{ form.family_background.mother_firstname }}
+            {{ this_form.family_background.mother_firstname }}
         </div>
         <div class="form-row">
             <label for="id_mother_middlename">Mother's Middle Name:</label>
-            {{ form.family_background.mother_middlename }}
+            {{ this_form.family_background.mother_middlename }}
         </div>
     </fieldset>
     <br>
@@ -221,15 +221,15 @@
         <legend>Relatives by Consanguinity or Affinity</legend>
         <div class="form-row">
             <label>Within Third Degree:</label>
-            {{ form.other_information.with_third_degree }}
+            {{ this_form.other_information.with_third_degree }}
         </div>
         <div class="form-row">
             <label>Within Fourth Degree:</label>
-            {{ form.other_information.with_fourth_degree }}
+            {{ this_form.other_information.with_fourth_degree }}
         </div>
         <div class="form-row">
             <label>Details (if any):</label>
-            {{ form.other_information.fourth_degree_details }}
+            {{ this_form.other_information.fourth_degree_details }}
         </div>
     </fieldset>
 
@@ -237,23 +237,23 @@
         <legend>Administrative and Criminal Offenses</legend>
         <div class="form-row">
             <label>Administrative Offense:</label>
-            {{ form.other_information.offense }}
+            {{ this_form.other_information.offense }}
         </div>
         <div class="form-row">
             <label>Details:</label>
-            {{ form.other_information.offense_details }}
+            {{ this_form.other_information.offense_details }}
         </div>
         <div class="form-row">
             <label>Criminally Charged:</label>
-            {{ form.other_information.criminal }}
+            {{ this_form.other_information.criminal }}
         </div>
         <div class="form-row">
             <label>Details:</label>
-            {{ form.other_information.criminal_details }}
+            {{ this_form.other_information.criminal_details }}
         </div>
         <div class="form-row">
             <label>Date of Criminal Charge:</label>
-            {{ form.other_information.criminal_date }}
+            {{ this_form.other_information.criminal_date }}
         </div>
     </fieldset>
 
@@ -261,11 +261,11 @@
         <legend>Conviction</legend>
         <div class="form-row">
             <label>Convicted of Crime:</label>
-            {{ form.other_information.convicted }}
+            {{ this_form.other_information.convicted }}
         </div>
         <div class="form-row">
             <label>Details:</label>
-            {{ form.other_information.convicted_details }}
+            {{ this_form.other_information.convicted_details }}
         </div>
     </fieldset>
 
@@ -273,11 +273,11 @@
         <legend>Service Separation</legend>
         <div class="form-row">
             <label>Separated from Service:</label>
-            {{ form.other_information.sep_service }}
+            {{ this_form.other_information.sep_service }}
         </div>
         <div class="form-row">
             <label>Details:</label>
-            {{ form.other_information.sep_service_details }}
+            {{ this_form.other_information.sep_service_details }}
         </div>
     </fieldset>
 
@@ -285,19 +285,19 @@
         <legend>Election-Related Questions</legend>
         <div class="form-row">
             <label>Candidate in Election:</label>
-            {{ form.other_information.candidate }}
+            {{ this_form.other_information.candidate }}
         </div>
         <div class="form-row">
             <label>Details:</label>
-            {{ form.other_information.candidate_details }}
+            {{ this_form.other_information.candidate_details }}
         </div>
         <div class="form-row">
             <label>Resigned for Campaign:</label>
-            {{ form.other_information.resign_candid }}
+            {{ this_form.other_information.resign_candid }}
         </div>
         <div class="form-row">
             <label>Details:</label>
-            {{ form.other_information.resign_candid_details }}
+            {{ this_form.other_information.resign_candid_details }}
         </div>
     </fieldset>
 
@@ -305,11 +305,11 @@
         <legend>Immigration or Permanent Residency</legend>
         <div class="form-row">
             <label>Immigrant/Permanent Resident:</label>
-            {{ form.other_information.immigrant_status }}
+            {{ this_form.other_information.immigrant_status }}
         </div>
         <div class="form-row">
             <label>Details:</label>
-            {{ form.other_information.immigrant_details }}
+            {{ this_form.other_information.immigrant_details }}
         </div>
     </fieldset>
 
@@ -317,22 +317,22 @@
         <legend>Membership and Status</legend>
         <div class="form-row">
             <label>Member of Indigenous Group:</label>
-            {{ form.other_information.indigenous_group_member }}
+            {{ this_form.other_information.indigenous_group_member }}
         </div>
         <div class="form-row">
             <label>Person with Disability:</label>
-            {{ form.other_information.disability_status }}
+            {{ this_form.other_information.disability_status }}
         </div>
         <div class="form-row">
             <label>Solo Parent:</label>
-            {{ form.other_information.solo_parent_status }}
+            {{ this_form.other_information.solo_parent_status }}
         </div>
     </fieldset>
 
     <fieldset>
         <legend>References</legend>
-        {% if form.other_information.references %}
-            <p>{{ form.other_information.references|linebreaksbr }}</p>
+        {% if this_form.other_information.references %}
+            <p>{{ this_form.other_information.references|linebreaksbr }}</p>
         {% else %}
             <p>No references recorded.</p>
         {% endif %}
@@ -342,19 +342,19 @@
         <legend>Government Issued ID</legend>
         <div class="form-row">
             <label>ID Type:</label>
-            {{ form.other_information.government_id }}
+            {{ this_form.other_information.government_id }}
         </div>
         <div class="form-row">
             <label>ID Number:</label>
-            {{ form.other_information.government_id_number }}
+            {{ this_form.other_information.government_id_number }}
         </div>
         <div class="form-row">
             <label>Issue Date:</label>
-            {{ form.other_information.id_issue_date }}
+            {{ this_form.other_information.id_issue_date }}
         </div>
         <div class="form-row">
             <label>Issue Place:</label>
-            {{ form.other_information.id_issue_place }}
+            {{ this_form.other_information.id_issue_place }}
         </div>
     </fieldset>
 
@@ -376,53 +376,53 @@
         <tbody>
             <tr>
                 <td class="educational-level">Elementary</td>
-                <td>{{ form.educational_background.elementary_name }}</td>
-                <td>{{ form.educational_background.elementary_degree_course }}</td>
-                <td>{{ form.educational_background.elementary_period_from }}</td>
-                <td>{{ form.educational_background.elementary_period_to }}</td>
-                <td>{{ form.educational_background.elementary_highest_level_units }}</td>
-                <td>{{ form.educational_background.elementary_year_graduated }}</td>
-                <td>{{ form.educational_background.elementary_honors }}</td>
+                <td>{{ this_form.educational_background.elementary_name }}</td>
+                <td>{{ this_form.educational_background.elementary_degree_course }}</td>
+                <td>{{ this_form.educational_background.elementary_period_from }}</td>
+                <td>{{ this_form.educational_background.elementary_period_to }}</td>
+                <td>{{ this_form.educational_background.elementary_highest_level_units }}</td>
+                <td>{{ this_form.educational_background.elementary_year_graduated }}</td>
+                <td>{{ this_form.educational_background.elementary_honors }}</td>
             </tr>
             <tr>
                 <td class="educational-level">Secondary</td>
-                <td>{{ form.educational_background.secondary_name }}</td>
-                <td>{{ form.educational_background.secondary_degree_course }}</td>
-                <td>{{ form.educational_background.secondary_period_from }}</td>
-                <td>{{ form.educational_background.secondary_period_to }}</td>
-                <td>{{ form.educational_background.secondary_highest_level_units }}</td>
-                <td>{{ form.educational_background.secondary_year_graduated }}</td>
-                <td>{{ form.educational_background.secondary_honors }}</td>
+                <td>{{ this_form.educational_background.secondary_name }}</td>
+                <td>{{ this_form.educational_background.secondary_degree_course }}</td>
+                <td>{{ this_form.educational_background.secondary_period_from }}</td>
+                <td>{{ this_form.educational_background.secondary_period_to }}</td>
+                <td>{{ this_form.educational_background.secondary_highest_level_units }}</td>
+                <td>{{ this_form.educational_background.secondary_year_graduated }}</td>
+                <td>{{ this_form.educational_background.secondary_honors }}</td>
             </tr>
             <tr>
                 <td class="educational-level">Vocational/Trade Course</td>
-                <td>{{ form.educational_background.vocational_name }}</td>
-                <td>{{ form.educational_background.vocational_degree_course }}</td>
-                <td>{{ form.educational_background.vocational_period_from }}</td>
-                <td>{{ form.educational_background.vocational_period_to }}</td>
-                <td>{{ form.educational_background.vocational_highest_level_units }}</td>
-                <td>{{ form.educational_background.vocational_year_graduated }}</td>
-                <td>{{ form.educational_background.vocational_honors }}</td>
+                <td>{{ this_form.educational_background.vocational_name }}</td>
+                <td>{{ this_form.educational_background.vocational_degree_course }}</td>
+                <td>{{ this_form.educational_background.vocational_period_from }}</td>
+                <td>{{ this_form.educational_background.vocational_period_to }}</td>
+                <td>{{ this_form.educational_background.vocational_highest_level_units }}</td>
+                <td>{{ this_form.educational_background.vocational_year_graduated }}</td>
+                <td>{{ this_form.educational_background.vocational_honors }}</td>
             </tr>
             <tr>
                 <td class="educational-level">College</td>
-                <td>{{ form.educational_background.college_name }}</td>
-                <td>{{ form.educational_background.college_degree_course }}</td>
-                <td>{{ form.educational_background.college_period_from }}</td>
-                <td>{{ form.educational_background.college_period_to }}</td>
-                <td>{{ form.educational_background.college_highest_level_units }}</td>
-                <td>{{ form.educational_background.college_year_graduated }}</td>
-                <td>{{ form.educational_background.college_honors }}</td>
+                <td>{{ this_form.educational_background.college_name }}</td>
+                <td>{{ this_form.educational_background.college_degree_course }}</td>
+                <td>{{ this_form.educational_background.college_period_from }}</td>
+                <td>{{ this_form.educational_background.college_period_to }}</td>
+                <td>{{ this_form.educational_background.college_highest_level_units }}</td>
+                <td>{{ this_form.educational_background.college_year_graduated }}</td>
+                <td>{{ this_form.educational_background.college_honors }}</td>
             </tr>
             <tr>
                 <td class="educational-level">Graduate Studies</td>
-                <td>{{ form.educational_background.graduate_name }}</td>
-                <td>{{ form.educational_background.graduate_degree_course }}</td>
-                <td>{{ form.educational_background.graduate_period_from }}</td>
-                <td>{{ form.educational_background.graduate_period_to }}</td>
-                <td>{{ form.educational_background.graduate_highest_level_units }}</td>
-                <td>{{ form.educational_background.graduate_year_graduated }}</td>
-                <td>{{ form.educational_background.graduate_honors }}</td>
+                <td>{{ this_form.educational_background.graduate_name }}</td>
+                <td>{{ this_form.educational_background.graduate_degree_course }}</td>
+                <td>{{ this_form.educational_background.graduate_period_from }}</td>
+                <td>{{ this_form.educational_background.graduate_period_to }}</td>
+                <td>{{ this_form.educational_background.graduate_highest_level_units }}</td>
+                <td>{{ this_form.educational_background.graduate_year_graduated }}</td>
+                <td>{{ this_form.educational_background.graduate_honors }}</td>
             </tr>
         </tbody>
     </table>
@@ -440,7 +440,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for eligibility in form.civil_service.all %}
+            {% for eligibility in this_form.civil_service.all %}
             <tr>
                 <td>{{eligibility.career_service}}</td>
                 <td>{{eligibility.rating}}</td>
@@ -477,7 +477,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for i in form.work_experience.all %}
+            {% for i in this_form.work_experience.all %}
 
             <tr>
                 <td>{{i.from_date}}</td>
@@ -518,7 +518,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for i in form.voluntary_work.all %}
+            {% for i in this_form.voluntary_work.all %}
             <tr>
                 <td>{{i.organization_name}}</td>
                 <td>{{i.from_date}}</td>
@@ -551,7 +551,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for i in form.learning_development.all %}
+            {% for i in this_form.learning_development.all %}
             <tr>
                 <td>{{i.title}}</td>
                 <td>{{i.from_date}}</td>

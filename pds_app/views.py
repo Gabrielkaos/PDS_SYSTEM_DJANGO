@@ -496,8 +496,9 @@ def all_forms(request, form_id):
     user_forms = CompleteForm.objects.filter(user=request.user)
     
     return render(request, "pds_app/all_forms.html", {
-        "form": form_instance, 
-        "forms": user_forms
+        "this_form": form_instance, 
+        "forms": user_forms,
+        "form":ImportForm()
     })
 
 @login_required
@@ -662,6 +663,7 @@ def edit_form(request, form_id):
         'education_form': education_form,
         'other_form': other_form,
         'creating': False,
+        'form':ImportForm(),
         "forms" : CompleteForm.objects.filter(user=request.user)
     }
     
