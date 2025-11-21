@@ -1,15 +1,15 @@
-
+/* Modal Overlay */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 9999;
     padding: 20px;
 }
 
@@ -19,15 +19,15 @@
     width: 100vw;
 }
 
-
+/* Modal Content */
 .modal-content,
 .file-upload-content {
     background: white;
     color: #333;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     max-width: 500px;
     width: 100%;
     display: flex;
@@ -35,24 +35,39 @@
     gap: 15px;
     text-align: center;
     position: relative;
+    z-index: 10000;
 }
 
-
+/* Close Button */
 .close {
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 15px;
-    font-size: 30px;
+    font-size: 24px;
     cursor: pointer;
-    color: #333;
-    transition: color 0.3s ease;
+    color: #666;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
 }
 
 .close:hover {
     color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+    transform: rotate(90deg);
 }
 
+.close svg {
+    fill: currentColor;
+}
 
+/* Modal Forms */
 .modal-content form,
 .file-upload-content form {
     display: flex;
@@ -66,6 +81,7 @@
     text-align: left;
 }
 
+/* Modal Inputs */
 .modal-content input[type="text"],
 .modal-content input[type="file"],
 .modal-content select,
@@ -73,13 +89,20 @@
 .file-upload-content input {
     width: 100%;
     padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     outline: none;
     font-size: 1em;
     color: #333;
-    background-color: #f9f9f9;
+    background-color: #f9fafb;
     box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.modal-content input:focus,
+.file-upload-content input:focus {
+    border-color: #4f8cff;
+    box-shadow: 0 0 0 3px rgba(66,133,244,0.25);
 }
 
 .modal-content input::placeholder,
@@ -87,38 +110,44 @@
     color: #999;
 }
 
-
+/* Modal Buttons */
 .modal-content button,
 .file-upload-content button {
     padding: 12px 16px;
-    border: none;
-    border-radius: 6px;
-    background-color: #007BFF;
-    color: white;
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    border-radius: 8px;
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
     font-size: 1em;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .modal-content button:hover,
 .file-upload-content button:hover {
-    background-color: #0056b3;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    background: rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-
+/* Open Modal Button */
 .open-modal-button {
-    background-color: #4CAF50;
-    color: white;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #059669;
     padding: 8px 12px;
-    border-radius: 6px;
-    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .open-modal-button:hover {
-    background-color: #36c823;
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
-
