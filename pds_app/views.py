@@ -327,7 +327,12 @@ def export_form(request, form_id):
         ws.cell(row=row, column=2, value=str(value) if value is not None else "")
         row += 1
 
-    
+    #form name first
+    write("Form Name",form.name)
+
+    row+=1
+    write("personalinformation","")
+
     p = form.personal_information
     write("Surname", p.surname)
     write("First Name", p.firstname)
@@ -519,7 +524,7 @@ def delete_form(request, form_id):
     
     return redirect('home')
 
-
+@login_required
 def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
