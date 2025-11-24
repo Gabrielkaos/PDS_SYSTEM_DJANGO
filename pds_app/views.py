@@ -469,6 +469,7 @@ def home(request):
     search_query = request.GET.get('search', '').strip()
     if search_query:
         forms_list = forms_list.filter(
+            Q(name__icontains=search_query) |
             Q(personal_information__surname__icontains=search_query) |
             Q(personal_information__firstname__icontains=search_query) |
             Q(personal_information__email_address__icontains=search_query) |
