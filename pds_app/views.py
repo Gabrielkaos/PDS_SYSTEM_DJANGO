@@ -71,6 +71,8 @@ def import_form(request):
                 data = parse_vert_section(ws)
                 print("Parsed vertical section")
 
+                form_name = safe_str(data.get("Form Name"))
+
                 
                 personal = PersonalInformation.objects.create(
                     user=request.user,
@@ -285,6 +287,7 @@ def import_form(request):
                 
                 complete_form = CompleteForm.objects.create(
                     user=request.user,
+                    name=form_name,
                     personal_information=personal,
                     family_background=family,
                     other_information=other,
