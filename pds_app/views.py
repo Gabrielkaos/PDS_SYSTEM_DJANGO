@@ -638,6 +638,7 @@ def edit_form(request, form_id):
 
                         
             if 'form_name' in request.POST:
+                form_instance.name = request.POST["form_name"]
                 form_instance.save()
                 print("saved form name")
             
