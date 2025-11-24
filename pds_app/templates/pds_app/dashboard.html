@@ -1,0 +1,114 @@
+{% extends 'pds_app/home.html' %}
+{% load static %}
+
+{% block sidebar %}
+    <a href="{% url 'dashboard' %}" class="active">Dashboard</a>
+    <div class="form-item" id="createNewLink">
+            <a href="{% url 'create_form'  %}" class="form-link" id="createFormLink">
+                <div class="form-name">Create New</div>
+            </a>
+            <button class="add-btn" id="createFormButton" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e3e3e3"><path d="M440-80v-340H120v-120h320v-340h80v340h320v120H520v340h-80Z"/></svg>                
+            </button>
+        </div>
+        <div class="form-item" id="clickableFormItem">
+            <a>
+                <div class="form-name">Import Form</div>
+            </a>
+            <button id="openModalBtn" type="button" class="open-modal-button" hidden>
+                
+            </button>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Dashboard</h2>
+    
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #007BFF;">
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ total_forms }}</h3>
+                <p>Total Forms</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #28a745;">
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{{ forms_this_month }}</h3>
+                <p>Created This Month</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #ffc107;">
+                <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <h3>{% if last_updated %}{{ last_updated.updated_at|date:"M d" }}{% else %}N/A{% endif %}</h3>
+                <p>Last Updated</p>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <a href="{% url 'create_form' %}" class="action-btn create-btn">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                Create New Form
+            </a>
+            <a href="{% url 'import_form' %}" class="action-btn import-btn">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                    <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>
+                </svg>
+                Import Form
+            </a>
+            <a href="{% url 'home' %}" class="action-btn view-btn">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                </svg>
+                View All Forms
+            </a>
+        </div>
+    </div>
+    
+    
+    <div class="recent-section">
+        <h3>Recent Forms</h3>
+        {% if recent_forms %}
+        <div class="recent-list">
+            {% for form in recent_forms %}
+            <a href="{% url 'all_forms' form.id %}" class="recent-item">
+                <div class="recent-info">
+                    <strong>{{ form.name|default:"Unnamed Form" }}</strong>
+                    <span class="recent-date">Created: {{ form.created_at|date:"M d, Y" }}</span>
+                </div>
+                <svg width="20" height="20" fill="#007BFF" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">No forms yet. <a href="{% url 'create_form' %}">Create your first form!</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -9,7 +9,39 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 from .forms import ImportForm
 from django.db.models import Q
+from django.db.models import Count
+from django.utils import timezone
+from datetime import timedelta
 
+@login_required
+def dashboard(request):
+    user = request.user
+    
+    
+    total_forms = CompleteForm.objects.filter(user=user).count()
+    
+    
+    today = timezone.now()
+    first_day_of_month = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    forms_this_month = CompleteForm.objects.filter(
+        user=user, 
+        created_at__gte=first_day_of_month
+    ).count()
+    
+   
+    recent_forms = CompleteForm.objects.filter(user=user).order_by('-created_at')[:5]
+    
+    
+    last_updated = CompleteForm.objects.filter(user=user).order_by('-updated_at').first()
+    
+    context = {
+        'total_forms': total_forms,
+        'forms_this_month': forms_this_month,
+        'recent_forms': recent_forms,
+        'last_updated': last_updated,
+    }
+    
+    return render(request, 'pds_app/dashboard.html', context)
 
 @login_required
 def import_form(request):
