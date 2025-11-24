@@ -650,7 +650,9 @@ def edit_form(request, form_id):
                 form_instance.name = request.POST["form_name"]
                 form_instance.save()
                 print("saved form name")
-            
+
+
+            messages.success(request, "Form edited successfully!")
             return redirect('all_forms', form_id=form_id)
 
 
@@ -790,8 +792,8 @@ def create_form(request):
             complete_form.voluntary_work.set(voluntary_works)
             complete_form.learning_development.set(learning_developments)
 
-
-            return redirect('home')
+            messages.success(request, "Form created successfully!")
+            return redirect('edit_form',form_id=complete_form.id)
         else:
             for form in [personal_form, family_form, education_form, other_form]:
                 if form.errors:
