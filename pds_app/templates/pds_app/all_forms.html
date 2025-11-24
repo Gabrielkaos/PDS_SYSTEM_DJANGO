@@ -10,6 +10,31 @@
 
 <form class="general-form">
     <br>
+
+    <h3 style="text-align:center;">Form Name</h3>
+    <fieldset>
+        <legend>Form</legend>
+        <div class="form-row">
+            <label for="id_surname">Surname:</label>
+            {{ this_form.personal_information.surname }}
+        </div>
+        <div class="form-row">
+            <label for="id_firstname">First Name:</label>
+            {{ this_form.personal_information.firstname }}
+        </div>
+        <div class="form-row">
+            <label for="id_middlename">Middle Name:</label>
+            {{ this_form.personal_information.middlename }}
+        </div>
+        <div class="form-row">
+            <label for="id_date_of_birth">Date of Birth:</label>
+            {{ this_form.personal_information.date_of_birth }}
+        </div>
+        <div class="form-row">
+            <label for="id_place_of_birth">Place of Birth:</label>
+            {{ this_form.personal_information.place_of_birth }}
+        </div>
+    </fieldset>
     
     <h3 style="text-align:center;">Personal Information</h3>
     <fieldset>
