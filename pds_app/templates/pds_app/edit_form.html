@@ -25,7 +25,15 @@
                 {% endfor %}
             </div>
         {% endif %}
-        
+
+        <h3 style="text-align:center;">Form</h3>
+        <fieldset>
+            <legend>Form Name</legend>
+            <div class="form-row">
+                <input name="form_name" type="text" value="{{ form_instance.name }}"/>
+            </div>
+        </fieldset>
+            
         <h3 style="text-align:center;">Personal Information</h3>
         
         <fieldset>

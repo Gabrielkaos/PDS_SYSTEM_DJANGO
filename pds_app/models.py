@@ -459,7 +459,7 @@ class EducationalBackground(models.Model):
 class CompleteForm(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="forms")
     
-    form_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     
     personal_information = models.ForeignKey(PersonalInformation, on_delete=models.CASCADE, null=True, blank=True)
     family_background = models.ForeignKey(FamilyBackground, on_delete=models.CASCADE, null=True, blank=True)
@@ -477,10 +477,6 @@ class CompleteForm(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
-    
-    @property
-    def name(self):
-        return f"{self.personal_information.full_name}"
 
     class Meta:
         ordering = ['-created_at']

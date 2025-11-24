@@ -53,6 +53,7 @@
             <a href="{% url 'all_forms' form.id %}" class="form-link" id="mainLink">
                 <div class="form-name">{{ form.name }}</div>
                 <div class="form-date">Created: {{ form.created_at|date:"M d, Y" }}</div>
+                <div class="form-date">Updated: {{ form.updated_at|date:"M d, Y" }}</div>
             </a>
             
             <form method="post" action="{% url 'delete_form' form.id %}" class="delete-form">

@@ -673,6 +673,8 @@ def edit_form(request, form_id):
 @login_required
 def create_form(request):
     if request.method == 'POST':
+        form_name = request.POST.get("form_name")
+        print(form_name)
         personal_form = PersonalInformationForm(request.POST)
         family_form = FamilyBackgroundForm(request.POST)
         education_form = EducationalBackgroundForm(request.POST)
@@ -767,6 +769,7 @@ def create_form(request):
 
             complete_form = CompleteForm.objects.create(
                 user=request.user,
+                name=form_name,
                 personal_information=personal_inst,
                 family_background=family_inst,
                 educational_background=education_inst,
