@@ -472,21 +472,21 @@
                     <tr>
                         <td><input type="text" name="career_service[]" value="{{ eligibility.career_service }}"></td>
                         <td><input type="number" name="rating[]" value="{{ eligibility.rating }}" step="0.01"></td>
-                        <td><input type="date" name="exam_date[]" value="{{ eligibility.exam_date|date:'Y-m-d' }}"></td>
+                        <td><input type="date" style="cursor:pointer" name="exam_date[]" value="{{ eligibility.exam_date|date:'Y-m-d' }}"></td>
                         <td><input type="text" name="exam_place[]" value="{{ eligibility.exam_place }}"></td>
                         <td><input type="text" name="license_number[]" value="{{ eligibility.license_number }}"></td>
-                        <td><input type="date" name="license_validity[]" value="{{ eligibility.license_validity|date:'Y-m-d' }}"></td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                        <td><input type="date" style="cursor:pointer" name="license_validity[]" value="{{ eligibility.license_validity|date:'Y-m-d' }}"></td>
+                        
                     </tr>
                     {% empty %}
                     <tr>
                         <td><input type="text" name="career_service[]" placeholder="Career Service/Eligibility"></td>
                         <td><input type="number" name="rating[]" step="0.01" placeholder="Rating"></td>
-                        <td><input type="date" name="exam_date[]"></td>
+                        <td><input type="date" style="cursor:pointer" name="exam_date[]"></td>
                         <td><input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment"></td>
                         <td><input type="text" name="license_number[]" placeholder="License Number"></td>
-                        <td><input type="date" name="license_validity[]"></td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                        <td><input type="date" style="cursor:pointer" name="license_validity[]"></td>
+                        
                     </tr>
                     {% endfor %}
                     
@@ -516,8 +516,8 @@
                 <tbody>
                     {% for experience in form_instance.work_experience.all %}
                     <tr>
-                        <td><input type="date" name="work_from_date[]" value="{{ experience.from_date|date:'Y-m-d' }}"></td>
-                        <td><input type="date" name="work_to_date[]" value="{{ experience.to_date|date:'Y-m-d' }}"></td>
+                        <td><input type="date" style="cursor:pointer" name="work_from_date[]" value="{{ experience.from_date|date:'Y-m-d' }}"></td>
+                        <td><input type="date" style="cursor:pointer" name="work_to_date[]" value="{{ experience.to_date|date:'Y-m-d' }}"></td>
                         <td><input type="text" name="work_position_title[]" value="{{ experience.position_title }}"></td>
                         <td><input type="text" name="work_department[]" value="{{ experience.department }}"></td>
                         <td><input type="number" name="work_monthly_salary[]" value="{{ experience.monthly_salary }}"></td>
@@ -529,12 +529,12 @@
                                 <option value="N" {% if experience.govt_service == 'N' %}selected{% endif %}>No</option>
                             </select>
                         </td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
+                        
                     </tr>
                     {% empty %}
                     <tr>
-                        <td><input type="date" name="work_from_date[]"></td>
-                        <td><input type="date" name="work_to_date[]"></td>
+                        <td><input type="date" style="cursor:pointer" name="work_from_date[]"></td>
+                        <td><input type="date" style="cursor:pointer" name="work_to_date[]"></td>
                         <td><input type="text" name="work_position_title[]" placeholder="Position Title"></td>
                         <td><input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company"></td>
                         <td><input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary"></td>
@@ -546,7 +546,6 @@
                                 <option value="N">No</option>
                             </select>
                         </td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% endfor %}
                     
@@ -574,20 +573,18 @@
                     {% for work in form_instance.voluntary_work.all %}
                     <tr>
                         <td><input type="text" name="voluntary_org[]" value="{{ work.organization_name }}"></td>
-                        <td><input type="date" name="voluntary_from[]" value="{{ work.from_date|date:'Y-m-d' }}"></td>
-                        <td><input type="date" name="voluntary_to[]" value="{{ work.to_date|date:'Y-m-d' }}"></td>
+                        <td><input type="date" style="cursor:pointer" name="voluntary_from[]" value="{{ work.from_date|date:'Y-m-d' }}"></td>
+                        <td><input type="date" style="cursor:pointer" name="voluntary_to[]" value="{{ work.to_date|date:'Y-m-d' }}"></td>
                         <td><input type="number" name="voluntary_hours[]" value="{{ work.number_of_hours }}"></td>
                         <td><input type="text" name="voluntary_nature[]" value="{{ work.nature_of_work }}"></td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% empty %}
                     <tr>
                         <td><input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization"></td>
-                        <td><input type="date" name="voluntary_from[]"></td>
-                        <td><input type="date" name="voluntary_to[]"></td>
+                        <td><input type="date" style="cursor:pointer" name="voluntary_from[]"></td>
+                        <td><input type="date" style="cursor:pointer" name="voluntary_to[]"></td>
                         <td><input type="number" name="voluntary_hours[]" placeholder="Number of Hours"></td>
                         <td><input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work"></td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% endfor %}
                     
@@ -616,22 +613,20 @@
                     {% for learning in form_instance.learning_development.all %}
                     <tr>
                         <td><input type="text" name="learning_title[]" value="{{ learning.title }}"></td>
-                        <td><input type="date" name="learning_from[]" value="{{ learning.from_date|date:'Y-m-d' }}"></td>
-                        <td><input type="date" name="learning_to[]" value="{{ learning.to_date|date:'Y-m-d' }}"></td>
+                        <td><input type="date" style="cursor:pointer" name="learning_from[]" value="{{ learning.from_date|date:'Y-m-d' }}"></td>
+                        <td><input type="date" style="cursor:pointer" name="learning_to[]" value="{{ learning.to_date|date:'Y-m-d' }}"></td>
                         <td><input type="number" name="learning_hours[]" value="{{ learning.number_of_hours }}"></td>
                         <td><input type="text" name="learning_type[]" value="{{ learning.type_of_ld }}"></td>
                         <td><input type="text" name="learning_conducted[]" value="{{ learning.conducted_by }}"></td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% empty %}
                     <tr>
                         <td><input type="text" name="learning_title[]" placeholder="Title"></td>
-                        <td><input type="date" name="learning_from[]"></td>
-                        <td><input type="date" name="learning_to[]"></td>
+                        <td><input type="date" style="cursor:pointer" name="learning_from[]"></td>
+                        <td><input type="date" style="cursor:pointer" name="learning_to[]"></td>
                         <td><input type="number" name="learning_hours[]" placeholder="Number of Hours"></td>
                         <td><input type="text" name="learning_type[]" placeholder="Type of LD"></td>
                         <td><input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By"></td>
-                        <td><button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button></td>
                     </tr>
                     {% endfor %}
                     
@@ -658,8 +653,8 @@ function addVoluntaryWorkRow() {
 
     const columns = [
         '<input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization">',
-        '<input type="date" name="voluntary_from[]">',
-        '<input type="date" name="voluntary_to[]">',
+        '<input type="date" style="cursor:pointer" name="voluntary_from[]">',
+        '<input type="date" style="cursor:pointer" name="voluntary_to[]">',
         '<input type="number" name="voluntary_hours[]" placeholder="Number of Hours">',
         '<input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work">',
         '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
@@ -677,8 +672,8 @@ function addWorkExperienceRow() {
     const newRow = table.insertRow(-1);
 
     const columns = [
-        '<input type="date" name="work_from_date[]">',
-        '<input type="date" name="work_to_date[]">',
+        '<input type="date" style="cursor:pointer" name="work_from_date[]">',
+        '<input type="date" style="cursor:pointer" name="work_to_date[]">',
         '<input type="text" name="work_position_title[]" placeholder="Position Title">',
         '<input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company">',
         '<input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary">',
@@ -703,10 +698,10 @@ function addCivilServiceRow() {
     const columns = [
         '<input type="text" name="career_service[]" placeholder="Career Service/Eligibility">',
         '<input type="number" name="rating[]" step="0.01" placeholder="Rating">',
-        '<input type="date" name="exam_date[]">',
+        '<input type="date" style="cursor:pointer" name="exam_date[]">',
         '<input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment">',
         '<input type="text" name="license_number[]" placeholder="License Number">',
-        '<input type="date" name="license_validity[]">',
+        '<input type="date" style="cursor:pointer" name="license_validity[]">',
         '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
     ];
 
@@ -726,8 +721,8 @@ function addLearningDevelopmentRow() {
 
     const columns = [
         '<input type="text" name="learning_title[]" placeholder="Title">',
-        '<input type="date" name="learning_from[]">',
-        '<input type="date" name="learning_to[]">',
+        '<input type="date" style="cursor:pointer" name="learning_from[]">',
+        '<input type="date" style="cursor:pointer" name="learning_to[]">',
         '<input type="number" name="learning_hours[]" placeholder="Number of Hours">',
         '<input type="text" name="learning_type[]" placeholder="Type of LD">',
         '<input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By">',

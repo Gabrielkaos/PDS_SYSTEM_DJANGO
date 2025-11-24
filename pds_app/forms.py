@@ -23,9 +23,9 @@ class OtherInformationForm(forms.ModelForm):
             'indigenous_group_member': forms.Select(),
             'disability_status': forms.Select(),
             'solo_parent_status': forms.Select(),
-            'criminal_date': forms.DateInput(attrs={'type': 'date'}),
-            'date_accomplished': forms.DateInput(attrs={'type': 'date'}),
-            'id_issue_date': forms.DateInput(attrs={'type': 'date'}),
+            'criminal_date': forms.DateInput(attrs={'type': 'date','style':'cursor:pointer'}),
+            'date_accomplished': forms.DateInput(attrs={'type': 'date','style':'cursor:pointer'}),
+            'id_issue_date': forms.DateInput(attrs={'type': 'date','style':'cursor:pointer'}),
             'references': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter references, separated by commas or new lines'}),
 
         }
@@ -67,7 +67,7 @@ class PersonalInformationForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['user']
         widgets = {
-            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date','style':'cursor:pointer'}),
             'sex': forms.Select(),
             'civil_status': forms.Select(),
             'blood_type': forms.Select(),

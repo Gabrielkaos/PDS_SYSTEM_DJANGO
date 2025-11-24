@@ -296,12 +296,13 @@ def import_form(request):
                 complete_form.learning_development.set(ld_objs)
 
                 messages.success(request, "Form imported successfully!")
-                return redirect('forms')
+                return redirect('edit_form',form_id=complete_form.id)
 
             except Exception as e:
                 import traceback
                 traceback.print_exc()
                 messages.error(request, f"Failed to import Excel: {e}")
+                return redirect("create_form")
 
     else:
         forms1 = CompleteForm.objects.filter(user=request.user)

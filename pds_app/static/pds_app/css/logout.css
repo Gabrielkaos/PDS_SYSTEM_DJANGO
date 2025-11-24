@@ -3,6 +3,7 @@
     position: absolute;
     top: 40px;
     right: 50px;
+    padding-right: 10px;
 }
 
 .welcome-text {
