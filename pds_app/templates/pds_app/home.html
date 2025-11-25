@@ -49,18 +49,6 @@
             {% endblock content %}
         </div>
     </div>
-
-    <!-- for opening modal -->
-    <script>
-        const form_item = document.getElementById('clickableFormItem')
-        const open_modal_button = document.getElementById('openModalBtn')
-
-        form_item.addEventListener("click",(event)=>{
-            if(event.target !== open_modal_button){
-                open_modal_button.click()
-            }
-        })
-    </script>
     <!-- for clear button in search -->
     <script>
 
@@ -70,18 +58,7 @@
             window.location = document.getElementById("hidden_a").href
         })
     </script>
-    <!-- to make the create and import button work -->
-    <script>
-        document.getElementById('createFormButton').addEventListener('click', function() {
-            window.location = document.getElementById("createFormLink").href;
-        });
-        document.getElementById('createNewLink').addEventListener('click', function() {
-            window.location = document.getElementById("createFormLink").href;
-        });
-        document.getElementById('mainFormLink').addEventListener('click', function() {
-            window.location = document.getElementById("mainLink").href;
-        });
-    </script>
+    
     <script src="{% static 'pds_app/js/modal.js' %}"></script>
 </body>
 </html>

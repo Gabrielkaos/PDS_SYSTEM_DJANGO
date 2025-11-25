@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function() {
     const modal = document.getElementById("attendanceModal");
-    const openModalBtn = document.getElementById("openModalBtn");
+    const openModalBtn = document.getElementById("side-bar-import-form");
     const closeModalBtn = document.getElementById("closeModalBtn");
 
     

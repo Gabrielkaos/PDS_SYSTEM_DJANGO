@@ -1,72 +1,108 @@
-{% extends 'pds_app/home.html' %}
-
-{% block sidebar %}
-
-<a href="{% url 'dashboard' %}" class="back-dashboard-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M15 18l-6-6 6-6"/>
-    </svg>
-    Back to Dashboard
-</a>
-
-<div class="forms-header">
-    <h3>Your Forms</h3>
-    <p class="forms-count">{{ forms|length }} form{{ forms|pluralize }}</p>
-</div>
-
-<div class="search-section">
-    <a href="{% url 'create_form' %}" hidden id="hidden_a" style="margin: -10px;"></a>
-    <form method="get" action="{% url 'home' %}" id="form-search">
-        <input 
-            type="text" 
-            name="search" 
-            value="{{ search_query }}" 
-            placeholder="Search by personal info"
-        >
-        <button type="submit">
-            Search
-        </button>
-        {% if search_query %}
-        <button type="button" id="button_clear">
-            Clear
-        </button>
-        {% endif %}
-    </form>
-    
-    {% if search_query %}
-    <p>
-        {{ total_forms }} result{{ total_forms|pluralize }} for "{{ search_query }}"
-    </p>
-    {% endif %}
-</div>
-
-<div class="forms-list">
-    {% for form in forms %}
-        <div class="form-item" id="mainFormLink">
-            <a href="{% url 'all_forms' form.id %}" class="form-link" id="mainLink">
-                <div class="form-name">{{ form.name }}</div>
-                <div class="form-date">Created: {{ form.created_at|date:"M d, Y" }}</div>
-                <div class="form-date">Updated: {{ form.updated_at|date:"M d, Y" }}</div>
-            </a>
-            
-            <form method="post" action="{% url 'delete_form' form.id %}" class="delete-form">
-                {% csrf_token %}
-                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete {{ form.name }}?');">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                    </svg>
-                </button>
-            </form>
-        </div>
-    {% endfor %}
-</div>
-
-
-
-
-
-{% endblock sidebar %}
+{% extends 'pds_app/dashboard.html' %}
 
 {% block content %}
+<div class="forms-container">
+    
+    <div class="forms-header">
+        <h2>Your Forms</h2>
+        <p class="forms-count">{{ total_forms }} form{{ total_forms|pluralize }}</p>
+    </div>
+
+    <a href="{% url 'home' %}" hidden id="hidden_a"></a>
+    <div class="search-section">
+        <form method="get" action="{% url 'home' %}">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ search_query }}" 
+                placeholder="Search by name, email, mobile..."
+            >
+            <button type="submit">Search</button>
+            {% if search_query %}
+            <button type="button" id="button_clear">
+                Clear
+            </button>
+            {% endif %}
+        </form>
+        
+        {% if search_query %}
+        <p>Found {{ total_forms }} result{{ total_forms|pluralize }} for "{{ search_query }}"</p>
+        {% endif %}
+    </div>
+
+   
+    {% if forms %}
+    <div class="forms-list">
+        {% for form in forms %}
+        <div class="form-item">
+            <a href="{% url 'all_forms' form.id %}" class="form-link">
+                <div class="form-info">
+                    <div class="form-name">{{ form.name|default:"Unnamed Form" }}</div>
+                    <div class="form-details">
+                        <span class="form-date">Created: {{ form.created_at|date:"M d, Y" }}</span>
+                        <span class="form-date">Updated: {{ form.updated_at|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+            </a>
+            
+            <div class="form-actions">
+                <a href="{% url 'edit_form' form.id %}" class="action-icon edit-icon" title="Edit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                    </svg>
+                </a>
+                
+                <a href="{% url 'export_form' form.id %}" class="action-icon export-icon" title="Export">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                    </svg>
+                </a>
+                
+                <form method="post" action="{% url 'delete_form' form.id %}" class="delete-form" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="action-icon delete-icon" title="Delete" onclick="return confirm('Are you sure you want to delete {{ form.name|default:"this form" }}?');">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+   
+    {% if forms.has_other_pages %}
+    <div class="pagination">
+        {% if forms.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; First</a>
+            <a href="?page={{ forms.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+        {% endif %}
+        
+        <span>Page {{ forms.number }} of {{ forms.paginator.num_pages }}</span>
+        
+        {% if forms.has_next %}
+            <a href="?page={{ forms.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+            <a href="?page={{ forms.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    
+    <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#ccc" viewBox="0 0 16 16" style="margin-bottom: 20px;">
+            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+        </svg>
+        <p>No forms found</p>
+        {% if search_query %}
+        <p style="font-size: 0.9em; color: #999;">Try a different search term or <a href="{% url 'home' %}">clear your search</a></p>
+        {% else %}
+        <a href="{% url 'create_form' %}" class="create-first-btn">Create Your First Form</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
 {% endblock content %}

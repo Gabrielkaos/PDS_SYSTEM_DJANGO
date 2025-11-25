@@ -3,28 +3,24 @@
 
 {% block sidebar %}
     
+    <a class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+    href="{% url 'dashboard' %}">
+    Dashboard
+    </a>
 
-    <a href="{% url 'dashboard' %}" class="active">Dashboard</a>
-    <a href="{% url 'home' %}">Your Forms</a>
-    
-    <div class="form-item" id="createNewLink">
-        <a href="{% url 'create_form'  %}" class="form-link" id="createFormLink">
-            <div class="form-name">Create New</div>
-        </a>
-        <button class="add-btn" id="createFormButton" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e3e3e3"><path d="M440-80v-340H120v-120h320v-340h80v340h320v120H520v340h-80Z"/></svg>                
-        </button>
-    </div>
+    <a class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+    href="{% url 'home' %}">
+    Your Forms
+    </a>
 
-    <div class="form-item" id="clickableFormItem">
-        <a>
-            <div class="form-name">Import Form</div>
-        </a>
-        <button id="openModalBtn" type="button" class="open-modal-button" hidden>
-            
-        </button>
-    </div>
+    <a class="{% if request.resolver_match.url_name == 'create_form' %}active{% endif %}" 
+    href="{% url 'create_form' %}">
+    Create Form
+    </a>
 
+    <a id="side-bar-import-form" href="#">
+    Import Form
+    </a>
 
 {% endblock %}
 
