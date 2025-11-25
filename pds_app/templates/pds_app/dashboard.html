@@ -1,6 +1,7 @@
 {% extends 'pds_app/home.html' %}
 {% load static %}
 
+
 {% block sidebar %}
     
     <a class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
@@ -19,7 +20,7 @@
     </a>
 
     <a id="side-bar-import-form" href="#">
-    Import Form
+    Import Form(s)
     </a>
 
 {% endblock %}
@@ -77,7 +78,7 @@
                 </svg>
                 Create New Form
             </a>
-            <a href="{% url 'import_form' %}" class="action-btn import-btn">
+            <a class="action-btn import-btn" id="side-bar-import-form2" href="#" >
                 <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
                     <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>
                 </svg>
