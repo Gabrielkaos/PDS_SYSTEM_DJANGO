@@ -1,32 +1,51 @@
 
+(function() {
+  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  const modal = $('#attendanceModal');
+  const closeBtn = $('#closeModalBtn');
 
-document.addEventListener("DOMContentLoaded", function() {
-    const modal = document.getElementById("attendanceModal");
-    const openModalBtn = document.getElementById("side-bar-import-form");
-    const openModalBtn2 = document.getElementById("side-bar-import-form2");
-    const closeModalBtn = document.getElementById("closeModalBtn");
+  if (!modal) {
+    console.warn('modal.js: #attendanceModal not found on page.');
+    return;
+  }
 
-    openModalBtn2.addEventListener("click", function() {
-      modal.style.display = "flex";
-      document.body.classList.add("no-scroll");
-    });
+  function openModal() {
+    modal.style.display = 'flex';
+    document.body.classList.add('no-scroll');
+  }
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.classList.remove('no-scroll');
+  }
+
+  
+  document.addEventListener('click', function (e) {
     
-    openModalBtn.addEventListener("click", function() {
-      modal.style.display = "flex";
-      document.body.classList.add("no-scroll");
-    });
+    if (e.target.closest('#side-bar-import-form') || e.target.closest('#side-bar-import-form2')) {
+      e.preventDefault();
+      openModal();
+      return;
+    }
 
-    closeModalBtn.addEventListener("click", function() {
-      modal.style.display = "none";
-      document.body.classList.remove("no-scroll");
-    });
+    
+    if (e.target.closest('#closeModalBtn') || e.target.closest('.modal .close')) {
+      e.preventDefault();
+      closeModal();
+      return;
+    }
 
-    window.addEventListener("click", function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-        document.body.classList.remove("no-scroll");
-      }
-    });
-
+    
+    if (e.target === modal) {
+      closeModal();
+      return;
+    }
   });
 
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+  });
+
+  
+  console.log('modal.js loaded — modal element found:', !!modal);
+})();
