@@ -49,6 +49,7 @@
             {% endblock content %}
         </div>
     </div>
+    
     <!-- for clear button in search -->
     <script>
 
@@ -58,6 +59,104 @@
             window.location = document.getElementById("hidden_a").href
         })
     </script>
+    <script>
+    function addVoluntaryWorkRow() {
+        const table = document.getElementById('voluntary-work-table');
+        const newRow = table.insertRow(-1);
+
+        const columns = [
+            '<input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization">',
+            '<input type="date" style="cursor:pointer" name="voluntary_from[]">',
+            '<input type="date" style="cursor:pointer" name="voluntary_to[]">',
+            '<input type="number" name="voluntary_hours[]" placeholder="Number of Hours">',
+            '<input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work">',
+            '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+        ];
+
+        columns.forEach((col, index) => {
+            const cell = newRow.insertCell(index);
+            cell.innerHTML = col;
+        });
+    }
+    </script>
+    <script>
+    function addWorkExperienceRow() {
+        const table = document.getElementById('work-experience-table');
+        const newRow = table.insertRow(-1);
+
+        const columns = [
+            '<input type="date" style="cursor:pointer" name="work_from_date[]">',
+            '<input type="date" style="cursor:pointer" name="work_to_date[]">',
+            '<input type="text" name="work_position_title[]" placeholder="Position Title">',
+            '<input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company">',
+            '<input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary">',
+            '<input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP">',
+            '<input type="text" name="work_status[]" placeholder="Status of Appointment">',
+            '<select name="work_govt_service[]"><option value="Y">Yes</option><option value="N">No</option></select>',
+            '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+        ];
+
+        columns.forEach((col, index) => {
+            const cell = newRow.insertCell(index);
+            cell.innerHTML = col;
+        });
+    }
+    </script>
+
+    <script>
+    function addCivilServiceRow() {
+        const tbody = document.querySelector('#eligibility-table tbody');  
+        const newRow = tbody.insertRow(-1);
+
+        const columns = [
+            '<input type="text" name="career_service[]" placeholder="Career Service/Eligibility">',
+            '<input type="number" name="rating[]" step="0.01" placeholder="Rating">',
+            '<input type="date" style="cursor:pointer" name="exam_date[]">',
+            '<input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment">',
+            '<input type="text" name="license_number[]" placeholder="License Number">',
+            '<input type="date" style="cursor:pointer" name="license_validity[]">',
+            '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+        ];
+
+        columns.forEach((col, index) => {
+            const cell = newRow.insertCell(index);
+            cell.innerHTML = col;
+        });
+    }
+
+    </script>
+
+
+    <script>
+    function addLearningDevelopmentRow() {
+        const table = document.getElementById('learning-development-table');
+        const newRow = table.insertRow(-1);
+
+        const columns = [
+            '<input type="text" name="learning_title[]" placeholder="Title">',
+            '<input type="date" style="cursor:pointer" name="learning_from[]">',
+            '<input type="date" style="cursor:pointer" name="learning_to[]">',
+            '<input type="number" name="learning_hours[]" placeholder="Number of Hours">',
+            '<input type="text" name="learning_type[]" placeholder="Type of LD">',
+            '<input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By">',
+            '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
+        ];
+
+        columns.forEach((col, index) => {
+            const cell = newRow.insertCell(index);
+            cell.innerHTML = col;
+        });
+    }
+    </script>
+
+    <script>
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-row-btn')) {
+            e.target.closest('tr').remove();
+        }
+    });
+    </script>
+
     
     <script src="{% static 'pds_app/js/modal.js' %}"></script>
 </body>

@@ -59,9 +59,9 @@
                     </svg>
                 </a>
                 
-                <form method="post" action="{% url 'delete_form' form.id %}" class="delete-form" style="display: inline;">
+                <form method="post" action="{% url 'delete_form' form.id %}" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit" class="action-icon delete-icon" title="Delete" onclick="return confirm('Are you sure you want to delete {{ form.name|default:"this form" }}?');">
+                    <button type="submit" class="delete-icon" title="Delete" onclick="return confirm('Are you sure you want to delete {{ form.name|default:"this form" }}?');">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -73,23 +73,6 @@
         {% endfor %}
     </div>
 
-   
-    {% if forms.has_other_pages %}
-    <div class="pagination">
-        {% if forms.has_previous %}
-            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; First</a>
-            <a href="?page={{ forms.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
-        {% endif %}
-        
-        <span>Page {{ forms.number }} of {{ forms.paginator.num_pages }}</span>
-        
-        {% if forms.has_next %}
-            <a href="?page={{ forms.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
-            <a href="?page={{ forms.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last &raquo;</a>
-        {% endif %}
-    </div>
-    {% endif %}
-
     {% else %}
     
     <div class="empty-state">
@@ -100,9 +83,9 @@
         {% if search_query %}
         <p style="font-size: 0.9em; color: #999;">Try a different search term or <a href="{% url 'home' %}">clear your search</a></p>
         {% else %}
-        <a href="{% url 'create_form' %}" class="create-first-btn">Create Your First Form</a>
+        <a href="{% url 'create_form' %}" class="dashboard-empty-state">Create Your First Form</a>
         {% endif %}
     </div>
     {% endif %}
 </div>
-{% endblock content %}
+{% endblock %}

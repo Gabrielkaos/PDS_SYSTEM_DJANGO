@@ -2,596 +2,599 @@
 {% extends 'pds_app/forms.html' %}
 
 {% block content %}
-<div class="form-actions">
-    <a href="{% url 'edit_form' this_form.id %}" class="edit-btn">Edit Form</a>
-    <a href="{% url 'export_form' this_form.id %}" class="edit-btn" style="margin-left:14px;">Export</a>
-</div>
-<h2>Form: {{this_form.name}}</h2>
+<div class="edit-form-container">
+    <div class="form-actions">
+        <a href="{% url 'edit_form' this_form.id %}" class="edit-btn">Edit Form</a>
+        <a href="{% url 'export_form' this_form.id %}" class="edit-btn" style="margin-left:14px;">Export</a>
+    </div>
+    <h2>Form: {{this_form.name}}</h2>
 
-<form class="general-form">
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
+    <form class="general-form">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <h3 style="text-align:center;">Form</h3>
-    <fieldset>
-        <legend>Form Name</legend>
-        <div class="form-row">
-            {{ this_form.name }}
-        </div>
-    </fieldset>
-    
-    <h3 style="text-align:center;">Personal Information</h3>
-    <fieldset>
-        <legend>Personal Details</legend>
-        <div class="form-row">
-            <label for="id_surname">Surname:</label>
-            {{ this_form.personal_information.surname }}
-        </div>
-        <div class="form-row">
-            <label for="id_firstname">First Name:</label>
-            {{ this_form.personal_information.firstname }}
-        </div>
-        <div class="form-row">
-            <label for="id_middlename">Middle Name:</label>
-            {{ this_form.personal_information.middlename }}
-        </div>
-        <div class="form-row">
-            <label for="id_date_of_birth">Date of Birth:</label>
-            {{ this_form.personal_information.date_of_birth }}
-        </div>
-        <div class="form-row">
-            <label for="id_place_of_birth">Place of Birth:</label>
-            {{ this_form.personal_information.place_of_birth }}
-        </div>
-    </fieldset>
-    
-    
-    <fieldset>
-        <legend>Physical Details</legend>
-        <div class="form-row">
-            <label for="id_sex">Sex:</label>
-            {{ this_form.personal_information.sex }}
-        </div>
-        <div class="form-row">
-            <label for="id_civil_status">Civil Status:</label>
-            {{ this_form.personal_information.civil_status }}
-        </div>
-        <div class="form-row">
-            <label for="id_height">Height (cm):</label>
-            {{ this_form.personal_information.height }}
-        </div>
-        <div class="form-row">
-            <label for="id_weight">Weight (kg):</label>
-            {{ this_form.personal_information.weight }}
-        </div>
-        <div class="form-row">
-            <label for="id_blood_type">Blood Type:</label>
-            {{ this_form.personal_information.blood_type }}
-        </div>
-    </fieldset>
-    
-    
-    <fieldset>
-        <legend>Contact Information</legend>
-        <div class="form-row">
-            <label for="id_residential_address">Residential Address:</label>
-            {{ this_form.personal_information.residential_address }}
-        </div>
-        <div class="form-row">
-            <label for="id_residential_zip_code">Residential Zip Code:</label>
-            {{ this_form.personal_information.residential_zip_code }}
-        </div>
-        <div class="form-row">
-            <label for="id_permanent_address">Permanent Address:</label>
-            {{ this_form.personal_information.permanent_address }}
-        </div>
-        <div class="form-row">
-            <label for="id_permanent_zip_code">Permanent Zip Code:</label>
-            {{ this_form.personal_information.permanent_zip_code }}
-        </div>
-        <div class="form-row">
-            <label for="id_telephone_no">Telephone Number:</label>
-            {{ this_form.personal_information.telephone_no }}
-        </div>
-        <div class="form-row">
-            <label for="id_mobile_no">Mobile Number:</label>
-            {{ this_form.personal_information.mobile_no }}
-        </div>
-        <div class="form-row">
-            <label for="id_email_address">Email Address:</label>
-            {{ this_form.personal_information.email_address }}
-        </div>
-    </fieldset>
-    
-    
-    <fieldset>
-        <legend>Government IDs</legend>
-        <div class="form-row">
-            <label for="id_gsis">GSIS Number:</label>
-            {{ this_form.personal_information.gsis }}
-        </div>
-        <div class="form-row">
-            <label for="id_pag_ibig">Pag-IBIG Number:</label>
-            {{ this_form.personal_information.pag_ibig }}
-        </div>
-        <div class="form-row">
-            <label for="id_philhealth">PhilHealth Number:</label>
-            {{ this_form.personal_information.philhealth }}
-        </div>
-        <div class="form-row">
-            <label for="id_sss_no">SSS Number:</label>
-            {{ this_form.personal_information.sss_no }}
-        </div>
-        <div class="form-row">
-            <label for="id_tin_no">TIN Number:</label>
-            {{ this_form.personal_information.tin_no }}
-        </div>
-    </fieldset>
-    
-   
-    <fieldset>
-        <legend>Other Information</legend>
-        <div class="form-row">
-            <label for="id_citizenship">Citizenship:</label>
-            {{ this_form.personal_information.citizenship }}
-        </div>
-        <div class="form-row">
-            <label for="id_agent_employee_number">Agent Employee Number:</label>
-            {{ this_form.personal_information.agent_employee_number }}
-        </div>
-    </fieldset>
-    <br>
-    <h3 style="text-align:center;">Family Background</h3>
-    
-    <fieldset>
-        <legend>Spouse Information</legend>
-        <div class="form-row">
-            <label for="id_spouse_surname">Spouse's Surname:</label>
-            {{ this_form.family_background.spouse_surname }}
-        </div>
-        <div class="form-row">
-            <label for="id_spouse_firstname">Spouse's First Name:</label>
-            {{ this_form.family_background.spouse_firstname }}
-        </div>
-        <div class="form-row">
-            <label for="id_spouse_middlename">Spouse's Middle Name:</label>
-            {{ this_form.family_background.spouse_middlename }}
-        </div>
-        <div class="form-row">
-            <label for="id_spouse_name_extension">Spouse's Name Extension:</label>
-            {{ this_form.family_background.spouse_name_extension }}
-        </div>
-        <div class="form-row">
-            <label for="id_spouse_occupation">Spouse's Occupation:</label>
-            {{ this_form.family_background.spouse_occupation }}
-        </div>
-        <div class="form-row">
-            <label for="id_spouse_employer_business_name">Employer/Business Name:</label>
-            {{ this_form.family_background.spouse_employer_business_name }}
-        </div>
-        <div class="form-row">
-            <label for="id_spouse_business_address">Business Address:</label>
-            {{ this_form.family_background.spouse_business_address }}
-        </div>
-        <div class="form-row">
-            <label for="id_spouse_telephone_no">Telephone Number:</label>
-            {{ this_form.family_background.spouse_telephone_no }}
-        </div>
-    </fieldset>
-
-   
-    <fieldset>
-        <legend>Children Information</legend>
-        {% if this_form.family_background.children %}
-            <p>{{ this_form.family_background.children|linebreaksbr }}</p>
-        {% else %}
-            <p>No children recorded.</p>
         {% endif %}
-    </fieldset>
 
+        <h3 style="text-align:center;">Form</h3>
+        <fieldset>
+            <legend>Form Name</legend>
+            <div class="form-row">
+                {{ this_form.name }}
+            </div>
+        </fieldset>
+        
+        <h3 style="text-align:center;">Personal Information</h3>
+        <fieldset>
+            <legend>Personal Details</legend>
+            <div class="form-row">
+                <label for="id_surname">Surname:</label>
+                {{ this_form.personal_information.surname }}
+            </div>
+            <div class="form-row">
+                <label for="id_firstname">First Name:</label>
+                {{ this_form.personal_information.firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_middlename">Middle Name:</label>
+                {{ this_form.personal_information.middlename }}
+            </div>
+            <div class="form-row">
+                <label for="id_date_of_birth">Date of Birth:</label>
+                {{ this_form.personal_information.date_of_birth }}
+            </div>
+            <div class="form-row">
+                <label for="id_place_of_birth">Place of Birth:</label>
+                {{ this_form.personal_information.place_of_birth }}
+            </div>
+        </fieldset>
+        
+        
+        <fieldset>
+            <legend>Physical Details</legend>
+            <div class="form-row">
+                <label for="id_sex">Sex:</label>
+                {{ this_form.personal_information.sex }}
+            </div>
+            <div class="form-row">
+                <label for="id_civil_status">Civil Status:</label>
+                {{ this_form.personal_information.civil_status }}
+            </div>
+            <div class="form-row">
+                <label for="id_height">Height (cm):</label>
+                {{ this_form.personal_information.height }}
+            </div>
+            <div class="form-row">
+                <label for="id_weight">Weight (kg):</label>
+                {{ this_form.personal_information.weight }}
+            </div>
+            <div class="form-row">
+                <label for="id_blood_type">Blood Type:</label>
+                {{ this_form.personal_information.blood_type }}
+            </div>
+        </fieldset>
+        
+        
+        <fieldset>
+            <legend>Contact Information</legend>
+            <div class="form-row">
+                <label for="id_residential_address">Residential Address:</label>
+                {{ this_form.personal_information.residential_address }}
+            </div>
+            <div class="form-row">
+                <label for="id_residential_zip_code">Residential Zip Code:</label>
+                {{ this_form.personal_information.residential_zip_code }}
+            </div>
+            <div class="form-row">
+                <label for="id_permanent_address">Permanent Address:</label>
+                {{ this_form.personal_information.permanent_address }}
+            </div>
+            <div class="form-row">
+                <label for="id_permanent_zip_code">Permanent Zip Code:</label>
+                {{ this_form.personal_information.permanent_zip_code }}
+            </div>
+            <div class="form-row">
+                <label for="id_telephone_no">Telephone Number:</label>
+                {{ this_form.personal_information.telephone_no }}
+            </div>
+            <div class="form-row">
+                <label for="id_mobile_no">Mobile Number:</label>
+                {{ this_form.personal_information.mobile_no }}
+            </div>
+            <div class="form-row">
+                <label for="id_email_address">Email Address:</label>
+                {{ this_form.personal_information.email_address }}
+            </div>
+        </fieldset>
+        
+        
+        <fieldset>
+            <legend>Government IDs</legend>
+            <div class="form-row">
+                <label for="id_gsis">GSIS Number:</label>
+                {{ this_form.personal_information.gsis }}
+            </div>
+            <div class="form-row">
+                <label for="id_pag_ibig">Pag-IBIG Number:</label>
+                {{ this_form.personal_information.pag_ibig }}
+            </div>
+            <div class="form-row">
+                <label for="id_philhealth">PhilHealth Number:</label>
+                {{ this_form.personal_information.philhealth }}
+            </div>
+            <div class="form-row">
+                <label for="id_sss_no">SSS Number:</label>
+                {{ this_form.personal_information.sss_no }}
+            </div>
+            <div class="form-row">
+                <label for="id_tin_no">TIN Number:</label>
+                {{ this_form.personal_information.tin_no }}
+            </div>
+        </fieldset>
+        
     
-    <fieldset>
-        <legend>Parents' Information</legend>
-        <h3 style="text-align:center;">Father's Information</h3>
-        <div class="form-row">
-            <label for="id_father_surname">Father's Surname:</label>
-            {{ this_form.family_background.father_surname }}
-        </div>
-        <div class="form-row">
-            <label for="id_father_firstname">Father's First Name:</label>
-            {{ this_form.family_background.father_firstname }}
-        </div>
-        <div class="form-row">
-            <label for="id_father_middlename">Father's Middle Name:</label>
-            {{ this_form.family_background.father_middlename }}
-        </div>
-        <div class="form-row">
-            <label for="id_father_name_extension">Father's Name Extension:</label>
-            {{ this_form.family_background.father_name_extension }}
-        </div>
-
-        <h3 style="text-align:center;">Mother's Information</h3>
-        <div class="form-row">
-            <label for="id_mother_maiden_lastname">Mother's Maiden Last Name:</label>
-            {{ this_form.family_background.mother_maiden_lastname }}
-        </div>
-        <div class="form-row">
-            <label for="id_mother_firstname">Mother's First Name:</label>
-            {{ this_form.family_background.mother_firstname }}
-        </div>
-        <div class="form-row">
-            <label for="id_mother_middlename">Mother's Middle Name:</label>
-            {{ this_form.family_background.mother_middlename }}
-        </div>
-    </fieldset>
-    <br>
-    <h3 style="text-align:center;">Other Information</h3>
-    <fieldset>
-        <legend>Relatives by Consanguinity or Affinity</legend>
-        <div class="form-row">
-            <label>Within Third Degree:</label>
-            {{ this_form.other_information.with_third_degree }}
-        </div>
-        <div class="form-row">
-            <label>Within Fourth Degree:</label>
-            {{ this_form.other_information.with_fourth_degree }}
-        </div>
-        <div class="form-row">
-            <label>Details (if any):</label>
-            {{ this_form.other_information.fourth_degree_details }}
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Administrative and Criminal Offenses</legend>
-        <div class="form-row">
-            <label>Administrative Offense:</label>
-            {{ this_form.other_information.offense }}
-        </div>
-        <div class="form-row">
-            <label>Details:</label>
-            {{ this_form.other_information.offense_details }}
-        </div>
-        <div class="form-row">
-            <label>Criminally Charged:</label>
-            {{ this_form.other_information.criminal }}
-        </div>
-        <div class="form-row">
-            <label>Details:</label>
-            {{ this_form.other_information.criminal_details }}
-        </div>
-        <div class="form-row">
-            <label>Date of Criminal Charge:</label>
-            {{ this_form.other_information.criminal_date }}
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Conviction</legend>
-        <div class="form-row">
-            <label>Convicted of Crime:</label>
-            {{ this_form.other_information.convicted }}
-        </div>
-        <div class="form-row">
-            <label>Details:</label>
-            {{ this_form.other_information.convicted_details }}
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Service Separation</legend>
-        <div class="form-row">
-            <label>Separated from Service:</label>
-            {{ this_form.other_information.sep_service }}
-        </div>
-        <div class="form-row">
-            <label>Details:</label>
-            {{ this_form.other_information.sep_service_details }}
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Election-Related Questions</legend>
-        <div class="form-row">
-            <label>Candidate in Election:</label>
-            {{ this_form.other_information.candidate }}
-        </div>
-        <div class="form-row">
-            <label>Details:</label>
-            {{ this_form.other_information.candidate_details }}
-        </div>
-        <div class="form-row">
-            <label>Resigned for Campaign:</label>
-            {{ this_form.other_information.resign_candid }}
-        </div>
-        <div class="form-row">
-            <label>Details:</label>
-            {{ this_form.other_information.resign_candid_details }}
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Immigration or Permanent Residency</legend>
-        <div class="form-row">
-            <label>Immigrant/Permanent Resident:</label>
-            {{ this_form.other_information.immigrant_status }}
-        </div>
-        <div class="form-row">
-            <label>Details:</label>
-            {{ this_form.other_information.immigrant_details }}
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Membership and Status</legend>
-        <div class="form-row">
-            <label>Member of Indigenous Group:</label>
-            {{ this_form.other_information.indigenous_group_member }}
-        </div>
-        <div class="form-row">
-            <label>Person with Disability:</label>
-            {{ this_form.other_information.disability_status }}
-        </div>
-        <div class="form-row">
-            <label>Solo Parent:</label>
-            {{ this_form.other_information.solo_parent_status }}
-        </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>References</legend>
-        {% if this_form.other_information.references %}
-            <p>{{ this_form.other_information.references|linebreaksbr }}</p>
-        {% else %}
-            <p>No references recorded.</p>
-        {% endif %}
-    </fieldset>
-
-    <fieldset>
-        <legend>Government Issued ID</legend>
-        <div class="form-row">
-            <label>ID Type:</label>
-            {{ this_form.other_information.government_id }}
-        </div>
-        <div class="form-row">
-            <label>ID Number:</label>
-            {{ this_form.other_information.government_id_number }}
-        </div>
-        <div class="form-row">
-            <label>Issue Date:</label>
-            {{ this_form.other_information.id_issue_date }}
-        </div>
-        <div class="form-row">
-            <label>Issue Place:</label>
-            {{ this_form.other_information.id_issue_place }}
-        </div>
-    </fieldset>
-
+        <fieldset>
+            <legend>Other Information</legend>
+            <div class="form-row">
+                <label for="id_citizenship">Citizenship:</label>
+                {{ this_form.personal_information.citizenship }}
+            </div>
+            <div class="form-row">
+                <label for="id_agent_employee_number">Agent Employee Number:</label>
+                {{ this_form.personal_information.agent_employee_number }}
+            </div>
+        </fieldset>
         <br>
-    <h3 style="text-align:center;">Educational Background</h3>
-    <table class="main-table">
-        <thead>
-            <tr>
-                <th class="main-table-header">Level</th>
-                <th class="main-table-header">Name of School</th>
-                <th class="main-table-header">Basic Ed/Degree/Course</th>
-                <th class="main-table-header">Period of Attendance (From)</th>
-                <th class="main-table-header">Period of Attendance (To)</th>
-                <th class="main-table-header">Highest Level/Units Earned</th>
-                <th class="main-table-header">Year Graduated</th>
-                <th class="main-table-header">Scholarship/Honors Received</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="educational-level">Elementary</td>
-                <td>{{ this_form.educational_background.elementary_name }}</td>
-                <td>{{ this_form.educational_background.elementary_degree_course }}</td>
-                <td>{{ this_form.educational_background.elementary_period_from }}</td>
-                <td>{{ this_form.educational_background.elementary_period_to }}</td>
-                <td>{{ this_form.educational_background.elementary_highest_level_units }}</td>
-                <td>{{ this_form.educational_background.elementary_year_graduated }}</td>
-                <td>{{ this_form.educational_background.elementary_honors }}</td>
-            </tr>
-            <tr>
-                <td class="educational-level">Secondary</td>
-                <td>{{ this_form.educational_background.secondary_name }}</td>
-                <td>{{ this_form.educational_background.secondary_degree_course }}</td>
-                <td>{{ this_form.educational_background.secondary_period_from }}</td>
-                <td>{{ this_form.educational_background.secondary_period_to }}</td>
-                <td>{{ this_form.educational_background.secondary_highest_level_units }}</td>
-                <td>{{ this_form.educational_background.secondary_year_graduated }}</td>
-                <td>{{ this_form.educational_background.secondary_honors }}</td>
-            </tr>
-            <tr>
-                <td class="educational-level">Vocational/Trade Course</td>
-                <td>{{ this_form.educational_background.vocational_name }}</td>
-                <td>{{ this_form.educational_background.vocational_degree_course }}</td>
-                <td>{{ this_form.educational_background.vocational_period_from }}</td>
-                <td>{{ this_form.educational_background.vocational_period_to }}</td>
-                <td>{{ this_form.educational_background.vocational_highest_level_units }}</td>
-                <td>{{ this_form.educational_background.vocational_year_graduated }}</td>
-                <td>{{ this_form.educational_background.vocational_honors }}</td>
-            </tr>
-            <tr>
-                <td class="educational-level">College</td>
-                <td>{{ this_form.educational_background.college_name }}</td>
-                <td>{{ this_form.educational_background.college_degree_course }}</td>
-                <td>{{ this_form.educational_background.college_period_from }}</td>
-                <td>{{ this_form.educational_background.college_period_to }}</td>
-                <td>{{ this_form.educational_background.college_highest_level_units }}</td>
-                <td>{{ this_form.educational_background.college_year_graduated }}</td>
-                <td>{{ this_form.educational_background.college_honors }}</td>
-            </tr>
-            <tr>
-                <td class="educational-level">Graduate Studies</td>
-                <td>{{ this_form.educational_background.graduate_name }}</td>
-                <td>{{ this_form.educational_background.graduate_degree_course }}</td>
-                <td>{{ this_form.educational_background.graduate_period_from }}</td>
-                <td>{{ this_form.educational_background.graduate_period_to }}</td>
-                <td>{{ this_form.educational_background.graduate_highest_level_units }}</td>
-                <td>{{ this_form.educational_background.graduate_year_graduated }}</td>
-                <td>{{ this_form.educational_background.graduate_honors }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <h3 style="text-align:center;">Civil Service Eligibility</h3>
-    <table id="eligibility-table" class="main-table">
-        <thead>
-            <tr>
-                <th  class="main-table-header">Career Service/Eligibility</th>
-                <th  class="main-table-header">Rating</th>
-                <th  class="main-table-header">Date of Examination/Conferment</th>
-                <th  class="main-table-header">Place of Examination/Conferment</th>
-                <th  class="main-table-header">License Number</th>
-                <th  class="main-table-header">License Validity</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for eligibility in this_form.civil_service.all %}
-            <tr>
-                <td>{{eligibility.career_service}}</td>
-                <td>{{eligibility.rating}}</td>
-                <td>{{eligibility.exam_date}}</td>
-                <td>{{eligibility.exam_place}}</td>
-                <td>{{eligibility.license_number}}</td>
-                <td>{{eligibility.license_validity}}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <h3 style="text-align:center;">Work Experience</h3>
-    <table id="work-experience-table" class="main-table">
-        <thead>
-            <tr>
-                <th class="main-table-header">From</th>
-                <th class="main-table-header">To</th>
-                <th class="main-table-header">Position Title</th>
-                <th class="main-table-header">Department/Agency/Office/Company</th>
-                <th class="main-table-header">Monthly Salary</th>
-                <th class="main-table-header">Salary Grade & STEP</th>
-                <th class="main-table-header">Status of Appointment</th>
-                <th class="main-table-header">Govt Service (Y/N)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in this_form.work_experience.all %}
+        <h3 style="text-align:center;">Family Background</h3>
+        
+        <fieldset>
+            <legend>Spouse Information</legend>
+            <div class="form-row">
+                <label for="id_spouse_surname">Spouse's Surname:</label>
+                {{ this_form.family_background.spouse_surname }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_firstname">Spouse's First Name:</label>
+                {{ this_form.family_background.spouse_firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_middlename">Spouse's Middle Name:</label>
+                {{ this_form.family_background.spouse_middlename }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_name_extension">Spouse's Name Extension:</label>
+                {{ this_form.family_background.spouse_name_extension }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_occupation">Spouse's Occupation:</label>
+                {{ this_form.family_background.spouse_occupation }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_employer_business_name">Employer/Business Name:</label>
+                {{ this_form.family_background.spouse_employer_business_name }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_business_address">Business Address:</label>
+                {{ this_form.family_background.spouse_business_address }}
+            </div>
+            <div class="form-row">
+                <label for="id_spouse_telephone_no">Telephone Number:</label>
+                {{ this_form.family_background.spouse_telephone_no }}
+            </div>
+        </fieldset>
 
-            <tr>
-                <td>{{i.from_date}}</td>
-                <td>{{i.to_date}}</td>
-                <td>{{i.position_title}}</td>
-                <td>{{i.department}}</td>
-                <td>{{i.monthly_salary}}</td>
-                <td>{{i.salary_grade}}</td>
-                <td>{{i.status_of_appointment}}</td>
-                <td>
-                    {{i.govt_service}}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <h3 style="text-align:center;">Voluntary Work</h3>
-    <table id="voluntary-work-table"  class="main-table">
-        <thead>
-            <tr>
-                <th class="main-table-header">Name and Address of Organization</th>
-                <th class="main-table-header">From</th>
-                <th class="main-table-header">To</th>
-                <th class="main-table-header">Number of Hours</th>
-                <th class="main-table-header">Position/Nature of Work</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in this_form.voluntary_work.all %}
-            <tr>
-                <td>{{i.organization_name}}</td>
-                <td>{{i.from_date}}</td>
-                <td>{{i.to_date}}</td>
-                <td>{{i.number_of_hours}}</td>
-                <td>{{i.nature_of_work}}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <h3 style="text-align:center;">Learning and Development</h3>
-    <table id="learning-development-table" class="main-table">
-        <thead>
-            <tr>
-                <th class="main-table-header">Title</th>
-                <th class="main-table-header">From</th>
-                <th class="main-table-header">To</th>
-                <th class="main-table-header">Number of Hours</th>
-                <th class="main-table-header">Type of LD</th>
-                <th class="main-table-header">Conducted/Sponsored By</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in this_form.learning_development.all %}
-            <tr>
-                <td>{{i.title}}</td>
-                <td>{{i.from_date}}</td>
-                <td>{{i.to_date}}</td>
-                <td>{{i.number_of_hours}}</td>
-                <td>{{i.type_of_ld}}</td>
-                <td>{{i.conducted_by}}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
+    
+        <fieldset>
+            <legend>Children Information</legend>
+            {% if this_form.family_background.children %}
+                <p>{{ this_form.family_background.children|linebreaksbr }}</p>
+            {% else %}
+                <p>No children recorded.</p>
+            {% endif %}
+        </fieldset>
+
+        
+        <fieldset>
+            <legend>Parents' Information</legend>
+            <h3 style="text-align:center;">Father's Information</h3>
+            <div class="form-row">
+                <label for="id_father_surname">Father's Surname:</label>
+                {{ this_form.family_background.father_surname }}
+            </div>
+            <div class="form-row">
+                <label for="id_father_firstname">Father's First Name:</label>
+                {{ this_form.family_background.father_firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_father_middlename">Father's Middle Name:</label>
+                {{ this_form.family_background.father_middlename }}
+            </div>
+            <div class="form-row">
+                <label for="id_father_name_extension">Father's Name Extension:</label>
+                {{ this_form.family_background.father_name_extension }}
+            </div>
+
+            <h3 style="text-align:center;">Mother's Information</h3>
+            <div class="form-row">
+                <label for="id_mother_maiden_lastname">Mother's Maiden Last Name:</label>
+                {{ this_form.family_background.mother_maiden_lastname }}
+            </div>
+            <div class="form-row">
+                <label for="id_mother_firstname">Mother's First Name:</label>
+                {{ this_form.family_background.mother_firstname }}
+            </div>
+            <div class="form-row">
+                <label for="id_mother_middlename">Mother's Middle Name:</label>
+                {{ this_form.family_background.mother_middlename }}
+            </div>
+        </fieldset>
+        <br>
+        <h3 style="text-align:center;">Other Information</h3>
+        <fieldset>
+            <legend>Relatives by Consanguinity or Affinity</legend>
+            <div class="form-row">
+                <label>Within Third Degree:</label>
+                {{ this_form.other_information.with_third_degree }}
+            </div>
+            <div class="form-row">
+                <label>Within Fourth Degree:</label>
+                {{ this_form.other_information.with_fourth_degree }}
+            </div>
+            <div class="form-row">
+                <label>Details (if any):</label>
+                {{ this_form.other_information.fourth_degree_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Administrative and Criminal Offenses</legend>
+            <div class="form-row">
+                <label>Administrative Offense:</label>
+                {{ this_form.other_information.offense }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ this_form.other_information.offense_details }}
+            </div>
+            <div class="form-row">
+                <label>Criminally Charged:</label>
+                {{ this_form.other_information.criminal }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ this_form.other_information.criminal_details }}
+            </div>
+            <div class="form-row">
+                <label>Date of Criminal Charge:</label>
+                {{ this_form.other_information.criminal_date }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Conviction</legend>
+            <div class="form-row">
+                <label>Convicted of Crime:</label>
+                {{ this_form.other_information.convicted }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ this_form.other_information.convicted_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Service Separation</legend>
+            <div class="form-row">
+                <label>Separated from Service:</label>
+                {{ this_form.other_information.sep_service }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ this_form.other_information.sep_service_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Election-Related Questions</legend>
+            <div class="form-row">
+                <label>Candidate in Election:</label>
+                {{ this_form.other_information.candidate }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ this_form.other_information.candidate_details }}
+            </div>
+            <div class="form-row">
+                <label>Resigned for Campaign:</label>
+                {{ this_form.other_information.resign_candid }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ this_form.other_information.resign_candid_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Immigration or Permanent Residency</legend>
+            <div class="form-row">
+                <label>Immigrant/Permanent Resident:</label>
+                {{ this_form.other_information.immigrant_status }}
+            </div>
+            <div class="form-row">
+                <label>Details:</label>
+                {{ this_form.other_information.immigrant_details }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Membership and Status</legend>
+            <div class="form-row">
+                <label>Member of Indigenous Group:</label>
+                {{ this_form.other_information.indigenous_group_member }}
+            </div>
+            <div class="form-row">
+                <label>Person with Disability:</label>
+                {{ this_form.other_information.disability_status }}
+            </div>
+            <div class="form-row">
+                <label>Solo Parent:</label>
+                {{ this_form.other_information.solo_parent_status }}
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>References</legend>
+            {% if this_form.other_information.references %}
+                <p>{{ this_form.other_information.references|linebreaksbr }}</p>
+            {% else %}
+                <p>No references recorded.</p>
+            {% endif %}
+        </fieldset>
+
+        <fieldset>
+            <legend>Government Issued ID</legend>
+            <div class="form-row">
+                <label>ID Type:</label>
+                {{ this_form.other_information.government_id }}
+            </div>
+            <div class="form-row">
+                <label>ID Number:</label>
+                {{ this_form.other_information.government_id_number }}
+            </div>
+            <div class="form-row">
+                <label>Issue Date:</label>
+                {{ this_form.other_information.id_issue_date }}
+            </div>
+            <div class="form-row">
+                <label>Issue Place:</label>
+                {{ this_form.other_information.id_issue_place }}
+            </div>
+        </fieldset>
+
+            <br>
+        <h3 style="text-align:center;">Educational Background</h3>
+        <table class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">Level</th>
+                    <th class="main-table-header">Name of School</th>
+                    <th class="main-table-header">Basic Ed/Degree/Course</th>
+                    <th class="main-table-header">Period of Attendance (From)</th>
+                    <th class="main-table-header">Period of Attendance (To)</th>
+                    <th class="main-table-header">Highest Level/Units Earned</th>
+                    <th class="main-table-header">Year Graduated</th>
+                    <th class="main-table-header">Scholarship/Honors Received</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="educational-level">Elementary</td>
+                    <td>{{ this_form.educational_background.elementary_name }}</td>
+                    <td>{{ this_form.educational_background.elementary_degree_course }}</td>
+                    <td>{{ this_form.educational_background.elementary_period_from }}</td>
+                    <td>{{ this_form.educational_background.elementary_period_to }}</td>
+                    <td>{{ this_form.educational_background.elementary_highest_level_units }}</td>
+                    <td>{{ this_form.educational_background.elementary_year_graduated }}</td>
+                    <td>{{ this_form.educational_background.elementary_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Secondary</td>
+                    <td>{{ this_form.educational_background.secondary_name }}</td>
+                    <td>{{ this_form.educational_background.secondary_degree_course }}</td>
+                    <td>{{ this_form.educational_background.secondary_period_from }}</td>
+                    <td>{{ this_form.educational_background.secondary_period_to }}</td>
+                    <td>{{ this_form.educational_background.secondary_highest_level_units }}</td>
+                    <td>{{ this_form.educational_background.secondary_year_graduated }}</td>
+                    <td>{{ this_form.educational_background.secondary_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Vocational/Trade Course</td>
+                    <td>{{ this_form.educational_background.vocational_name }}</td>
+                    <td>{{ this_form.educational_background.vocational_degree_course }}</td>
+                    <td>{{ this_form.educational_background.vocational_period_from }}</td>
+                    <td>{{ this_form.educational_background.vocational_period_to }}</td>
+                    <td>{{ this_form.educational_background.vocational_highest_level_units }}</td>
+                    <td>{{ this_form.educational_background.vocational_year_graduated }}</td>
+                    <td>{{ this_form.educational_background.vocational_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">College</td>
+                    <td>{{ this_form.educational_background.college_name }}</td>
+                    <td>{{ this_form.educational_background.college_degree_course }}</td>
+                    <td>{{ this_form.educational_background.college_period_from }}</td>
+                    <td>{{ this_form.educational_background.college_period_to }}</td>
+                    <td>{{ this_form.educational_background.college_highest_level_units }}</td>
+                    <td>{{ this_form.educational_background.college_year_graduated }}</td>
+                    <td>{{ this_form.educational_background.college_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Graduate Studies</td>
+                    <td>{{ this_form.educational_background.graduate_name }}</td>
+                    <td>{{ this_form.educational_background.graduate_degree_course }}</td>
+                    <td>{{ this_form.educational_background.graduate_period_from }}</td>
+                    <td>{{ this_form.educational_background.graduate_period_to }}</td>
+                    <td>{{ this_form.educational_background.graduate_highest_level_units }}</td>
+                    <td>{{ this_form.educational_background.graduate_year_graduated }}</td>
+                    <td>{{ this_form.educational_background.graduate_honors }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h3 style="text-align:center;">Civil Service Eligibility</h3>
+        <table id="eligibility-table" class="main-table">
+            <thead>
+                <tr>
+                    <th  class="main-table-header">Career Service/Eligibility</th>
+                    <th  class="main-table-header">Rating</th>
+                    <th  class="main-table-header">Date of Examination/Conferment</th>
+                    <th  class="main-table-header">Place of Examination/Conferment</th>
+                    <th  class="main-table-header">License Number</th>
+                    <th  class="main-table-header">License Validity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for eligibility in this_form.civil_service.all %}
+                <tr>
+                    <td>{{eligibility.career_service}}</td>
+                    <td>{{eligibility.rating}}</td>
+                    <td>{{eligibility.exam_date}}</td>
+                    <td>{{eligibility.exam_place}}</td>
+                    <td>{{eligibility.license_number}}</td>
+                    <td>{{eligibility.license_validity}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <h3 style="text-align:center;">Work Experience</h3>
+        <table id="work-experience-table" class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">From</th>
+                    <th class="main-table-header">To</th>
+                    <th class="main-table-header">Position Title</th>
+                    <th class="main-table-header">Department/Agency/Office/Company</th>
+                    <th class="main-table-header">Monthly Salary</th>
+                    <th class="main-table-header">Salary Grade & STEP</th>
+                    <th class="main-table-header">Status of Appointment</th>
+                    <th class="main-table-header">Govt Service (Y/N)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in this_form.work_experience.all %}
+
+                <tr>
+                    <td>{{i.from_date}}</td>
+                    <td>{{i.to_date}}</td>
+                    <td>{{i.position_title}}</td>
+                    <td>{{i.department}}</td>
+                    <td>{{i.monthly_salary}}</td>
+                    <td>{{i.salary_grade}}</td>
+                    <td>{{i.status_of_appointment}}</td>
+                    <td>
+                        {{i.govt_service}}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <h3 style="text-align:center;">Voluntary Work</h3>
+        <table id="voluntary-work-table"  class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">Name and Address of Organization</th>
+                    <th class="main-table-header">From</th>
+                    <th class="main-table-header">To</th>
+                    <th class="main-table-header">Number of Hours</th>
+                    <th class="main-table-header">Position/Nature of Work</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in this_form.voluntary_work.all %}
+                <tr>
+                    <td>{{i.organization_name}}</td>
+                    <td>{{i.from_date}}</td>
+                    <td>{{i.to_date}}</td>
+                    <td>{{i.number_of_hours}}</td>
+                    <td>{{i.nature_of_work}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <h3 style="text-align:center;">Learning and Development</h3>
+        <table id="learning-development-table" class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">Title</th>
+                    <th class="main-table-header">From</th>
+                    <th class="main-table-header">To</th>
+                    <th class="main-table-header">Number of Hours</th>
+                    <th class="main-table-header">Type of LD</th>
+                    <th class="main-table-header">Conducted/Sponsored By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in this_form.learning_development.all %}
+                <tr>
+                    <td>{{i.title}}</td>
+                    <td>{{i.from_date}}</td>
+                    <td>{{i.to_date}}</td>
+                    <td>{{i.number_of_hours}}</td>
+                    <td>{{i.type_of_ld}}</td>
+                    <td>{{i.conducted_by}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>None</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
 
 
-</form>
+    </form>
+
+</div>
 
 
 {% endblock content %}

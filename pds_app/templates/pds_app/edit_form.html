@@ -7,10 +7,6 @@
     {% else %}
         <h2>Edit Form: {{ form_instance.name }}</h2>
     {% endif %}
-
-    
-
-    
     
     <form method="post" class="general-form" id="general-form">
         {% csrf_token %}
@@ -380,366 +376,268 @@
         
         <h3 style="text-align:center;">Educational Background</h3>
         
-        <div class="background-form">
-            <table class="main-table">
-                <thead>
-                    <tr>
-                        <th class="main-table-header">Level</th>
-                        <th class="main-table-header">Name of School</th>
-                        <th class="main-table-header">Basic Ed/Degree/Course</th>
-                        <th class="main-table-header">Period of Attendance (From)</th>
-                        <th class="main-table-header">Period of Attendance (To)</th>
-                        <th class="main-table-header">Highest Level/Units Earned</th>
-                        <th class="main-table-header">Year Graduated</th>
-                        <th class="main-table-header">Scholarship/Honors Received</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="educational-level">Elementary</td>
-                        <td>{{ education_form.elementary_name }}</td>
-                        <td>{{ education_form.elementary_degree_course }}</td>
-                        <td>{{ education_form.elementary_period_from }}</td>
-                        <td>{{ education_form.elementary_period_to }}</td>
-                        <td>{{ education_form.elementary_highest_level_units }}</td>
-                        <td>{{ education_form.elementary_year_graduated }}</td>
-                        <td>{{ education_form.elementary_honors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="educational-level">Secondary</td>
-                        <td>{{ education_form.secondary_name }}</td>
-                        <td>{{ education_form.secondary_degree_course }}</td>
-                        <td>{{ education_form.secondary_period_from }}</td>
-                        <td>{{ education_form.secondary_period_to }}</td>
-                        <td>{{ education_form.secondary_highest_level_units }}</td>
-                        <td>{{ education_form.secondary_year_graduated }}</td>
-                        <td>{{ education_form.secondary_honors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="educational-level">Vocational/Trade Course</td>
-                        <td>{{ education_form.vocational_name }}</td>
-                        <td>{{ education_form.vocational_degree_course }}</td>
-                        <td>{{ education_form.vocational_period_from }}</td>
-                        <td>{{ education_form.vocational_period_to }}</td>
-                        <td>{{ education_form.vocational_highest_level_units }}</td>
-                        <td>{{ education_form.vocational_year_graduated }}</td>
-                        <td>{{ education_form.vocational_honors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="educational-level">College</td>
-                        <td>{{ education_form.college_name }}</td>
-                        <td>{{ education_form.college_degree_course }}</td>
-                        <td>{{ education_form.college_period_from }}</td>
-                        <td>{{ education_form.college_period_to }}</td>
-                        <td>{{ education_form.college_highest_level_units }}</td>
-                        <td>{{ education_form.college_year_graduated }}</td>
-                        <td>{{ education_form.college_honors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="educational-level">Graduate Studies</td>
-                        <td>{{ education_form.graduate_name }}</td>
-                        <td>{{ education_form.graduate_degree_course }}</td>
-                        <td>{{ education_form.graduate_period_from }}</td>
-                        <td>{{ education_form.graduate_period_to }}</td>
-                        <td>{{ education_form.graduate_highest_level_units }}</td>
-                        <td>{{ education_form.graduate_year_graduated }}</td>
-                        <td>{{ education_form.graduate_honors }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        
+        <table class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">Level</th>
+                    <th class="main-table-header">Name of School</th>
+                    <th class="main-table-header">Basic Ed/Degree/Course</th>
+                    <th class="main-table-header">Period of Attendance (From)</th>
+                    <th class="main-table-header">Period of Attendance (To)</th>
+                    <th class="main-table-header">Highest Level/Units Earned</th>
+                    <th class="main-table-header">Year Graduated</th>
+                    <th class="main-table-header">Scholarship/Honors Received</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="educational-level">Elementary</td>
+                    <td>{{ education_form.elementary_name }}</td>
+                    <td>{{ education_form.elementary_degree_course }}</td>
+                    <td>{{ education_form.elementary_period_from }}</td>
+                    <td>{{ education_form.elementary_period_to }}</td>
+                    <td>{{ education_form.elementary_highest_level_units }}</td>
+                    <td>{{ education_form.elementary_year_graduated }}</td>
+                    <td>{{ education_form.elementary_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Secondary</td>
+                    <td>{{ education_form.secondary_name }}</td>
+                    <td>{{ education_form.secondary_degree_course }}</td>
+                    <td>{{ education_form.secondary_period_from }}</td>
+                    <td>{{ education_form.secondary_period_to }}</td>
+                    <td>{{ education_form.secondary_highest_level_units }}</td>
+                    <td>{{ education_form.secondary_year_graduated }}</td>
+                    <td>{{ education_form.secondary_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Vocational/Trade Course</td>
+                    <td>{{ education_form.vocational_name }}</td>
+                    <td>{{ education_form.vocational_degree_course }}</td>
+                    <td>{{ education_form.vocational_period_from }}</td>
+                    <td>{{ education_form.vocational_period_to }}</td>
+                    <td>{{ education_form.vocational_highest_level_units }}</td>
+                    <td>{{ education_form.vocational_year_graduated }}</td>
+                    <td>{{ education_form.vocational_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">College</td>
+                    <td>{{ education_form.college_name }}</td>
+                    <td>{{ education_form.college_degree_course }}</td>
+                    <td>{{ education_form.college_period_from }}</td>
+                    <td>{{ education_form.college_period_to }}</td>
+                    <td>{{ education_form.college_highest_level_units }}</td>
+                    <td>{{ education_form.college_year_graduated }}</td>
+                    <td>{{ education_form.college_honors }}</td>
+                </tr>
+                <tr>
+                    <td class="educational-level">Graduate Studies</td>
+                    <td>{{ education_form.graduate_name }}</td>
+                    <td>{{ education_form.graduate_degree_course }}</td>
+                    <td>{{ education_form.graduate_period_from }}</td>
+                    <td>{{ education_form.graduate_period_to }}</td>
+                    <td>{{ education_form.graduate_highest_level_units }}</td>
+                    <td>{{ education_form.graduate_year_graduated }}</td>
+                    <td>{{ education_form.graduate_honors }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
 
        
         <h3 style="text-align:center;">Civil Service Eligibility</h3>
 
-        <div class="background-form">
-            <table id="eligibility-table" class="main-table">
-                <thead>
-                    <tr>
-                        <th class="main-table-header">Career Service/Eligibility</th>
-                        <th class="main-table-header">Rating</th>
-                        <th class="main-table-header">Date of Examination/Conferment</th>
-                        <th class="main-table-header">Place of Examination/Conferment</th>
-                        <th class="main-table-header">License Number</th>
-                        <th class="main-table-header">License Validity</th>
-                        <th class="main-table-header">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for eligibility in form_instance.civil_service.all %}
-                    <tr>
-                        <td><input type="text" name="career_service[]" value="{{ eligibility.career_service }}"></td>
-                        <td><input type="number" name="rating[]" value="{{ eligibility.rating }}" step="0.01"></td>
-                        <td><input type="date" style="cursor:pointer" name="exam_date[]" value="{{ eligibility.exam_date|date:'Y-m-d' }}"></td>
-                        <td><input type="text" name="exam_place[]" value="{{ eligibility.exam_place }}"></td>
-                        <td><input type="text" name="license_number[]" value="{{ eligibility.license_number }}"></td>
-                        <td><input type="date" style="cursor:pointer" name="license_validity[]" value="{{ eligibility.license_validity|date:'Y-m-d' }}"></td>
-                        
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td><input type="text" name="career_service[]" placeholder="Career Service/Eligibility"></td>
-                        <td><input type="number" name="rating[]" step="0.01" placeholder="Rating"></td>
-                        <td><input type="date" style="cursor:pointer" name="exam_date[]"></td>
-                        <td><input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment"></td>
-                        <td><input type="text" name="license_number[]" placeholder="License Number"></td>
-                        <td><input type="date" style="cursor:pointer" name="license_validity[]"></td>
-                        
-                    </tr>
-                    {% endfor %}
+        
+        <table id="eligibility-table" class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">Career Service/Eligibility</th>
+                    <th class="main-table-header">Rating</th>
+                    <th class="main-table-header">Date of Examination/Conferment</th>
+                    <th class="main-table-header">Place of Examination/Conferment</th>
+                    <th class="main-table-header">License Number</th>
+                    <th class="main-table-header">License Validity</th>
+                    <th class="main-table-header">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for eligibility in form_instance.civil_service.all %}
+                <tr>
+                    <td><input type="text" name="career_service[]" value="{{ eligibility.career_service }}"></td>
+                    <td><input type="number" name="rating[]" value="{{ eligibility.rating }}" step="0.01"></td>
+                    <td><input type="date" style="cursor:pointer" name="exam_date[]" value="{{ eligibility.exam_date|date:'Y-m-d' }}"></td>
+                    <td><input type="text" name="exam_place[]" value="{{ eligibility.exam_place }}"></td>
+                    <td><input type="text" name="license_number[]" value="{{ eligibility.license_number }}"></td>
+                    <td><input type="date" style="cursor:pointer" name="license_validity[]" value="{{ eligibility.license_validity|date:'Y-m-d' }}"></td>
                     
-                </tbody>
-            </table>
-            <button type="button" class="add-row-btn" onclick="addCivilServiceRow()">Add Row</button>
-        </div>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td><input type="text" name="career_service[]" placeholder="Career Service/Eligibility"></td>
+                    <td><input type="number" name="rating[]" step="0.01" placeholder="Rating"></td>
+                    <td><input type="date" style="cursor:pointer" name="exam_date[]"></td>
+                    <td><input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment"></td>
+                    <td><input type="text" name="license_number[]" placeholder="License Number"></td>
+                    <td><input type="date" style="cursor:pointer" name="license_validity[]"></td>
+                    
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        <button type="button" class="add-row-btn" onclick="addCivilServiceRow()">Add Row</button>
+        
 
         
         <h3 style="text-align:center;">Work Experience</h3>
 
-        <div class="background-form">
-            <table id="work-experience-table" class="main-table">
-                <thead>
-                    <tr>
-                        <th class="main-table-header">From</th>
-                        <th class="main-table-header">To</th>
-                        <th class="main-table-header">Position Title</th>
-                        <th class="main-table-header">Department/Agency/Office/Company</th>
-                        <th class="main-table-header">Monthly Salary</th>
-                        <th class="main-table-header">Salary Grade & STEP</th>
-                        <th class="main-table-header">Status of Appointment</th>
-                        <th class="main-table-header">Govt Service (Y/N)</th>
-                        <th class="main-table-header">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for experience in form_instance.work_experience.all %}
-                    <tr>
-                        <td><input type="date" style="cursor:pointer" name="work_from_date[]" value="{{ experience.from_date|date:'Y-m-d' }}"></td>
-                        <td><input type="date" style="cursor:pointer" name="work_to_date[]" value="{{ experience.to_date|date:'Y-m-d' }}"></td>
-                        <td><input type="text" name="work_position_title[]" value="{{ experience.position_title }}"></td>
-                        <td><input type="text" name="work_department[]" value="{{ experience.department }}"></td>
-                        <td><input type="number" name="work_monthly_salary[]" value="{{ experience.monthly_salary }}"></td>
-                        <td><input type="text" name="work_salary_grade[]" value="{{ experience.salary_grade }}"></td>
-                        <td><input type="text" name="work_status[]" value="{{ experience.status_of_appointment }}"></td>
-                        <td>
-                            <select name="work_govt_service[]">
-                                <option value="Y" {% if experience.govt_service == 'Y' %}selected{% endif %}>Yes</option>
-                                <option value="N" {% if experience.govt_service == 'N' %}selected{% endif %}>No</option>
-                            </select>
-                        </td>
-                        
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td><input type="date" style="cursor:pointer" name="work_from_date[]"></td>
-                        <td><input type="date" style="cursor:pointer" name="work_to_date[]"></td>
-                        <td><input type="text" name="work_position_title[]" placeholder="Position Title"></td>
-                        <td><input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company"></td>
-                        <td><input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary"></td>
-                        <td><input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP"></td>
-                        <td><input type="text" name="work_status[]" placeholder="Status of Appointment"></td>
-                        <td>
-                            <select name="work_govt_service[]">
-                                <option value="Y">Yes</option>
-                                <option value="N">No</option>
-                            </select>
-                        </td>
-                    </tr>
-                    {% endfor %}
+        
+        <table id="work-experience-table" class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">From</th>
+                    <th class="main-table-header">To</th>
+                    <th class="main-table-header">Position Title</th>
+                    <th class="main-table-header">Department/Agency/Office/Company</th>
+                    <th class="main-table-header">Monthly Salary</th>
+                    <th class="main-table-header">Salary Grade & STEP</th>
+                    <th class="main-table-header">Status of Appointment</th>
+                    <th class="main-table-header">Govt Service (Y/N)</th>
+                    <th class="main-table-header">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for experience in form_instance.work_experience.all %}
+                <tr>
+                    <td><input type="date" style="cursor:pointer" name="work_from_date[]" value="{{ experience.from_date|date:'Y-m-d' }}"></td>
+                    <td><input type="date" style="cursor:pointer" name="work_to_date[]" value="{{ experience.to_date|date:'Y-m-d' }}"></td>
+                    <td><input type="text" name="work_position_title[]" value="{{ experience.position_title }}"></td>
+                    <td><input type="text" name="work_department[]" value="{{ experience.department }}"></td>
+                    <td><input type="number" name="work_monthly_salary[]" value="{{ experience.monthly_salary }}"></td>
+                    <td><input type="text" name="work_salary_grade[]" value="{{ experience.salary_grade }}"></td>
+                    <td><input type="text" name="work_status[]" value="{{ experience.status_of_appointment }}"></td>
+                    <td>
+                        <select name="work_govt_service[]">
+                            <option value="Y" {% if experience.govt_service == 'Y' %}selected{% endif %}>Yes</option>
+                            <option value="N" {% if experience.govt_service == 'N' %}selected{% endif %}>No</option>
+                        </select>
+                    </td>
                     
-                </tbody>
-            </table>
-            <button type="button" class="add-row-btn" onclick="addWorkExperienceRow()">Add Row</button>
-        </div>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td><input type="date" style="cursor:pointer" name="work_from_date[]"></td>
+                    <td><input type="date" style="cursor:pointer" name="work_to_date[]"></td>
+                    <td><input type="text" name="work_position_title[]" placeholder="Position Title"></td>
+                    <td><input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company"></td>
+                    <td><input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary"></td>
+                    <td><input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP"></td>
+                    <td><input type="text" name="work_status[]" placeholder="Status of Appointment"></td>
+                    <td>
+                        <select name="work_govt_service[]">
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        <button type="button" class="add-row-btn" onclick="addWorkExperienceRow()">Add Row</button>
+        
 
         <h3 style="text-align:center;">Voluntary Work</h3>
 
-        <div class="background-form">
-            <table id="voluntary-work-table" class="main-table">
-                <thead>
-                    <tr>
-                        <th class="main-table-header">Name and Address of Organization</th>
-                        <th class="main-table-header">From</th>
-                        <th class="main-table-header">To</th>
-                        <th class="main-table-header">Number of Hours</th>
-                        <th class="main-table-header">Position/Nature of Work</th>
-                        <th class="main-table-header">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for work in form_instance.voluntary_work.all %}
-                    <tr>
-                        <td><input type="text" name="voluntary_org[]" value="{{ work.organization_name }}"></td>
-                        <td><input type="date" style="cursor:pointer" name="voluntary_from[]" value="{{ work.from_date|date:'Y-m-d' }}"></td>
-                        <td><input type="date" style="cursor:pointer" name="voluntary_to[]" value="{{ work.to_date|date:'Y-m-d' }}"></td>
-                        <td><input type="number" name="voluntary_hours[]" value="{{ work.number_of_hours }}"></td>
-                        <td><input type="text" name="voluntary_nature[]" value="{{ work.nature_of_work }}"></td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td><input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization"></td>
-                        <td><input type="date" style="cursor:pointer" name="voluntary_from[]"></td>
-                        <td><input type="date" style="cursor:pointer" name="voluntary_to[]"></td>
-                        <td><input type="number" name="voluntary_hours[]" placeholder="Number of Hours"></td>
-                        <td><input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work"></td>
-                    </tr>
-                    {% endfor %}
-                    
-                </tbody>
-            </table>
-            <button type="button" class="add-row-btn" onclick="addVoluntaryWorkRow()">Add Row</button>
-        </div>
+        
+        <table id="voluntary-work-table" class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">Name and Address of Organization</th>
+                    <th class="main-table-header">From</th>
+                    <th class="main-table-header">To</th>
+                    <th class="main-table-header">Number of Hours</th>
+                    <th class="main-table-header">Position/Nature of Work</th>
+                    <th class="main-table-header">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work in form_instance.voluntary_work.all %}
+                <tr>
+                    <td><input type="text" name="voluntary_org[]" value="{{ work.organization_name }}"></td>
+                    <td><input type="date" style="cursor:pointer" name="voluntary_from[]" value="{{ work.from_date|date:'Y-m-d' }}"></td>
+                    <td><input type="date" style="cursor:pointer" name="voluntary_to[]" value="{{ work.to_date|date:'Y-m-d' }}"></td>
+                    <td><input type="number" name="voluntary_hours[]" value="{{ work.number_of_hours }}"></td>
+                    <td><input type="text" name="voluntary_nature[]" value="{{ work.nature_of_work }}"></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td><input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization"></td>
+                    <td><input type="date" style="cursor:pointer" name="voluntary_from[]"></td>
+                    <td><input type="date" style="cursor:pointer" name="voluntary_to[]"></td>
+                    <td><input type="number" name="voluntary_hours[]" placeholder="Number of Hours"></td>
+                    <td><input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work"></td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        <button type="button" class="add-row-btn" onclick="addVoluntaryWorkRow()">Add Row</button>
+        
 
        
         <h3 style="text-align:center;">Learning and Development</h3>
 
-        <div class="background-form">
-            <table id="learning-development-table" class="main-table">
-                <thead>
-                    <tr>
-                        <th class="main-table-header">Title</th>
-                        <th class="main-table-header">From</th>
-                        <th class="main-table-header">To</th>
-                        <th class="main-table-header">Number of Hours</th>
-                        <th class="main-table-header">Type of LD</th>
-                        <th class="main-table-header">Conducted/Sponsored By</th>
-                        <th class="main-table-header">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for learning in form_instance.learning_development.all %}
-                    <tr>
-                        <td><input type="text" name="learning_title[]" value="{{ learning.title }}"></td>
-                        <td><input type="date" style="cursor:pointer" name="learning_from[]" value="{{ learning.from_date|date:'Y-m-d' }}"></td>
-                        <td><input type="date" style="cursor:pointer" name="learning_to[]" value="{{ learning.to_date|date:'Y-m-d' }}"></td>
-                        <td><input type="number" name="learning_hours[]" value="{{ learning.number_of_hours }}"></td>
-                        <td><input type="text" name="learning_type[]" value="{{ learning.type_of_ld }}"></td>
-                        <td><input type="text" name="learning_conducted[]" value="{{ learning.conducted_by }}"></td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td><input type="text" name="learning_title[]" placeholder="Title"></td>
-                        <td><input type="date" style="cursor:pointer" name="learning_from[]"></td>
-                        <td><input type="date" style="cursor:pointer" name="learning_to[]"></td>
-                        <td><input type="number" name="learning_hours[]" placeholder="Number of Hours"></td>
-                        <td><input type="text" name="learning_type[]" placeholder="Type of LD"></td>
-                        <td><input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By"></td>
-                    </tr>
-                    {% endfor %}
-                    
-                </tbody>
-            </table>
-            <button type="button" class="add-row-btn" onclick="addLearningDevelopmentRow()">Add Row</button>
-        </div>
+        <table id="learning-development-table" class="main-table">
+            <thead>
+                <tr>
+                    <th class="main-table-header">Title</th>
+                    <th class="main-table-header">From</th>
+                    <th class="main-table-header">To</th>
+                    <th class="main-table-header">Number of Hours</th>
+                    <th class="main-table-header">Type of LD</th>
+                    <th class="main-table-header">Conducted/Sponsored By</th>
+                    <th class="main-table-header">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for learning in form_instance.learning_development.all %}
+                <tr>
+                    <td><input type="text" name="learning_title[]" value="{{ learning.title }}"></td>
+                    <td><input type="date" style="cursor:pointer" name="learning_from[]" value="{{ learning.from_date|date:'Y-m-d' }}"></td>
+                    <td><input type="date" style="cursor:pointer" name="learning_to[]" value="{{ learning.to_date|date:'Y-m-d' }}"></td>
+                    <td><input type="number" name="learning_hours[]" value="{{ learning.number_of_hours }}"></td>
+                    <td><input type="text" name="learning_type[]" value="{{ learning.type_of_ld }}"></td>
+                    <td><input type="text" name="learning_conducted[]" value="{{ learning.conducted_by }}"></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td><input type="text" name="learning_title[]" placeholder="Title"></td>
+                    <td><input type="date" style="cursor:pointer" name="learning_from[]"></td>
+                    <td><input type="date" style="cursor:pointer" name="learning_to[]"></td>
+                    <td><input type="number" name="learning_hours[]" placeholder="Number of Hours"></td>
+                    <td><input type="text" name="learning_type[]" placeholder="Type of LD"></td>
+                    <td><input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By"></td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        <button type="button" class="add-row-btn" onclick="addLearningDevelopmentRow()">Add Row</button>
+        
         
 
         <div class="form-actions">
             <button type="submit" class="submit-btn">Save Changes</button>
             {% if creating %}
-                <a href="{% url 'home' %}" class="cancel-btn">Cancel</a>  {# Redirect to dashboard on create cancel #}
+                <a href="{% url 'home' %}" class="cancel-btn">Cancel</a>  
             {% else %}
-                <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn">Cancel</a>  {# Redirect to form detail view on edit cancel #}
+                <a href="{% url 'all_forms' form_instance.id %}" class="cancel-btn">Cancel</a>  
             {% endif %}
         </div>
     </form>
 </div>
-<script>
-function addVoluntaryWorkRow() {
-    const table = document.getElementById('voluntary-work-table');
-    const newRow = table.insertRow(-1);
-
-    const columns = [
-        '<input type="text" name="voluntary_org[]" placeholder="Name and Address of Organization">',
-        '<input type="date" style="cursor:pointer" name="voluntary_from[]">',
-        '<input type="date" style="cursor:pointer" name="voluntary_to[]">',
-        '<input type="number" name="voluntary_hours[]" placeholder="Number of Hours">',
-        '<input type="text" name="voluntary_nature[]" placeholder="Position/Nature of Work">',
-        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
-    ];
-
-    columns.forEach((col, index) => {
-        const cell = newRow.insertCell(index);
-        cell.innerHTML = col;
-    });
-}
-</script>
-<script>
-function addWorkExperienceRow() {
-    const table = document.getElementById('work-experience-table');
-    const newRow = table.insertRow(-1);
-
-    const columns = [
-        '<input type="date" style="cursor:pointer" name="work_from_date[]">',
-        '<input type="date" style="cursor:pointer" name="work_to_date[]">',
-        '<input type="text" name="work_position_title[]" placeholder="Position Title">',
-        '<input type="text" name="work_department[]" placeholder="Department/Agency/Office/Company">',
-        '<input type="number" name="work_monthly_salary[]" placeholder="Monthly Salary">',
-        '<input type="text" name="work_salary_grade[]" placeholder="Salary Grade & STEP">',
-        '<input type="text" name="work_status[]" placeholder="Status of Appointment">',
-        '<select name="work_govt_service[]"><option value="Y">Yes</option><option value="N">No</option></select>',
-        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
-    ];
-
-    columns.forEach((col, index) => {
-        const cell = newRow.insertCell(index);
-        cell.innerHTML = col;
-    });
-}
-</script>
-
-<script>
-function addCivilServiceRow() {
-    const tbody = document.querySelector('#eligibility-table tbody');  
-    const newRow = tbody.insertRow(-1);
-
-    const columns = [
-        '<input type="text" name="career_service[]" placeholder="Career Service/Eligibility">',
-        '<input type="number" name="rating[]" step="0.01" placeholder="Rating">',
-        '<input type="date" style="cursor:pointer" name="exam_date[]">',
-        '<input type="text" name="exam_place[]" placeholder="Place of Examination/Conferment">',
-        '<input type="text" name="license_number[]" placeholder="License Number">',
-        '<input type="date" style="cursor:pointer" name="license_validity[]">',
-        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
-    ];
-
-    columns.forEach((col, index) => {
-        const cell = newRow.insertCell(index);
-        cell.innerHTML = col;
-    });
-}
-
-</script>
-
-
-<script>
-function addLearningDevelopmentRow() {
-    const table = document.getElementById('learning-development-table');
-    const newRow = table.insertRow(-1);
-
-    const columns = [
-        '<input type="text" name="learning_title[]" placeholder="Title">',
-        '<input type="date" style="cursor:pointer" name="learning_from[]">',
-        '<input type="date" style="cursor:pointer" name="learning_to[]">',
-        '<input type="number" name="learning_hours[]" placeholder="Number of Hours">',
-        '<input type="text" name="learning_type[]" placeholder="Type of LD">',
-        '<input type="text" name="learning_conducted[]" placeholder="Conducted/Sponsored By">',
-        '<button type="button" class="delete-row-btn" onclick="deleteRow(this)">Delete</button>'
-    ];
-
-    columns.forEach((col, index) => {
-        const cell = newRow.insertCell(index);
-        cell.innerHTML = col;
-    });
-}
-</script>
-
-<script>
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('delete-row-btn')) {
-        e.target.closest('tr').remove();
-    }
-});
-</script>
 
 
 {% endblock %}
