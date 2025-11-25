@@ -1,20 +1,13 @@
 {% extends 'pds_app/home.html' %}
 
 {% block sidebar %}
-<div id="attendanceModal" class="modal" style="display: none;">
-    <span id="closeModalBtn" class="close">
-        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#fff"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-    </span>
 
-    <div class="file-upload-content">
-        <h2>Upload File</h2>
-        <form method="post" enctype="multipart/form-data" action="{% url 'import_form' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Upload</button>
-        </form>
-    </div>
-</div>
+<a href="{% url 'dashboard' %}" class="back-dashboard-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M15 18l-6-6 6-6"/>
+    </svg>
+    Back to Dashboard
+</a>
 
 <div class="forms-header">
     <h3>Your Forms</h3>
@@ -67,55 +60,11 @@
             </form>
         </div>
     {% endfor %}
-        <div class="form-item" id="createNewLink">
-            <a href="{% url 'create_form'  %}" class="form-link" id="createFormLink">
-                <div class="form-name">Create New</div>
-            </a>
-            <button class="add-btn" id="createFormButton" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e3e3e3"><path d="M440-80v-340H120v-120h320v-340h80v340h320v120H520v340h-80Z"/></svg>                
-            </button>
-        </div>
-        <div class="form-item" id="clickableFormItem">
-            <a>
-                <div class="form-name">Import Form</div>
-            </a>
-            <button id="openModalBtn" type="button" class="open-modal-button" hidden>
-                
-            </button>
-        </div>
 </div>
 
-<script>
 
-    const button_clear = document.getElementById("button_clear")
 
-    button_clear.addEventListener("click",()=>{
-        window.location = document.getElementById("hidden_a").href
-    })
-</script>
 
-<script>
-  document.getElementById('createFormButton').addEventListener('click', function() {
-    window.location = document.getElementById("createFormLink").href;
-  });
-  document.getElementById('createNewLink').addEventListener('click', function() {
-    window.location = document.getElementById("createFormLink").href;
-  });
-  document.getElementById('mainFormLink').addEventListener('click', function() {
-    window.location = document.getElementById("mainLink").href;
-  });
-</script>
-
-<script>
-    const form_item = document.getElementById('clickableFormItem')
-    const open_modal_button = document.getElementById('openModalBtn')
-
-    form_item.addEventListener("click",(event)=>{
-        if(event.target !== open_modal_button){
-            open_modal_button.click()
-        }
-    })
-</script>
 
 {% endblock sidebar %}
 

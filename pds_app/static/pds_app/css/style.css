@@ -1,4 +1,35 @@
-/* === DASHBOARD (MATCHED TO GLOBAL STYLE.CSS THEME) === */
+.back-dashboard-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+    border-radius: 8px;
+
+    background: rgba(107, 114, 128, 0.08); /* same family as cancel-btn, view-btn */
+    border: 1px solid rgba(107, 114, 128, 0.3);
+    color: #4b5563;
+
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.back-dashboard-btn:hover {
+    background: rgba(107, 114, 128, 0.15);
+    border-color: rgba(107, 114, 128, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(107, 114, 128, 0.2);
+    text-decoration: none;
+    color: #4b5563;
+}
+
+
+
+/*dashboard */
 
 .dashboard-container {
     max-width: 1200px;
@@ -99,6 +130,7 @@
     background: rgba(16, 185, 129, 0.08);
     border: 1px solid rgba(16, 185, 129, 0.3);
     color: #059669;
+    z-index: 10;
 }
 .create-btn:hover {
     background: rgba(16, 185, 129, 0.15);
@@ -111,6 +143,7 @@
     background: rgba(37, 99, 235, 0.08);
     border: 1px solid rgba(37, 99, 235, 0.3);
     color: #2563eb;
+    z-index: 10;
 }
 .import-btn:hover {
     background: rgba(37, 99, 235, 0.15);
@@ -123,6 +156,7 @@
     background: rgba(107, 114, 128, 0.08);
     border: 1px solid rgba(107, 114, 128, 0.3);
     color: #4b5563;
+    z-index: 10;
 }
 .view-btn:hover {
     background: rgba(107, 114, 128, 0.15);

@@ -10,6 +10,20 @@
     <link rel="stylesheet" href="{%static 'pds_app/css/modal.css' %}">
 </head>
 <body>
+    <div id="attendanceModal" class="modal" style="display: none;">
+        <span id="closeModalBtn" class="close">
+            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#fff"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+        </span>
+
+        <div class="file-upload-content">
+            <h2>Upload File</h2>
+            <form method="post" enctype="multipart/form-data" action="{% url 'import_form' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
     <header>
         <h1>Personal Data Sheet System</h1>
 
@@ -35,6 +49,39 @@
             {% endblock content %}
         </div>
     </div>
+
+    <!-- for opening modal -->
+    <script>
+        const form_item = document.getElementById('clickableFormItem')
+        const open_modal_button = document.getElementById('openModalBtn')
+
+        form_item.addEventListener("click",(event)=>{
+            if(event.target !== open_modal_button){
+                open_modal_button.click()
+            }
+        })
+    </script>
+    <!-- for clear button in search -->
+    <script>
+
+        const button_clear = document.getElementById("button_clear")
+
+        button_clear.addEventListener("click",()=>{
+            window.location = document.getElementById("hidden_a").href
+        })
+    </script>
+    <!-- to make the create and import button work -->
+    <script>
+        document.getElementById('createFormButton').addEventListener('click', function() {
+            window.location = document.getElementById("createFormLink").href;
+        });
+        document.getElementById('createNewLink').addEventListener('click', function() {
+            window.location = document.getElementById("createFormLink").href;
+        });
+        document.getElementById('mainFormLink').addEventListener('click', function() {
+            window.location = document.getElementById("mainLink").href;
+        });
+    </script>
     <script src="{% static 'pds_app/js/modal.js' %}"></script>
 </body>
 </html>

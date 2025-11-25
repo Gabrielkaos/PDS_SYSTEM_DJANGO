@@ -39,6 +39,7 @@ def dashboard(request):
         'forms_this_month': forms_this_month,
         'recent_forms': recent_forms,
         'last_updated': last_updated,
+        "form":ImportForm(),
     }
     
     return render(request, 'pds_app/dashboard.html', context)
