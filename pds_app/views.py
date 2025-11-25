@@ -500,6 +500,8 @@ def bulk_delete_forms(request):
             id__in=form_ids,
             user=request.user
         ).delete()[0]
+
+        messages.success(request,f"Deleted {len(form_ids)} form(s)")
         
         return JsonResponse({
             'success': True,
