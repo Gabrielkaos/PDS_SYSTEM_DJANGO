@@ -1,4 +1,4 @@
-/* Bulk Operations */
+/* Bulk Operations======================================= */
 .bulk-actions-bar {
     display: none;
     justify-content: space-between;
@@ -91,6 +91,7 @@
     display: flex;
     align-items: center;
 }
+/* Bulk Operations======================================= */
 
 /*dashboard =============================================*/
 

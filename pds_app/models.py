@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.core.validators import EmailValidator
+from django.forms import ValidationError
+from .validators import (
+    validate_philippine_mobile, validate_birth_date, validate_philippine_zip,
+    validate_tin, validate_sss, validate_philhealth, validate_past_date, validate_rating
+)
 
 
 class PersonalInformation(models.Model):
@@ -13,7 +19,7 @@ class PersonalInformation(models.Model):
     middlename = models.CharField(max_length=100, blank=True, null=True)
 
     
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(validators=[validate_birth_date])
     place_of_birth = models.CharField(max_length=255)
 
     
@@ -47,9 +53,9 @@ class PersonalInformation(models.Model):
     
     gsis = models.CharField(max_length=50, blank=True, null=True)
     pag_ibig = models.CharField(max_length=50, blank=True, null=True)
-    philhealth = models.CharField(max_length=50, blank=True, null=True)
-    sss_no = models.CharField(max_length=50, blank=True, null=True)
-    tin_no = models.CharField(max_length=50, blank=True, null=True)
+    philhealth = models.CharField(max_length=50, blank=True, null=True,validators=[validate_philhealth])
+    sss_no = models.CharField(max_length=50, blank=True, null=True,validators=[validate_sss])
+    tin_no = models.CharField(max_length=50, blank=True, null=True,validators=[validate_tin])
 
     
     agent_employee_number = models.CharField(max_length=50, blank=True, null=True)
@@ -59,9 +65,9 @@ class PersonalInformation(models.Model):
 
     
     residential_address = models.TextField()
-    residential_zip_code = models.CharField(max_length=10)
+    residential_zip_code = models.CharField(max_length=10,validators=[validate_philippine_zip])
     permanent_address = models.TextField(blank=True, null=True)
-    permanent_zip_code = models.CharField(max_length=10, blank=True, null=True)
+    permanent_zip_code = models.CharField(max_length=10, blank=True, null=True,validators=[validate_philippine_zip])
 
     
     telephone_no = models.CharField(max_length=15, blank=True, null=True)
@@ -69,9 +75,9 @@ class PersonalInformation(models.Model):
         blank=True,
         null=True,
         max_length=15,
-        validators=[RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')]
+        validators=[validate_philippine_mobile]
     )
-    email_address = models.EmailField(blank=True, null=True)
+    email_address = models.EmailField(blank=True, null=True,validators=[EmailValidator(message='Enter a valid email address')])
 
     @property
     def full_name(self):
@@ -145,7 +151,7 @@ class VoluntaryWork(models.Model):
     # name = models.CharField(max_length=255)
 
     organization_name = models.CharField(max_length=255, verbose_name="Name and Address of Organization (Write in Full)",null=True,blank=True)
-    from_date = models.DateField(verbose_name="Inclusive Dates (From)",null=True,blank=True)
+    from_date = models.DateField(verbose_name="Inclusive Dates (From)",null=True,blank=True,validators=[validate_past_date])
     to_date = models.DateField(verbose_name="Inclusive Dates (To)",null=True,blank=True)
     number_of_hours = models.PositiveIntegerField(verbose_name="Number of Hours",null=True,blank=True)
     nature_of_work = models.CharField(max_length=255, verbose_name="Position/Nature of Work",null=True,blank=True)
@@ -158,6 +164,11 @@ class VoluntaryWork(models.Model):
         verbose_name_plural = "Voluntary Works"
         ordering = ['-from_date']
 
+    def clean(self):
+        super().clean()
+        if self.from_date and self.to_date and self.from_date > self.to_date:
+            raise ValidationError("End date cannot be before start date")
+
 class LearningDevelopment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="learning_developments")
 
@@ -165,7 +176,7 @@ class LearningDevelopment(models.Model):
     # name = models.CharField(max_length=255)
 
     title = models.CharField(max_length=255, verbose_name="Title of Learning and Development Interventions/Training Programs (Write in Full)",blank=True,null=True)
-    from_date = models.DateField(verbose_name="Inclusive Dates (From)",blank=True,null=True)
+    from_date = models.DateField(verbose_name="Inclusive Dates (From)",blank=True,null=True,validators=[validate_past_date])
     to_date = models.DateField(verbose_name="Inclusive Dates (To)",blank=True,null=True)
     number_of_hours = models.PositiveIntegerField(verbose_name="Number of Hours",blank=True,null=True)
     type_of_ld = models.CharField(max_length=100, verbose_name="Type of LD (Managerial/Supervisory/Technical, etc.)",blank=True,null=True)
@@ -178,13 +189,18 @@ class LearningDevelopment(models.Model):
         verbose_name = "Learning and Development"
         verbose_name_plural = "Learning and Development"
 
+    def clean(self):
+        super().clean()
+        if self.from_date and self.to_date and self.from_date > self.to_date:
+            raise ValidationError("End date cannot be before start date")
+
 class WorkExperience(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="work_experiences")
 
     # form_id = models.ForeignKey(FormID, on_delete=models.CASCADE)
     # name = models.CharField(max_length=255)
 
-    from_date = models.DateField(verbose_name="Inclusive Dates (From)",blank=True,null=True)
+    from_date = models.DateField(verbose_name="Inclusive Dates (From)",blank=True,null=True,validators=[validate_past_date])
     to_date = models.DateField(verbose_name="Inclusive Dates (To)",blank=True,null=True)
     position_title = models.CharField(max_length=255, verbose_name="Position Title (Write in Full)",blank=True,null=True)
     department = models.CharField(
@@ -387,12 +403,18 @@ class CivilServiceEligibility(models.Model):
         verbose_name="Career Service/RA 1080 (Board/Bar) under Special Laws/CES/CSEE/Barangay Eligibility/Driver's License"
     )
     rating = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Rating (if applicable)"
+        max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Rating (if applicable)",validators=[validate_rating]
     )
-    exam_date = models.DateField(verbose_name="Date of Examination/Conferment",null=True,blank=True)
+    exam_date = models.DateField(verbose_name="Date of Examination/Conferment",null=True,blank=True,validators=[validate_past_date])
     exam_place = models.CharField(max_length=255, verbose_name="Place of Examination/Conferment",null=True,blank=True)
     license_number = models.CharField(max_length=50, blank=True, null=True, verbose_name="License Number (if applicable)")
     license_validity = models.DateField(blank=True, null=True, verbose_name="License Validity (if applicable)")
+
+    def clean(self):
+        super().clean()
+        if self.exam_date and self.license_validity:
+            if self.license_validity < self.exam_date:
+                raise ValidationError('License validity cannot be before exam date')
 
     def __str__(self):
         return f"{self.career_service} - {self.exam_date}"

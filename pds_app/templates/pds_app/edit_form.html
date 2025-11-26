@@ -640,5 +640,240 @@
     </form>
 </div>
 
+<script>
+// Real-time validation
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('general-form');
+    
+    // Philippine Mobile Number Validation
+    const mobileInput = document.querySelector('input[name="mobile_no"]');
+    if (mobileInput) {
+        mobileInput.addEventListener('blur', function() {
+            const value = this.value.trim();
+            if (value && !isValidPhilippineMobile(value)) {
+                showError(this, 'Invalid Philippine mobile number (e.g., 09171234567)');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+    
+    // Email Validation
+    const emailInput = document.querySelector('input[name="email_address"]');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            const value = this.value.trim();
+            if (value && !isValidEmail(value)) {
+                showError(this, 'Invalid email address');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+    
+    // ZIP Code Validation
+    const zipInputs = document.querySelectorAll('input[name="residential_zip_code"], input[name="permanent_zip_code"]');
+    zipInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            const value = this.value.trim();
+            if (value && !isValidPHZip(value)) {
+                showError(this, 'ZIP code must be exactly 4 digits');
+            } else {
+                clearError(this);
+            }
+        });
+    });
+    
+    // Date of Birth Validation
+    const dobInput = document.querySelector('input[name="date_of_birth"]');
+    if (dobInput) {
+        dobInput.addEventListener('change', function() {
+            const value = this.value;
+            if (value) {
+                const birthDate = new Date(value);
+                const today = new Date();
+                const age = today.getFullYear() - birthDate.getFullYear();
+                
+                if (birthDate > today) {
+                    showError(this, 'Birth date cannot be in the future');
+                } else if (age < 15) {
+                    showError(this, 'Must be at least 15 years old');
+                } else if (age > 120) {
+                    showError(this, 'Invalid birth date');
+                } else {
+                    clearError(this);
+                }
+            }
+        });
+    }
+    
+    // TIN Validation
+    const tinInput = document.querySelector('input[name="tin_no"]');
+    if (tinInput) {
+        tinInput.addEventListener('blur', function() {
+            const value = this.value.replace(/[\s\-]/g, '');
+            if (value && !/^\d{9,12}$/.test(value)) {
+                showError(this, 'Invalid TIN (must be 9-12 digits)');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+    
+    // SSS Validation
+    const sssInput = document.querySelector('input[name="sss_no"]');
+    if (sssInput) {
+        sssInput.addEventListener('blur', function() {
+            const value = this.value.replace(/[\s\-]/g, '');
+            if (value && !/^\d{10}$/.test(value)) {
+                showError(this, 'Invalid SSS number (must be 10 digits)');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+    
+    // PhilHealth Validation
+    const philhealthInput = document.querySelector('input[name="philhealth"]');
+    if (philhealthInput) {
+        philhealthInput.addEventListener('blur', function() {
+            const value = this.value.replace(/[\s\-]/g, '');
+            if (value && !/^\d{12}$/.test(value)) {
+                showError(this, 'Invalid PhilHealth number (must be 12 digits)');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+    
+    // Height Validation
+    const heightInput = document.querySelector('input[name="height"]');
+    if (heightInput) {
+        heightInput.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (value && (value < 50 || value > 300)) {
+                showError(this, 'Height must be between 50 and 300 cm');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+    
+    // Weight Validation
+    const weightInput = document.querySelector('input[name="weight"]');
+    if (weightInput) {
+        weightInput.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (value && (value < 20 || value > 300)) {
+                showError(this, 'Weight must be between 20 and 300 kg');
+            } else {
+                clearError(this);
+            }
+        });
+    }
+    
+    // Rating Validation (for Civil Service)
+    document.querySelectorAll('input[name="rating[]"]').forEach(input => {
+        input.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (value && (value < 0 || value > 100)) {
+                showError(this, 'Rating must be between 0 and 100');
+            } else {
+                clearError(this);
+            }
+        });
+    });
+    
+    // Date Range Validation (Work Experience, Voluntary Work, Learning)
+    validateDateRanges('work_from_date[]', 'work_to_date[]');
+    validateDateRanges('voluntary_from[]', 'voluntary_to[]');
+    validateDateRanges('learning_from[]', 'learning_to[]');
+    
+    // Form Submit Validation
+    form.addEventListener('submit', function(e) {
+        const errors = document.querySelectorAll('.field-error');
+        if (errors.length > 0) {
+            e.preventDefault();
+            alert('Please fix all validation errors before submitting');
+            errors[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+});
 
+// Validation Helper Functions
+function isValidPhilippineMobile(value) {
+    const cleaned = value.replace(/[\s\-\(\)]/g, '');
+    return /^(\+63|0)?9\d{9}$/.test(cleaned);
+}
+
+function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isValidPHZip(value) {
+    return /^\d{4}$/.test(value);
+}
+
+function validateDateRanges(fromName, toName) {
+    const fromInputs = document.querySelectorAll(`input[name="${fromName}"]`);
+    const toInputs = document.querySelectorAll(`input[name="${toName}"]`);
+    
+    fromInputs.forEach((fromInput, index) => {
+        const toInput = toInputs[index];
+        if (!toInput) return;
+        
+        const validate = () => {
+            const fromDate = new Date(fromInput.value);
+            const toDate = new Date(toInput.value);
+            
+            if (fromInput.value && toInput.value && fromDate > toDate) {
+                showError(toInput, 'End date must be after start date');
+            } else {
+                clearError(toInput);
+            }
+        };
+        
+        fromInput.addEventListener('change', validate);
+        toInput.addEventListener('change', validate);
+    });
+}
+
+function showError(input, message) {
+    clearError(input);
+    
+    input.classList.add('invalid-input');
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'field-error';
+    errorDiv.textContent = message;
+    errorDiv.style.color = '#dc3545';
+    errorDiv.style.fontSize = '0.85em';
+    errorDiv.style.marginTop = '4px';
+    
+    input.parentNode.appendChild(errorDiv);
+}
+
+function clearError(input) {
+    input.classList.remove('invalid-input');
+    
+    const existingError = input.parentNode.querySelector('.field-error');
+    if (existingError) {
+        existingError.remove();
+    }
+}
+</script>
+
+<style>
+.invalid-input {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+}
+
+.field-error {
+    color: #dc3545;
+    font-size: 0.85em;
+    margin-top: 4px;
+    font-weight: 500;
+}
+</style>
 {% endblock %}

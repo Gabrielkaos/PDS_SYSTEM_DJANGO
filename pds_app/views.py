@@ -15,6 +15,8 @@ from django.views.decorators.http import require_POST
 import json
 import datetime
 from decimal import Decimal, InvalidOperation
+from django.core.exceptions import ValidationError
+from .validators import validate_date_range
 
 @login_required
 def bulk_export_forms(request):
@@ -1069,8 +1071,19 @@ def edit_form(request, form_id):
     form_instance = get_object_or_404(CompleteForm, id=form_id, user=request.user)
     
     if request.method == 'POST':
-        print(request.POST)
-        print("POST")
+        form_name = request.POST.get("form_name")
+        if not form_name:
+            messages.error(request, "Form name is required")
+            return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=False, form_instance=form_instance))
+        
+        if len(form_name) > 100:
+            messages.error(request, "Form name must be less than 100 characters")
+            return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=False, form_instance=form_instance))
+        
+        if CompleteForm.objects.filter(user=request.user, name=form_name).exists():
+            messages.error(request, f'A form with the name "{form_name}" already exists')
+            return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=False, form_instance=form_instance))
+        
         personal_form = PersonalInformationForm(request.POST, instance=form_instance.personal_information)
         family_form = FamilyBackgroundForm(request.POST, instance=form_instance.family_background)
         education_form = EducationalBackgroundForm(request.POST, instance=form_instance.educational_background)
@@ -1084,108 +1097,115 @@ def edit_form(request, form_id):
         print([personal_form.is_valid(), family_form.is_valid(), education_form.is_valid(), other_form.is_valid()])
         
         if all([personal_form.is_valid(), family_form.is_valid(), other_form.is_valid(),education_form.is_valid()]):
+            try:
+                validate_work_experience_dates(request.POST)
+                validate_voluntary_work_dates(request.POST)
+                validate_learning_development_dates(request.POST)
+                validate_civil_service_data(request.POST)
 
-            personal_form.save()
-            family_form.save()
-            education_form.save()
-            other_form.save()
-            print("Saved")
+                personal_form.save()
+                family_form.save()
+                education_form.save()
+                other_form.save()
+                print("Saved")
 
-            form_instance.civil_service.all().delete()
+                form_instance.civil_service.all().delete()
 
-            career_services = request.POST.getlist('career_service[]')
-            ratings = request.POST.getlist('rating[]')
-            exam_dates = request.POST.getlist('exam_date[]')
-            exam_places = request.POST.getlist('exam_place[]')
-            license_numbers = request.POST.getlist('license_number[]')
-            license_validities = request.POST.getlist('license_validity[]')
+                career_services = request.POST.getlist('career_service[]')
+                ratings = request.POST.getlist('rating[]')
+                exam_dates = request.POST.getlist('exam_date[]')
+                exam_places = request.POST.getlist('exam_place[]')
+                license_numbers = request.POST.getlist('license_number[]')
+                license_validities = request.POST.getlist('license_validity[]')
 
-            print("career_services:", request.POST.getlist('career_service[]'))
-            print("ratings:", request.POST.getlist('rating[]'))
-            print("exam_dates:", request.POST.getlist('exam_date[]'))
-            print("exam_places:", request.POST.getlist('exam_place[]'))
-            print("license_number:", request.POST.getlist('license_number[]'))
-            print("license_validities:", request.POST.getlist('license_validity[]'))
+                print("career_services:", request.POST.getlist('career_service[]'))
+                print("ratings:", request.POST.getlist('rating[]'))
+                print("exam_dates:", request.POST.getlist('exam_date[]'))
+                print("exam_places:", request.POST.getlist('exam_place[]'))
+                print("license_number:", request.POST.getlist('license_number[]'))
+                print("license_validities:", request.POST.getlist('license_validity[]'))
 
-            civil_services = []
-            for i in range(len(career_services)):
-                if career_services[i].strip():
-                    civil_service = CivilServiceEligibility.objects.create(
-                        user=request.user,
-                        career_service=career_services[i],
-                        rating=ratings[i] if i < len(ratings) else None,
-                        exam_date=exam_dates[i] if i < len(exam_dates) else None,
-                        exam_place=exam_places[i] if i < len(exam_places) else None,
-                        license_number=license_numbers[i] if i < len(license_numbers) else None,
-                        license_validity=license_validities[i] if i < len(license_validities) else None,
-                    )
-                    civil_services.append(civil_service)
-            form_instance.civil_service.set(civil_services)
-
-
-            form_instance.work_experience.all().delete()
-            work_from_dates = request.POST.getlist('work_from_date[]')
-            work_experiences = []
-            for i in range(len(work_from_dates)):
-                if work_from_dates[i]:
-                    work_exp = WorkExperience.objects.create(
-                        user=request.user,
-                        from_date=work_from_dates[i],
-                        to_date=request.POST.getlist('work_to_date[]')[i] if i < len(request.POST.getlist('work_to_date[]')) and request.POST.getlist('work_to_date[]')[i] else None,
-                        position_title=request.POST.getlist('work_position_title[]')[i] if i < len(request.POST.getlist('work_position_title[]')) else '',
-                        department=request.POST.getlist('work_department[]')[i] if i < len(request.POST.getlist('work_department[]')) else '',
-                        monthly_salary=request.POST.getlist('work_monthly_salary[]')[i] if i < len(request.POST.getlist('work_monthly_salary[]')) and request.POST.getlist('work_monthly_salary[]')[i] else None,
-                        salary_grade=request.POST.getlist('work_salary_grade[]')[i] if i < len(request.POST.getlist('work_salary_grade[]')) else None,
-                        status_of_appointment=request.POST.getlist('work_status[]')[i] if i < len(request.POST.getlist('work_status[]')) else '',
-                        govt_service=request.POST.getlist('work_govt_service[]')[i] if i < len(request.POST.getlist('work_govt_service[]')) else 'N',
-                    )
-                    work_experiences.append(work_exp)
-            form_instance.work_experience.set(work_experiences)
-
-            form_instance.voluntary_work.all().delete()
-            voluntary_orgs = request.POST.getlist('voluntary_org[]')
-            voluntary_works = []
-            for i in range(len(voluntary_orgs)):
-                if voluntary_orgs[i].strip():
-                    voluntary = VoluntaryWork.objects.create(
-                        user=request.user,
-                        organization_name=voluntary_orgs[i],
-                        from_date=request.POST.getlist('voluntary_from[]')[i] if i < len(request.POST.getlist('voluntary_from[]')) and request.POST.getlist('voluntary_from[]')[i] else None,
-                        to_date=request.POST.getlist('voluntary_to[]')[i] if i < len(request.POST.getlist('voluntary_to[]')) and request.POST.getlist('voluntary_to[]')[i] else None,
-                        number_of_hours=request.POST.getlist('voluntary_hours[]')[i] if i < len(request.POST.getlist('voluntary_hours[]')) and request.POST.getlist('voluntary_hours[]')[i] else 0,
-                        nature_of_work=request.POST.getlist('voluntary_nature[]')[i] if i < len(request.POST.getlist('voluntary_nature[]')) else '',
-                    )
-                    voluntary_works.append(voluntary)
-            form_instance.voluntary_work.set(voluntary_works)
-
-            form_instance.learning_development.all().delete()
-            learning_titles = request.POST.getlist('learning_title[]')
-
-            learning_developments = []
-            for i in range(len(learning_titles)):
-                if learning_titles[i].strip():
-                    learning = LearningDevelopment.objects.create(
-                        user=request.user,
-                        title=learning_titles[i],
-                        from_date=request.POST.getlist('learning_from[]')[i] if i < len(request.POST.getlist('learning_from[]')) and request.POST.getlist('learning_from[]')[i] else None,
-                        to_date=request.POST.getlist('learning_to[]')[i] if i < len(request.POST.getlist('learning_to[]')) and request.POST.getlist('learning_to[]')[i] else None,
-                        number_of_hours=request.POST.getlist('learning_hours[]')[i] if i < len(request.POST.getlist('learning_hours[]')) and request.POST.getlist('learning_hours[]')[i] else 0,
-                        type_of_ld=request.POST.getlist('learning_type[]')[i] if i < len(request.POST.getlist('learning_type[]')) else '',
-                        conducted_by=request.POST.getlist('learning_conducted[]')[i] if i < len(request.POST.getlist('learning_conducted[]')) else '',
-                    )
-                    learning_developments.append(learning)
-            form_instance.learning_development.set(learning_developments)
-
-                        
-            if 'form_name' in request.POST:
-                form_instance.name = request.POST["form_name"]
-                form_instance.save()
-                print("saved form name")
+                civil_services = []
+                for i in range(len(career_services)):
+                    if career_services[i].strip():
+                        civil_service = CivilServiceEligibility.objects.create(
+                            user=request.user,
+                            career_service=career_services[i],
+                            rating=ratings[i] if i < len(ratings) else None,
+                            exam_date=exam_dates[i] if i < len(exam_dates) else None,
+                            exam_place=exam_places[i] if i < len(exam_places) else None,
+                            license_number=license_numbers[i] if i < len(license_numbers) else None,
+                            license_validity=license_validities[i] if i < len(license_validities) else None,
+                        )
+                        civil_services.append(civil_service)
+                form_instance.civil_service.set(civil_services)
 
 
-            messages.success(request, "Form edited successfully!")
-            return redirect('all_forms', form_id=form_id)
+                form_instance.work_experience.all().delete()
+                work_from_dates = request.POST.getlist('work_from_date[]')
+                work_experiences = []
+                for i in range(len(work_from_dates)):
+                    if work_from_dates[i]:
+                        work_exp = WorkExperience.objects.create(
+                            user=request.user,
+                            from_date=work_from_dates[i],
+                            to_date=request.POST.getlist('work_to_date[]')[i] if i < len(request.POST.getlist('work_to_date[]')) and request.POST.getlist('work_to_date[]')[i] else None,
+                            position_title=request.POST.getlist('work_position_title[]')[i] if i < len(request.POST.getlist('work_position_title[]')) else '',
+                            department=request.POST.getlist('work_department[]')[i] if i < len(request.POST.getlist('work_department[]')) else '',
+                            monthly_salary=request.POST.getlist('work_monthly_salary[]')[i] if i < len(request.POST.getlist('work_monthly_salary[]')) and request.POST.getlist('work_monthly_salary[]')[i] else None,
+                            salary_grade=request.POST.getlist('work_salary_grade[]')[i] if i < len(request.POST.getlist('work_salary_grade[]')) else None,
+                            status_of_appointment=request.POST.getlist('work_status[]')[i] if i < len(request.POST.getlist('work_status[]')) else '',
+                            govt_service=request.POST.getlist('work_govt_service[]')[i] if i < len(request.POST.getlist('work_govt_service[]')) else 'N',
+                        )
+                        work_experiences.append(work_exp)
+                form_instance.work_experience.set(work_experiences)
 
+                form_instance.voluntary_work.all().delete()
+                voluntary_orgs = request.POST.getlist('voluntary_org[]')
+                voluntary_works = []
+                for i in range(len(voluntary_orgs)):
+                    if voluntary_orgs[i].strip():
+                        voluntary = VoluntaryWork.objects.create(
+                            user=request.user,
+                            organization_name=voluntary_orgs[i],
+                            from_date=request.POST.getlist('voluntary_from[]')[i] if i < len(request.POST.getlist('voluntary_from[]')) and request.POST.getlist('voluntary_from[]')[i] else None,
+                            to_date=request.POST.getlist('voluntary_to[]')[i] if i < len(request.POST.getlist('voluntary_to[]')) and request.POST.getlist('voluntary_to[]')[i] else None,
+                            number_of_hours=request.POST.getlist('voluntary_hours[]')[i] if i < len(request.POST.getlist('voluntary_hours[]')) and request.POST.getlist('voluntary_hours[]')[i] else 0,
+                            nature_of_work=request.POST.getlist('voluntary_nature[]')[i] if i < len(request.POST.getlist('voluntary_nature[]')) else '',
+                        )
+                        voluntary_works.append(voluntary)
+                form_instance.voluntary_work.set(voluntary_works)
+
+                form_instance.learning_development.all().delete()
+                learning_titles = request.POST.getlist('learning_title[]')
+
+                learning_developments = []
+                for i in range(len(learning_titles)):
+                    if learning_titles[i].strip():
+                        learning = LearningDevelopment.objects.create(
+                            user=request.user,
+                            title=learning_titles[i],
+                            from_date=request.POST.getlist('learning_from[]')[i] if i < len(request.POST.getlist('learning_from[]')) and request.POST.getlist('learning_from[]')[i] else None,
+                            to_date=request.POST.getlist('learning_to[]')[i] if i < len(request.POST.getlist('learning_to[]')) and request.POST.getlist('learning_to[]')[i] else None,
+                            number_of_hours=request.POST.getlist('learning_hours[]')[i] if i < len(request.POST.getlist('learning_hours[]')) and request.POST.getlist('learning_hours[]')[i] else 0,
+                            type_of_ld=request.POST.getlist('learning_type[]')[i] if i < len(request.POST.getlist('learning_type[]')) else '',
+                            conducted_by=request.POST.getlist('learning_conducted[]')[i] if i < len(request.POST.getlist('learning_conducted[]')) else '',
+                        )
+                        learning_developments.append(learning)
+                form_instance.learning_development.set(learning_developments)
+
+                            
+                if 'form_name' in request.POST:
+                    form_instance.name = request.POST["form_name"]
+                    form_instance.save()
+                    print("saved form name")
+
+
+                messages.success(request, "Form edited successfully!")
+                return redirect('all_forms', form_id=form_id)
+            except ValidationError as e:
+                messages.error(request, str(e))
+                return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=False,form_instance=form_instance))
 
         else:
             for form in [personal_form, family_form, education_form, other_form]:
@@ -1217,7 +1237,18 @@ def edit_form(request, form_id):
 def create_form(request):
     if request.method == 'POST':
         form_name = request.POST.get("form_name")
-        print(form_name)
+        if not form_name:
+            messages.error(request, "Form name is required")
+            return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=True))
+        
+        if len(form_name) > 100:
+            messages.error(request, "Form name must be less than 100 characters")
+            return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=True))
+        
+        if CompleteForm.objects.filter(user=request.user, name=form_name).exists():
+            messages.error(request, f'A form with the name "{form_name}" already exists')
+            return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=True))
+        
         personal_form = PersonalInformationForm(request.POST)
         family_form = FamilyBackgroundForm(request.POST)
         education_form = EducationalBackgroundForm(request.POST)
@@ -1231,100 +1262,108 @@ def create_form(request):
         print([personal_form.is_valid(), family_form.is_valid(), education_form.is_valid(), other_form.is_valid()])
         
         if all([personal_form.is_valid(), family_form.is_valid(), other_form.is_valid(),education_form.is_valid()]):
+            try:
+                validate_work_experience_dates(request.POST)
+                validate_voluntary_work_dates(request.POST)
+                validate_learning_development_dates(request.POST)
+                validate_civil_service_data(request.POST)
 
-            personal_inst = personal_form.save(commit=False)
-            family_inst = family_form.save(commit=False)
-            education_inst = education_form.save(commit=False)
-            other_inst = other_form.save(commit=False)
+                personal_inst = personal_form.save(commit=False)
+                family_inst = family_form.save(commit=False)
+                education_inst = education_form.save(commit=False)
+                other_inst = other_form.save(commit=False)
 
-            for inst in [personal_inst, family_inst, education_inst, other_inst]:
-                inst.user = request.user
-                inst.save()
-            print("Saved")
+                for inst in [personal_inst, family_inst, education_inst, other_inst]:
+                    inst.user = request.user
+                    inst.save()
+                print("Saved")
 
-        
-            career_services = request.POST.getlist('career_service[]')
-            ratings = request.POST.getlist('rating[]')
-            exam_dates = request.POST.getlist('exam_date[]')
-            exam_places = request.POST.getlist('exam_place[]')
-            license_numbers = request.POST.getlist('license_number[]')
-            license_validities = request.POST.getlist('license_validity[]')
-            civil_services = []
-            for i in range(len(career_services)):
-                if career_services[i].strip():
-                    civil_service = CivilServiceEligibility.objects.create(
-                        user=request.user,
-                        career_service=career_services[i],
-                        rating=ratings[i] if i < len(ratings) else None,
-                        exam_date=exam_dates[i] if i < len(exam_dates) else None,
-                        exam_place=exam_places[i] if i < len(exam_places) else None,
-                        license_number=license_numbers[i] if i < len(license_numbers) else None,
-                        license_validity=license_validities[i] if i < len(license_validities) else None,
-                    )
-                    civil_services.append(civil_service)
             
+                career_services = request.POST.getlist('career_service[]')
+                ratings = request.POST.getlist('rating[]')
+                exam_dates = request.POST.getlist('exam_date[]')
+                exam_places = request.POST.getlist('exam_place[]')
+                license_numbers = request.POST.getlist('license_number[]')
+                license_validities = request.POST.getlist('license_validity[]')
+                civil_services = []
+                for i in range(len(career_services)):
+                    if career_services[i].strip():
+                        civil_service = CivilServiceEligibility.objects.create(
+                            user=request.user,
+                            career_service=career_services[i],
+                            rating=ratings[i] if i < len(ratings) else None,
+                            exam_date=exam_dates[i] if i < len(exam_dates) else None,
+                            exam_place=exam_places[i] if i < len(exam_places) else None,
+                            license_number=license_numbers[i] if i < len(license_numbers) else None,
+                            license_validity=license_validities[i] if i < len(license_validities) else None,
+                        )
+                        civil_services.append(civil_service)
+                
 
-            work_from_dates = request.POST.getlist('work_from_date[]')
-            work_experiences = []
-            for i in range(len(work_from_dates)):
-                if work_from_dates[i]:
-                    work_exp = WorkExperience.objects.create(
-                        user=request.user,
-                        from_date=work_from_dates[i],
-                        to_date=request.POST.getlist('work_to_date[]')[i] if i < len(request.POST.getlist('work_to_date[]')) and request.POST.getlist('work_to_date[]')[i] else None,
-                        position_title=request.POST.getlist('work_position_title[]')[i] if i < len(request.POST.getlist('work_position_title[]')) else '',
-                        department=request.POST.getlist('work_department[]')[i] if i < len(request.POST.getlist('work_department[]')) else '',
-                        monthly_salary=request.POST.getlist('work_monthly_salary[]')[i] if i < len(request.POST.getlist('work_monthly_salary[]')) and request.POST.getlist('work_monthly_salary[]')[i] else None,
-                        salary_grade=request.POST.getlist('work_salary_grade[]')[i] if i < len(request.POST.getlist('work_salary_grade[]')) else None,
-                        status_of_appointment=request.POST.getlist('work_status[]')[i] if i < len(request.POST.getlist('work_status[]')) else '',
-                        govt_service=request.POST.getlist('work_govt_service[]')[i] if i < len(request.POST.getlist('work_govt_service[]')) else 'N',
-                    )
-                    work_experiences.append(work_exp)
+                work_from_dates = request.POST.getlist('work_from_date[]')
+                work_experiences = []
+                for i in range(len(work_from_dates)):
+                    if work_from_dates[i]:
+                        work_exp = WorkExperience.objects.create(
+                            user=request.user,
+                            from_date=work_from_dates[i],
+                            to_date=request.POST.getlist('work_to_date[]')[i] if i < len(request.POST.getlist('work_to_date[]')) and request.POST.getlist('work_to_date[]')[i] else None,
+                            position_title=request.POST.getlist('work_position_title[]')[i] if i < len(request.POST.getlist('work_position_title[]')) else '',
+                            department=request.POST.getlist('work_department[]')[i] if i < len(request.POST.getlist('work_department[]')) else '',
+                            monthly_salary=request.POST.getlist('work_monthly_salary[]')[i] if i < len(request.POST.getlist('work_monthly_salary[]')) and request.POST.getlist('work_monthly_salary[]')[i] else None,
+                            salary_grade=request.POST.getlist('work_salary_grade[]')[i] if i < len(request.POST.getlist('work_salary_grade[]')) else None,
+                            status_of_appointment=request.POST.getlist('work_status[]')[i] if i < len(request.POST.getlist('work_status[]')) else '',
+                            govt_service=request.POST.getlist('work_govt_service[]')[i] if i < len(request.POST.getlist('work_govt_service[]')) else 'N',
+                        )
+                        work_experiences.append(work_exp)
 
-            voluntary_orgs = request.POST.getlist('voluntary_org[]')
-            voluntary_works = []
-            for i in range(len(voluntary_orgs)):
-                if voluntary_orgs[i].strip():
-                    voluntary = VoluntaryWork.objects.create(
-                        user=request.user,
-                        organization_name=voluntary_orgs[i],
-                        from_date=request.POST.getlist('voluntary_from[]')[i] if i < len(request.POST.getlist('voluntary_from[]')) and request.POST.getlist('voluntary_from[]')[i] else None,
-                        to_date=request.POST.getlist('voluntary_to[]')[i] if i < len(request.POST.getlist('voluntary_to[]')) and request.POST.getlist('voluntary_to[]')[i] else None,
-                        number_of_hours=request.POST.getlist('voluntary_hours[]')[i] if i < len(request.POST.getlist('voluntary_hours[]')) and request.POST.getlist('voluntary_hours[]')[i] else 0,
-                        nature_of_work=request.POST.getlist('voluntary_nature[]')[i] if i < len(request.POST.getlist('voluntary_nature[]')) else '',
-                    )
-                    voluntary_works.append(voluntary)
+                voluntary_orgs = request.POST.getlist('voluntary_org[]')
+                voluntary_works = []
+                for i in range(len(voluntary_orgs)):
+                    if voluntary_orgs[i].strip():
+                        voluntary = VoluntaryWork.objects.create(
+                            user=request.user,
+                            organization_name=voluntary_orgs[i],
+                            from_date=request.POST.getlist('voluntary_from[]')[i] if i < len(request.POST.getlist('voluntary_from[]')) and request.POST.getlist('voluntary_from[]')[i] else None,
+                            to_date=request.POST.getlist('voluntary_to[]')[i] if i < len(request.POST.getlist('voluntary_to[]')) and request.POST.getlist('voluntary_to[]')[i] else None,
+                            number_of_hours=request.POST.getlist('voluntary_hours[]')[i] if i < len(request.POST.getlist('voluntary_hours[]')) and request.POST.getlist('voluntary_hours[]')[i] else 0,
+                            nature_of_work=request.POST.getlist('voluntary_nature[]')[i] if i < len(request.POST.getlist('voluntary_nature[]')) else '',
+                        )
+                        voluntary_works.append(voluntary)
 
-            learning_titles = request.POST.getlist('learning_title[]')
-            learning_developments = []
-            for i in range(len(learning_titles)):
-                if learning_titles[i].strip():
-                    learning = LearningDevelopment.objects.create(
-                        user=request.user,
-                        title=learning_titles[i],
-                        from_date=request.POST.getlist('learning_from[]')[i] if i < len(request.POST.getlist('learning_from[]')) and request.POST.getlist('learning_from[]')[i] else None,
-                        to_date=request.POST.getlist('learning_to[]')[i] if i < len(request.POST.getlist('learning_to[]')) and request.POST.getlist('learning_to[]')[i] else None,
-                        number_of_hours=request.POST.getlist('learning_hours[]')[i] if i < len(request.POST.getlist('learning_hours[]')) and request.POST.getlist('learning_hours[]')[i] else 0,
-                        type_of_ld=request.POST.getlist('learning_type[]')[i] if i < len(request.POST.getlist('learning_type[]')) else '',
-                        conducted_by=request.POST.getlist('learning_conducted[]')[i] if i < len(request.POST.getlist('learning_conducted[]')) else '',
-                    )
-                    learning_developments.append(learning)
+                learning_titles = request.POST.getlist('learning_title[]')
+                learning_developments = []
+                for i in range(len(learning_titles)):
+                    if learning_titles[i].strip():
+                        learning = LearningDevelopment.objects.create(
+                            user=request.user,
+                            title=learning_titles[i],
+                            from_date=request.POST.getlist('learning_from[]')[i] if i < len(request.POST.getlist('learning_from[]')) and request.POST.getlist('learning_from[]')[i] else None,
+                            to_date=request.POST.getlist('learning_to[]')[i] if i < len(request.POST.getlist('learning_to[]')) and request.POST.getlist('learning_to[]')[i] else None,
+                            number_of_hours=request.POST.getlist('learning_hours[]')[i] if i < len(request.POST.getlist('learning_hours[]')) and request.POST.getlist('learning_hours[]')[i] else 0,
+                            type_of_ld=request.POST.getlist('learning_type[]')[i] if i < len(request.POST.getlist('learning_type[]')) else '',
+                            conducted_by=request.POST.getlist('learning_conducted[]')[i] if i < len(request.POST.getlist('learning_conducted[]')) else '',
+                        )
+                        learning_developments.append(learning)
 
-            complete_form = CompleteForm.objects.create(
-                user=request.user,
-                name=form_name,
-                personal_information=personal_inst,
-                family_background=family_inst,
-                educational_background=education_inst,
-                other_information=other_inst
-            )
-            complete_form.civil_service.set(civil_services)
-            complete_form.work_experience.set(work_experiences)
-            complete_form.voluntary_work.set(voluntary_works)
-            complete_form.learning_development.set(learning_developments)
+                complete_form = CompleteForm.objects.create(
+                    user=request.user,
+                    name=form_name,
+                    personal_information=personal_inst,
+                    family_background=family_inst,
+                    educational_background=education_inst,
+                    other_information=other_inst
+                )
+                complete_form.civil_service.set(civil_services)
+                complete_form.work_experience.set(work_experiences)
+                complete_form.voluntary_work.set(voluntary_works)
+                complete_form.learning_development.set(learning_developments)
 
-            messages.success(request, "Form created successfully!")
-            return redirect('edit_form',form_id=complete_form.id)
+                messages.success(request, "Form created successfully!")
+                return redirect('edit_form',form_id=complete_form.id)
+            except ValidationError as e:
+                messages.error(request, str(e))
+                return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=True))
         else:
             for form in [personal_form, family_form, education_form, other_form]:
                 if form.errors:
@@ -1349,3 +1388,96 @@ def create_form(request):
     }
 
     return render(request, 'pds_app/edit_form.html', context)
+
+
+
+def validate_work_experience_dates(post_data):
+    from_dates = post_data.getlist('work_from_date[]')
+    to_dates = post_data.getlist('work_to_date[]')
+    
+    for i, (from_date, to_date) in enumerate(zip(from_dates, to_dates), 1):
+        if from_date and to_date:
+            try:
+                from_dt = datetime.datetime.strptime(from_date, '%Y-%m-%d').date()
+                to_dt = datetime.datetime.strptime(to_date, '%Y-%m-%d').date()
+                
+                if from_dt > to_dt:
+                    raise ValidationError(f'Work Experience #{i}: End date must be after start date')
+                
+                if from_dt > datetime.date.today():
+                    raise ValidationError(f'Work Experience #{i}: Start date cannot be in the future')
+                    
+            except ValueError:
+                raise ValidationError(f'Work Experience #{i}: Invalid date format')
+
+def validate_voluntary_work_dates(post_data):
+    from_dates = post_data.getlist('voluntary_from[]')
+    to_dates = post_data.getlist('voluntary_to[]')
+    
+    for i, (from_date, to_date) in enumerate(zip(from_dates, to_dates), 1):
+        if from_date and to_date:
+            try:
+                from_dt = datetime.datetime.strptime(from_date, '%Y-%m-%d').date()
+                to_dt = datetime.datetime.strptime(to_date, '%Y-%m-%d').date()
+                
+                if from_dt > to_dt:
+                    raise ValidationError(f'Voluntary Work #{i}: End date must be after start date')
+                    
+            except ValueError:
+                raise ValidationError(f'Voluntary Work #{i}: Invalid date format')
+
+def validate_learning_development_dates(post_data):
+    from_dates = post_data.getlist('learning_from[]')
+    to_dates = post_data.getlist('learning_to[]')
+    
+    for i, (from_date, to_date) in enumerate(zip(from_dates, to_dates), 1):
+        if from_date and to_date:
+            try:
+                from_dt = datetime.datetime.strptime(from_date, '%Y-%m-%d').date()
+                to_dt = datetime.datetime.strptime(to_date, '%Y-%m-%d').date()
+                
+                if from_dt > to_dt:
+                    raise ValidationError(f'Learning & Development #{i}: End date must be after start date')
+                    
+            except ValueError:
+                raise ValidationError(f'Learning & Development #{i}: Invalid date format')
+
+def validate_civil_service_data(post_data):
+    ratings = post_data.getlist('rating[]')
+    
+    for i, rating in enumerate(ratings, 1):
+        if rating:
+            try:
+                rating_val = float(rating)
+                if rating_val < 0 or rating_val > 100:
+                    raise ValidationError(f'Civil Service #{i}: Rating must be between 0 and 100')
+            except ValueError:
+                raise ValidationError(f'Civil Service #{i}: Invalid rating value')
+
+def get_form_context(request, creating=True, form_instance=None):
+    if creating:
+        return {
+            'personal_form': PersonalInformationForm(),
+            'family_form': FamilyBackgroundForm(),
+            'education_form': EducationalBackgroundForm(),
+            'other_form': OtherInformationForm(),
+            'creating': True,
+            "forms": CompleteForm.objects.filter(user=request.user),
+            "form": ImportForm()
+        }
+    
+    personal_form = PersonalInformationForm(request.POST, instance=form_instance.personal_information)
+    family_form = FamilyBackgroundForm(request.POST, instance=form_instance.family_background)
+    education_form = EducationalBackgroundForm(request.POST, instance=form_instance.educational_background)
+    other_form = OtherInformationForm(request.POST, instance=form_instance.other_information)
+
+    return {
+        'form_instance': form_instance,
+        'personal_form': personal_form,
+        'family_form': family_form,
+        'education_form': education_form,
+        'other_form': other_form,
+        'creating': False,
+        'form':ImportForm(),
+        "forms" : CompleteForm.objects.filter(user=request.user)
+    }
