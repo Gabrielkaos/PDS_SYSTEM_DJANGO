@@ -3,11 +3,11 @@ from .models import *
 from .forms import PersonalInformationForm, FamilyBackgroundForm, EducationalBackgroundForm, OtherInformationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import redirect, get_object_or_404
 import openpyxl
 from openpyxl.utils import get_column_letter
-from .forms import ImportForm
+from .forms import ImportForm, UserRegistrationForm
 from django.db.models import Q
 from django.utils import timezone
 from django.http import JsonResponse
@@ -17,6 +17,64 @@ import datetime
 from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 from .import_validators import ImportDataValidator
+
+def register(request):
+    
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        # form = UserRegistrationForm(request.POST)
+
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        password2 = request.POST['password2']
+
+        print(username,email,password,password2)
+
+
+        #see if there are existing 
+        if User.objects.filter(username=username).exists():
+            messages.error(request,"Username already exists")
+            return redirect("register")
+        
+        if User.objects.filter(email=email).exists():
+            messages.error(request,"Email already exists")
+            return redirect("register")
+
+        if password != password2:
+            messages.error(request,"Password doesnt match with confirmation password")
+            return redirect("register")
+
+        User.objects.create_user(username=username,email=email,password=password,
+                                          is_active = True, is_staff= False, is_superuser = False)
+        
+        user = User.objects.get(username=username)
+        
+        login(request, user)
+
+        
+        # Create user but don't save yet
+        # user = form.save(commit=False)
+        # user.is_active = True  # Auto-activate users
+        # user.is_staff = False  # Regular users are NOT staff
+        # user.is_superuser = False  # Regular users are NOT superusers
+        # user.save()
+        
+        # # Log the user in
+        # username = form.cleaned_data.get('username')
+        # password = form.cleaned_data.get('password1')
+        # user = authenticate(username=username, password=password)
+        # login(request, user)
+        
+        messages.success(request, f'Welcome {username}! Your account has been created.')
+        return redirect('dashboard')
+        
+    
+    
+    return render(request, 'pds_app/register.html')
+
 
 @login_required
 def export_form(request, form_id):

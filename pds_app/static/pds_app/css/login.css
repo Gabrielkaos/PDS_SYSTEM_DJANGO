@@ -135,6 +135,7 @@ body {
     color: #2563eb;
     text-decoration: none;
     font-weight: 500;
+    margin-bottom: 20px;
 }
 
 .login-link:hover {
@@ -160,4 +161,8 @@ header h1 {
     font-size: 1.4rem;
     margin-left: 25px;
     letter-spacing: 0.5px;
+}
+
+.login-hyperlink {
+    padding-bottom: 20px;
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Personal Data Sheet System</title>
+    <title>Register - Personal Data Sheet System</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'pds_app/css/login.css' %}">
 </head>
@@ -11,8 +11,8 @@
     <header>
         <h1>Personal Data Sheet System</h1>
     </header>
-        <div class="login-container">
-        <h2>Login to Your Account</h2>
+    <div class="login-container">
+        <h2>Register an Account</h2>
         
         {% if messages %}
         <div class="messages">
@@ -31,30 +31,39 @@
         </div>
         {% endif %}
         
-        <form method="post">
+        <form method="post" action="{% url 'register' %}">
             {% csrf_token %}
             <fieldset class="login-fieldset">
-                <legend class="login-legend">Login Information</legend>
+                <legend class="login-legend">Register Information</legend>
                 
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="password2">Confirm Password:</label>
+                    <input type="password" id="password2" name="password2" required>
+                </div>
+
             </fieldset>
 
-            <a class="login-link" href="{% url 'register' %}">Don't have an account? <i>Register</i></a>
+            <a class="login-link" href="{% url 'login' %}">Already have an account? <i>Login</i></a>
             
-            <button type="submit" class="btn-login">Login</button>
+            <button type="submit" class="btn-login">Register</button>
         </form>
         
     </div>
-
-    
     
 </body>
 </html>
