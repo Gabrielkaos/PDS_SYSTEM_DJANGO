@@ -1,78 +1,94 @@
-/* Bulk Operations======================================= */
+/* Bulk Operations ======================================= */
+
 .bulk-actions-bar {
     display: none;
     justify-content: space-between;
     align-items: center;
-    background: #fff3cd;
-    border: 1px solid #ffc107;
-    padding: 15px 20px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+    background: #ffffff;
+    padding: 18px 22px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
 
 .bulk-actions-info {
     font-weight: 600;
-    color: #856404;
+    color: #333;
 }
 
 .bulk-actions-buttons {
     display: flex;
-    gap: 10px;
+    gap: 12px;
 }
 
 .bulk-btn {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
     font-weight: 500;
-    transition: all 0.3s;
+    cursor: pointer;
+    transition: 0.25s ease;
+    backdrop-filter: blur(10px);
 }
+
 
 .export-bulk {
-    background: #28a745;
-    color: white;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #059669;
+}
+.export-bulk:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.2);
 }
 
-.export-bulk:hover {
-    background: #218838;
-}
 
 .delete-bulk {
-    background: #dc3545;
-    color: white;
+    background: rgba(235, 37, 37, 0.08);
+    border: 1px solid rgba(235, 37, 37, 0.3);
+    color: #dc3545;
+}
+.delete-bulk:hover {
+    background: rgba(235, 37, 37, 0.15);
+    border-color: rgba(235, 37, 37, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(235,37,37,0.2);
 }
 
-.delete-bulk:hover {
-    background: #c82333;
-}
 
 .cancel-bulk {
-    background: #6c757d;
-    color: white;
+    background: rgba(107, 114, 128, 0.08);
+    border: 1px solid rgba(107, 114, 128, 0.3);
+    color: #4b5563;
+}
+.cancel-bulk:hover {
+    background: rgba(107, 114, 128, 0.15);
+    border-color: rgba(107, 114, 128, 0.5);
+    transform: translateY(-2px);
 }
 
-.cancel-bulk:hover {
-    background: #545b62;
-}
 
 .select-all-section {
-    padding: 10px 15px;
-    background: #f8f9fa;
-    border-radius: 5px;
-    margin-bottom: 15px;
+    padding: 14px 20px;
+    background: #f9fafb;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 20px;
 }
 
 .select-all-section label {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
     font-weight: 500;
+    color: #4b5563;
 }
 
 .form-checkbox {
@@ -91,7 +107,8 @@
     display: flex;
     align-items: center;
 }
-/* Bulk Operations======================================= */
+/* Bulk Operations ======================================= */
+
 
 /*dashboard =============================================*/
 
@@ -825,64 +842,69 @@ header p a {
 
 /* header================================================*/
 
-/* sidebar================================================= */
+/* Sidebar =========================================================== */
 
 .sidebar {
     width: 250px;
-    background-color: #f1efef;
+    background: #ffffff;
     padding: 20px;
     padding-bottom: 40px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid #e5e7eb;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.06);
     height: calc(100vh - 85px);
     position: fixed;
-    overflow-y: auto;      
+    overflow-y: auto;
     overflow-x: hidden;
+    border-radius: 0 12px 12px 0;
 }
 
 .sidebar::after {
     content: "";
     display: block;
-    height: 60px; 
+    height: 50px; 
     flex-shrink: 0;
 }
 
+
 .sidebar a {
-    display: block;
-    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #374151;
     text-decoration: none;
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 5px;
+    padding: 12px 14px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: 0.25s ease;
 }
 
 .sidebar a:hover {
-    background-color: #e0e0e0;
+    background: #f3f4f6;
+    transform: translateX(4px);
 }
 
-.sidebar a.active {
-    background-color: #00aaff;
-    color: white;
+
+.sidebar a.active,
+.sidebar span.active {
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    color: #2563eb;
+    font-weight: 600;
     cursor: default;
     pointer-events: none;
+    transform: none;
 }
 
-.sidebar span.active {
-    background-color: #00aaff;
-    color: white;
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
-}
 
 .sidebar a.disabled-link {
-    color: #aaa;
+    color: #9ca3af;
     cursor: not-allowed;
     pointer-events: none;
-    text-decoration: none;
 }
 
+/* Sidebar =========================================================== */
 
-/* sidebar ================================================================= */
 
 .container {
     display: flex;

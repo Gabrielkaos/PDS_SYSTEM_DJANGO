@@ -22,4 +22,9 @@ urlpatterns = [
     path('bulk-delete/', views.bulk_delete_forms, name='bulk_delete'),
     path('bulk-export/', views.bulk_export_forms, name='bulk_export'),
     path('import-multiple/', views.import_multiple_forms, name='import_multiple'),
+
+    # admin urls
+    path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('admin-panel/toggle-admin/<int:user_id>/', views.toggle_admin_status, name='toggle_admin_status'),
+    path('admin-panel/delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
 ]

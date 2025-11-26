@@ -4,7 +4,7 @@ from decimal import Decimal, InvalidOperation
 import re
 
 class ImportDataValidator:
-    """Validates data during Excel import"""
+    
     
     def __init__(self, sheet_name):
         self.sheet_name = sheet_name
@@ -12,33 +12,26 @@ class ImportDataValidator:
         self.warnings = []
     
     def add_error(self, field, message):
-        """Add validation error"""
         self.errors.append(f"{field}: {message}")
     
     def add_warning(self, field, message):
-        """Add validation warning"""
         self.warnings.append(f"{field}: {message}")
     
     def has_errors(self):
-        """Check if there are any errors"""
         return len(self.errors) > 0
     
     def get_error_summary(self):
-        """Get formatted error summary"""
         if not self.has_errors():
             return None
         return f"Sheet '{self.sheet_name}' - Validation Errors:\n" + "\n".join(f"  • {err}" for err in self.errors)
     
-    # Personal Information Validators
     def validate_required_field(self, value, field_name):
-        """Validate required field is not empty"""
         if not value or str(value).strip() == "":
             self.add_error(field_name, "This field is required")
             return False
         return True
     
     def validate_birth_date(self, value):
-        """Validate birth date"""
         if not value:
             self.add_error("Date of Birth", "Required field")
             return None
@@ -72,7 +65,6 @@ class ImportDataValidator:
             return None
     
     def validate_mobile_number(self, value):
-        """Validate Philippine mobile number"""
         if not value:
             return value
         
@@ -84,7 +76,6 @@ class ImportDataValidator:
         return value
     
     def validate_email(self, value):
-        """Validate email address"""
         if not value:
             return value
         
@@ -95,7 +86,6 @@ class ImportDataValidator:
         return value
     
     def validate_zip_code(self, value, field_name="ZIP Code"):
-        """Validate Philippine ZIP code"""
         if not value:
             return value
         
@@ -105,7 +95,6 @@ class ImportDataValidator:
         return value
     
     def validate_height(self, value):
-        """Validate height in cm"""
         if not value:
             return 0
         
@@ -120,7 +109,6 @@ class ImportDataValidator:
             return 0
     
     def validate_weight(self, value):
-        """Validate weight in kg"""
         if not value:
             return 0
         
@@ -135,7 +123,6 @@ class ImportDataValidator:
             return 0
     
     def validate_sex(self, value):
-        """Validate sex field"""
         if not value:
             self.add_error("Sex", "Required field")
             return ""
@@ -148,7 +135,6 @@ class ImportDataValidator:
         return value
     
     def validate_civil_status(self, value):
-        """Validate civil status"""
         if not value:
             self.add_error("Civil Status", "Required field")
             return ""
@@ -163,7 +149,6 @@ class ImportDataValidator:
         return value
     
     def validate_blood_type(self, value):
-        """Validate blood type"""
         if not value:
             return ""
         
@@ -176,7 +161,6 @@ class ImportDataValidator:
         return value
     
     def validate_tin(self, value):
-        """Validate TIN number"""
         if not value:
             return value
         
@@ -187,7 +171,6 @@ class ImportDataValidator:
         return value
     
     def validate_sss(self, value):
-        """Validate SSS number"""
         if not value:
             return value
         
@@ -198,7 +181,6 @@ class ImportDataValidator:
         return value
     
     def validate_philhealth(self, value):
-        """Validate PhilHealth number"""
         if not value:
             return value
         
@@ -208,9 +190,7 @@ class ImportDataValidator:
         
         return value
     
-    # Date Range Validators
     def validate_date_range(self, from_date, to_date, context=""):
-        """Validate date range (from < to)"""
         if not from_date or not to_date:
             return True
         
@@ -236,7 +216,6 @@ class ImportDataValidator:
             return False
     
     def validate_past_date(self, value, field_name):
-        """Validate date is not in the future"""
         if not value:
             return value
         
@@ -255,9 +234,7 @@ class ImportDataValidator:
             self.add_error(field_name, f"Invalid date: {e}")
             return None
     
-    # Civil Service Validators
     def validate_rating(self, value):
-        """Validate rating (0-100)"""
         if not value:
             return None
         
@@ -271,9 +248,7 @@ class ImportDataValidator:
             self.add_error("Rating", "Invalid number format")
             return None
     
-    # General Validators
     def validate_positive_integer(self, value, field_name):
-        """Validate positive integer"""
         if not value:
             return 0
         
@@ -288,7 +263,6 @@ class ImportDataValidator:
             return 0
     
     def validate_decimal(self, value, field_name):
-        """Validate decimal number"""
         if not value:
             return None
         
@@ -299,7 +273,6 @@ class ImportDataValidator:
             return None
     
     def validate_year(self, value, field_name):
-        """Validate year (4 digits)"""
         if not value:
             return ""
         

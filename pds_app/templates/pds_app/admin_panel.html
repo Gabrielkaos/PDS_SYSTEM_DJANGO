@@ -1,0 +1,319 @@
+{% extends 'pds_app/home.html' %}
+
+{% block sidebar %}
+    {% if user.is_superuser %}
+    
+    <a href="{% url 'admin_panel' %}" style="color: #a74c28;" class="{% if request.resolver_match.url_name == 'admin_panel' %}active{% endif %}">
+        <strong>Admin Panel</strong>
+    </a>
+    {% endif %}
+    
+    <a class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+    href="{% url 'dashboard' %}">
+    Dashboard
+    </a>
+
+    <a class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+    href="{% url 'home' %}">
+    Your Forms
+    </a>
+
+    <a class="{% if request.resolver_match.url_name == 'create_form' %}active{% endif %}" 
+    href="{% url 'create_form' %}">
+    Create Form
+    </a>
+
+    <a id="side-bar-import-form" href="#">
+    Import Form(s)
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="admin-panel-container">
+    <h2>Admin Panel - User Management</h2>
+    
+    
+    <div class="admin-stats">
+        <div class="stat-card">
+            <h3>{{ total_users }}</h3>
+            <p>Total Users</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ admin_count }}</h3>
+            <p>Administrators</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ user_count }}</h3>
+            <p>Regular Users</p>
+        </div>
+    </div>
+    
+    
+    <div class="filter-section">
+        <a href="{% url 'admin_panel' %}" class="filter-btn {% if user_type == 'all' %}active{% endif %}">All Users</a>
+        <a href="{% url 'admin_panel' %}?type=admin" class="filter-btn {% if user_type == 'admin' %}active{% endif %}">Admins</a>
+        <a href="{% url 'admin_panel' %}?type=user" class="filter-btn {% if user_type == 'user' %}active{% endif %}">Regular Users</a>
+    </div>
+    
+    
+    <div class="users-table-container">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Full Name</th>
+                    <th>Role</th>
+                    <th>Date Joined</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        <strong>{{ user.username }}</strong>
+                        {% if user == request.user %}
+                            <span class="badge badge-primary">You</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.get_full_name|default:"—" }}</td>
+                    <td>
+                        {% if user.is_superuser %}
+                            <span class="badge badge-admin">Admin</span>
+                        {% else %}
+                            <span class="badge badge-user">User</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                    <td>
+                        {% if user != request.user %}
+                        <div class="action-buttons">
+                            <a href="{% url 'toggle_admin_status' user.id %}" 
+                               class="action-btn {% if user.is_staff %}remove-admin{% else %}make-admin{% endif %}"
+                               onclick="return confirm('Are you sure you want to {% if user.is_staff %}remove admin status from{% else %}make{% endif %} {{ user.username }}{% if not user.is_staff %} an admin{% endif %}?')">
+                                {% if user.is_staff %}
+                                    Remove Admin
+                                {% else %}
+                                    Make Admin
+                                {% endif %}
+                            </a>
+                            
+                            <a href="{% url 'delete_user' user.id %}" 
+                               class="action-btn delete-user"
+                               onclick="return confirm('Are you sure you want to delete {{ user.username }}? This action cannot be undone!')">
+                                Delete
+                            </a>
+                        </div>
+                        {% else %}
+                            <span style="color: #999;">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
+                        No users found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+/* Admin Panel============================ */
+
+.admin-panel-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-panel-container h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.admin-stats .stat-card {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    transition: 0.25s ease;
+}
+
+.admin-stats .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.admin-stats .stat-card h3 {
+    margin: 0;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #2563eb; 
+}
+
+.admin-stats .stat-card p {
+    margin-top: 8px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+
+.filter-section {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 22px;
+    background: rgba(37, 99, 235, 0.06);
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    border-radius: 10px;
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 500;
+    transition: 0.25s ease;
+    backdrop-filter: blur(10px);
+}
+
+.filter-btn:hover {
+    background: rgba(37, 99, 235, 0.12);
+    border-color: rgba(37, 99, 235, 0.4);
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+
+.users-table-container {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table thead {
+    background: #f9fafb;
+}
+
+.users-table th,
+.users-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.users-table th {
+    font-weight: 600;
+    color: #333;
+}
+
+.users-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-primary {
+    background: rgba(37, 99, 235, 0.15);
+    color: #2563eb;
+}
+
+.badge-admin {
+    background: rgba(16, 185, 129, 0.2);
+    color: #059669;
+}
+
+.badge-user {
+    background: rgba(107, 114, 128, 0.2);
+    color: #4b5563;
+}
+
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: 0.25s;
+    backdrop-filter: blur(10px);
+}
+
+
+.make-admin {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #059669;
+}
+.make-admin:hover {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: rgba(16, 185, 129, 0.6);
+    transform: translateY(-2px);
+}
+
+
+.remove-admin {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #b45309;
+}
+.remove-admin:hover {
+    background: rgba(245, 158, 11, 0.22);
+    border-color: rgba(245, 158, 11, 0.55);
+    transform: translateY(-2px);
+}
+
+
+.delete-user {
+    background: rgba(220, 38, 38, 0.15);
+    border: 1px solid rgba(220, 38, 38, 0.4);
+    color: #dc2626;
+}
+.delete-user:hover {
+    background: rgba(220, 38, 38, 0.22);
+    border-color: rgba(220, 38, 38, 0.55);
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

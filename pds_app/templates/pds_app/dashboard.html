@@ -3,6 +3,13 @@
 
 
 {% block sidebar %}
+
+    {% if user.is_superuser %}
+    
+    <a href="{% url 'admin_panel' %}" style="color: #a74c28;" class="{% if request.resolver_match.url_name == 'admin_panel' %}active{% endif %}" >
+        <strong>Admin Panel</strong>
+    </a>
+    {% endif %}
     
     <a class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
     href="{% url 'dashboard' %}">

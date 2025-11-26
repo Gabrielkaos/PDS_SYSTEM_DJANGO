@@ -81,14 +81,12 @@ class PersonalInformation(models.Model):
 
     @property
     def full_name(self):
-        """Return full name"""
         if self.middlename:
             return f"{self.firstname} {self.middlename} {self.surname}"
         return f"{self.firstname} {self.surname}"
     
     @property
     def age(self):
-        """Calculate age from date of birth"""
         from datetime import date
         today = date.today()
         return today.year - self.date_of_birth.year - (
@@ -224,7 +222,6 @@ class WorkExperience(models.Model):
 
     @property
     def duration_years(self):
-        """Calculate duration in years"""
         from datetime import date
         if self.to_date:
             delta = self.to_date - self.from_date

@@ -7,7 +7,7 @@ from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import redirect, get_object_or_404
 import openpyxl
 from openpyxl.utils import get_column_letter
-from .forms import ImportForm, UserRegistrationForm
+from .forms import ImportForm
 from django.db.models import Q
 from django.utils import timezone
 from django.http import JsonResponse
@@ -17,6 +17,80 @@ import datetime
 from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 from .import_validators import ImportDataValidator
+from django.contrib.admin.views.decorators import staff_member_required
+
+
+@staff_member_required
+def admin_panel(request):
+    
+    if not request.user.is_superuser:
+        messages.error(request, "You don't have permission to access this page")
+        return redirect('dashboard')
+    
+    users = User.objects.all().order_by('-date_joined')
+    
+    
+    user_type = request.GET.get('type', 'all')
+    if user_type == 'admin':
+        users = users.filter(is_staff=True)
+    elif user_type == 'user':
+        users = users.filter(is_staff=False)
+    
+    context = {
+        'users': users,
+        'total_users': User.objects.count(),
+        'admin_count': User.objects.filter(is_staff=True).count(),
+        'user_count': User.objects.filter(is_staff=False).count(),
+        'user_type': user_type,
+    }
+    
+    return render(request, 'pds_app/admin_panel.html', context)
+
+
+@staff_member_required
+def toggle_admin_status(request, user_id):
+    if not request.user.is_superuser:
+        messages.error(request, "You don't have permission to perform this action")
+        return redirect('dashboard')
+    
+    user = get_object_or_404(User, id=user_id)
+    
+    
+    if user == request.user:
+        messages.error(request, "You cannot change your own admin status")
+        return redirect('admin_panel')
+    
+    if user.is_staff:
+        user.is_staff = False
+        user.is_superuser = False
+        messages.success(request, f"{user.username} is no longer an admin")
+    else:
+        user.is_staff = True
+        user.is_superuser = True
+        messages.success(request, f"{user.username} is now an admin")
+    
+    user.save()
+    return redirect('admin_panel')
+
+
+@staff_member_required
+def delete_user(request, user_id):
+    
+    if not request.user.is_superuser:
+        messages.error(request, "You don't have permission to perform this action")
+        return redirect('dashboard')
+    
+    user = get_object_or_404(User, id=user_id)
+    
+    if user == request.user:
+        messages.error(request, "You cannot delete your own account")
+        return redirect('admin_panel')
+    
+    username = user.username
+    user.delete()
+    messages.success(request, f"User '{username}' has been deleted")
+    return redirect('admin_panel')
+
 
 def register(request):
     
@@ -24,7 +98,6 @@ def register(request):
         return redirect('dashboard')
     
     if request.method == 'POST':
-        # form = UserRegistrationForm(request.POST)
 
         username = request.POST['username']
         email = request.POST['email']
@@ -53,20 +126,6 @@ def register(request):
         user = User.objects.get(username=username)
         
         login(request, user)
-
-        
-        # Create user but don't save yet
-        # user = form.save(commit=False)
-        # user.is_active = True  # Auto-activate users
-        # user.is_staff = False  # Regular users are NOT staff
-        # user.is_superuser = False  # Regular users are NOT superusers
-        # user.save()
-        
-        # # Log the user in
-        # username = form.cleaned_data.get('username')
-        # password = form.cleaned_data.get('password1')
-        # user = authenticate(username=username, password=password)
-        # login(request, user)
         
         messages.success(request, f'Welcome {username}! Your account has been created.')
         return redirect('dashboard')
@@ -1146,7 +1205,6 @@ def home(request):
 
 @login_required
 def all_forms(request, form_id):
-    """View specific form - ensure user can only see their own forms"""
     form_instance = get_object_or_404(CompleteForm, id=form_id, user=request.user)
     user_forms = CompleteForm.objects.filter(user=request.user)
     
