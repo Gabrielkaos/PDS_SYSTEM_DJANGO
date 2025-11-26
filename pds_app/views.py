@@ -20,6 +20,44 @@ from .import_validators import ImportDataValidator
 from django.contrib.admin.views.decorators import staff_member_required
 
 
+@login_required
+def sign_form(request, form_id):
+    form_instance = get_object_or_404(CompleteForm, id=form_id, user=request.user)
+    
+    if request.method == 'POST':
+        signature_data = request.POST.get('signature')
+        
+        if signature_data:
+            form_instance.digital_signature = signature_data
+            form_instance.signature_date = timezone.now()
+            form_instance.is_signed = True
+            form_instance.save()
+            
+            messages.success(request, 'Form signed successfully!')
+            return redirect('all_forms', form_id=form_id)
+        else:
+            messages.error(request, 'Please provide a signature')
+    
+    context = {
+        'form_instance': form_instance,
+        'forms': CompleteForm.objects.filter(user=request.user)
+    }
+    
+    return render(request, 'pds_app/sign_form.html', context)
+
+
+@login_required
+def remove_signature(request, form_id):
+    form_instance = get_object_or_404(CompleteForm, id=form_id, user=request.user)
+    
+    form_instance.digital_signature = None
+    form_instance.signature_date = None
+    form_instance.is_signed = False
+    form_instance.save()
+    
+    messages.success(request, 'Signature removed')
+    return redirect('all_forms', form_id=form_id)
+
 @staff_member_required
 def admin_panel(request):
     

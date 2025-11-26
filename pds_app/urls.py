@@ -27,4 +27,7 @@ urlpatterns = [
     path('admin-panel/', views.admin_panel, name='admin_panel'),
     path('admin-panel/toggle-admin/<int:user_id>/', views.toggle_admin_status, name='toggle_admin_status'),
     path('admin-panel/delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
+
+    path('forms/<int:form_id>/sign/', views.sign_form, name='sign_form'),
+    path('forms/<int:form_id>/remove-signature/', views.remove_signature, name='remove_signature'),
 ]

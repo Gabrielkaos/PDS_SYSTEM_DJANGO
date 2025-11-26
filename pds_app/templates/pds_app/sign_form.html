@@ -1,0 +1,252 @@
+{% extends 'pds_app/dashboard.html' %}
+
+
+{% block content %}
+<div class="signature-container">
+    <h2>Digital Signature - {{ form_instance.name }}</h2>
+    
+    {% if form_instance.is_signed %}
+    <div class="alert alert-success">
+        This form was signed on {{ form_instance.signature_date|date:"M d, Y h:i A" }}
+    </div>
+    {% endif %}
+    
+    <div class="signature-section">
+        <h3>Sign Your Form</h3>
+        <p>Draw your signature in the box below using your mouse or touch screen.</p>
+        
+        <div class="signature-pad-container">
+            <canvas id="signaturePad" width="600" height="200"></canvas>
+        </div>
+        
+        <div class="signature-actions">
+            <button type="button" id="clearBtn" class="btn-secondary">Clear</button>
+            <button type="button" id="saveBtn" class="btn-primary">Save Signature</button>
+        </div>
+    </div>
+    
+    {% if form_instance.digital_signature %}
+    <div class="current-signature">
+        <h3>Current Signature</h3>
+        <img src="{{ form_instance.digital_signature }}" alt="Digital Signature" style="border: 1px solid #ddd; padding: 10px; background: white; margin-bottom: 20px;">
+        <div style="margin-top: 10px;">
+            <a href="{% url 'remove_signature' form_instance.id %}" class="btn-danger" onclick="return confirm('Are you sure you want to remove this signature?')">
+                Remove Signature
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<form id="signatureForm" method="post" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="signature" id="signatureInput">
+</form>
+
+<style>
+/* Signature Form =========================================================== */
+
+.signature-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
+.signature-section,
+.current-signature {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    margin-bottom: 30px;
+}
+
+.signature-section h3,
+.current-signature h3 {
+    margin-top: 0;
+    color: #111827;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+
+.signature-pad-container {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f9fafb;
+    padding: 10px;
+    display: inline-block;
+    margin: 20px 0;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+}
+
+#signaturePad {
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+    background: white;
+    border-radius: 10px;
+}
+
+
+.signature-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: 0.25s ease;
+    border: 1px solid transparent;
+}
+
+
+.btn-primary {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #059669;
+}
+.btn-primary:hover {
+    background: rgba(16, 185, 129, 0.18);
+    border-color: rgba(16, 185, 129, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.25);
+}
+
+
+.btn-secondary {
+    background: rgba(107, 114, 128, 0.12);
+    border-color: rgba(107, 114, 128, 0.3);
+    color: #4b5563;
+}
+.btn-secondary:hover {
+    background: rgba(107, 114, 128, 0.18);
+    border-color: rgba(107, 114, 128, 0.45);
+    transform: translateY(-2px);
+}
+
+
+.btn-danger {
+    background: rgba(220, 53, 69, 0.12);
+    border-color: rgba(220, 53, 69, 0.35);
+    color: #b91c1c;
+}
+.btn-danger:hover {
+    background: rgba(220, 53, 69, 0.18);
+    border-color: rgba(220, 53, 69, 0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220,53,69,0.25);
+}
+
+
+.current-signature img {
+    max-width: 100%;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+/* Signature Form =========================================================== */
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('signaturePad');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+    
+    canvas.addEventListener('touchstart', handleTouchStart);
+    canvas.addEventListener('touchmove', handleTouchMove);
+    canvas.addEventListener('touchend', stopDrawing);
+    
+    function startDrawing(e) {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+    
+    function draw(e) {
+        if (!isDrawing) return;
+        
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+    
+    function stopDrawing() {
+        isDrawing = false;
+    }
+    
+    function handleTouchStart(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        lastX = touch.clientX - rect.left;
+        lastY = touch.clientY - rect.top;
+        isDrawing = true;
+    }
+    
+    function handleTouchMove(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        [lastX, lastY] = [x, y];
+    }
+    
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+    
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const isBlank = !imageData.data.some(channel => channel !== 0 && channel !== 255);
+        
+        if (isBlank) {
+            alert('Please draw your signature first');
+            return;
+        }
+        
+        const signatureData = canvas.toDataURL('image/png');
+        document.getElementById('signatureInput').value = signatureData;
+        document.getElementById('signatureForm').submit();
+    });
+});
+</script>
+{% endblock %}
