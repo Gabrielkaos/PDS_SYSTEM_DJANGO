@@ -1,4 +1,4 @@
-/* Base layout */
+
 body {
     margin: 0;
     font-family: 'Inter', Arial, sans-serif;
@@ -9,7 +9,7 @@ body {
     height: 100vh;
 }
 
-/* Login Card */
+
 .login-container {
     background: white;
     padding: 2rem;
@@ -17,11 +17,11 @@ body {
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     width: 420px;
     max-width: 90%;
-    border: none; /* Removed outdated gray border */
+    border: none; 
     margin-top: 80px;
 }
 
-/* Title inside card */
+
 .login-container h2 {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -30,7 +30,6 @@ body {
     font-weight: 600;
 }
 
-/* Messages (reuse global style) */
 .messages {
     margin-bottom: 1rem;
 }
@@ -60,7 +59,6 @@ body {
     border: 1px solid #bee5eb;
 }
 
-/* Fields */
 .form-group {
     display: flex;
     flex-direction: column;
@@ -88,7 +86,6 @@ body {
     box-shadow: 0 0 0 3px rgba(66,133,244,0.25);
 }
 
-/* Fieldset */
 .login-fieldset {
     margin-bottom: 20px;
     padding: 20px;

@@ -1,4 +1,4 @@
-// Bulk Operations JavaScript
+
 document.addEventListener('DOMContentLoaded', function() {
     const selectAllCheckbox = document.getElementById('selectAllCheckbox');
     const formCheckboxes = document.querySelectorAll('.form-select-checkbox');
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
     const cancelBulkBtn = document.getElementById('cancelBulkBtn');
     
-    // Update bulk actions bar visibility
+    
     function updateBulkActionsBar() {
         const selectedCheckboxes = document.querySelectorAll('.form-select-checkbox:checked');
         const count = selectedCheckboxes.length;
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Select all checkbox
+    
     if (selectAllCheckbox) {
         selectAllCheckbox.addEventListener('change', function() {
             formCheckboxes.forEach(checkbox => {
@@ -32,12 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Individual checkboxes
+    
     formCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             updateBulkActionsBar();
             
-            // Update select all checkbox
+            
             const allChecked = Array.from(formCheckboxes).every(cb => cb.checked);
             if (selectAllCheckbox) {
                 selectAllCheckbox.checked = allChecked;
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Bulk Export
+   
     if (bulkExportBtn) {
         bulkExportBtn.addEventListener('click', function() {
             const selectedIds = Array.from(document.querySelectorAll('.form-select-checkbox:checked'))
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Create URL with form IDs
+            
             const params = new URLSearchParams();
             selectedIds.forEach(id => params.append('form_ids', id));
             
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Bulk Delete
+    
     if (bulkDeleteBtn) {
         bulkDeleteBtn.addEventListener('click', function() {
             const selectedIds = Array.from(document.querySelectorAll('.form-select-checkbox:checked'))
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const confirmed = confirm(`Are you sure you want to delete ${selectedIds.length} form(s)? This action cannot be undone.`);
             
             if (confirmed) {
-                // Get CSRF token
                 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
                 
                 fetch('/bulk-delete/', {
@@ -105,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Cancel bulk selection
     if (cancelBulkBtn) {
         cancelBulkBtn.addEventListener('click', function() {
             formCheckboxes.forEach(checkbox => {
