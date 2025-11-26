@@ -25,6 +25,47 @@ class ImportDataValidator:
             return None
         return f"Sheet '{self.sheet_name}' - Validation Errors:\n" + "\n".join(f"  • {err}" for err in self.errors)
     
+    def validate_digital_signature(self, signature_data):
+        if not signature_data:
+            return None
+        
+        if not signature_data.startswith('data:image/'):
+            self.add_warning("Digital Signature", "Invalid signature format (should be base64 image)")
+            return None
+        
+        
+        if len(signature_data) > 5 * 1024 * 1024:
+            self.add_error("Digital Signature", "Signature data is too large (max 5MB)")
+            return None
+        
+        return signature_data
+
+    def validate_signature_date(self, value, is_signed):
+        if is_signed and not value:
+            self.add_warning("Signature Date", "Signature date is missing but form is marked as signed")
+            return None
+        
+        if value:
+            try:
+                if isinstance(value, str):
+                    print("Helllo thereeeee")
+                    print(value)
+                    sig_date = datetime.fromisoformat(value)
+                    print("Helllo nowww")
+                else:
+                    sig_date = value
+                
+                if sig_date > datetime.now(sig_date.tzinfo):
+                    self.add_error("Signature Date", "Signature date cannot be in the future")
+                    return None
+                
+                return sig_date
+            except Exception as e:
+                self.add_error("Signature Date", f"Invalid date format: {e}")
+                return None
+        
+        return value
+    
     def validate_required_field(self, value, field_name):
         if not value or str(value).strip() == "":
             self.add_error(field_name, "This field is required")

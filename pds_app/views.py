@@ -193,6 +193,12 @@ def export_form(request, form_id):
     write("Form Name",form.name)
 
     row+=1
+    write("digitalsignature", "")
+    write("Is Signed", "Yes" if form.is_signed else "No")
+    write("Signature Date", form.signature_date if form.signature_date else "")
+    write("Digital Signature Data", form.digital_signature if form.digital_signature else "")
+
+    row+=1
     write("personalinformation","")
 
     p = form.personal_information
@@ -357,6 +363,15 @@ def bulk_export_forms(request):
             row += 1
         
         write("Form Name", form.name)
+
+
+        row += 1
+        write("digitalsignature", "")
+        write("Is Signed", "Yes" if form.is_signed else "No")
+        write("Signature Date", form.signature_date if form.signature_date else "")
+        write("Digital Signature Data", form.digital_signature if form.digital_signature else "")
+        
+
         row += 1
         write("personalinformation", "")
         
@@ -576,6 +591,18 @@ def import_multiple_forms(request):
                             validator.add_error("Form Name", "Required")
                         elif CompleteForm.objects.filter(user=request.user, name=form_name).exists():
                             validator.add_error("Form Name", f"Duplicate: '{form_name}' already exists")
+
+                        is_signed_str = safe_str(data.get("Is Signed")).upper()
+                        is_signed = is_signed_str == "YES"
+                        signature_data = safe_str(data.get("Digital Signature Data"))
+                        signature_date_str = safe_str(data.get("Signature Date"))
+                        
+                        if is_signed:
+                            validated_signature = validator.validate_digital_signature(signature_data)
+                            validated_sig_date = validator.validate_signature_date(signature_date_str, is_signed)
+                        else:
+                            validated_signature = None
+                            validated_sig_date = None
 
                         validator.validate_required_field(data.get("Surname"), "Surname")
                         validator.validate_required_field(data.get("First Name"), "First Name")
@@ -806,6 +833,9 @@ def import_multiple_forms(request):
                             family_background=family,
                             other_information=other,
                             educational_background=educational,
+                            digital_signature=validated_signature,
+                            signature_date=validated_sig_date,
+                            is_signed=is_signed,
                         )
                         complete_form.civil_service.set(civil_objs)
                         complete_form.work_experience.set(work_objs)
