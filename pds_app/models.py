@@ -388,7 +388,6 @@ class OtherInformation(models.Model):
         return f"Other Information for {self.id}"
 
 
-
 class CivilServiceEligibility(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="civil_service_eligibilities")
 
@@ -493,6 +492,14 @@ class CompleteForm(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    digital_signature = models.TextField(
+        blank=True, 
+        null=True,
+        help_text="Base64 encoded signature image"
+    )
+    signature_date = models.DateTimeField(blank=True, null=True)
+    is_signed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}"
