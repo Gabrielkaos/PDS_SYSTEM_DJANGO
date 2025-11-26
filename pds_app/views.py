@@ -80,6 +80,7 @@ def admin_panel(request):
         'admin_count': User.objects.filter(is_staff=True).count(),
         'user_count': User.objects.filter(is_staff=False).count(),
         'user_type': user_type,
+        "form": ImportForm()
     }
     
     return render(request, 'pds_app/admin_panel.html', context)
