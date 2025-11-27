@@ -18,7 +18,29 @@ from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 from .import_validators import ImportDataValidator
 from django.contrib.admin.views.decorators import staff_member_required
+from .pdf_generator import PDSPDFGenerator
 
+@login_required
+def export_form_pdf(request, form_id):
+    form = get_object_or_404(CompleteForm, id=form_id, user=request.user)
+    
+    try:
+        # Generate PDF
+        pdf_generator = PDSPDFGenerator(form)
+        pdf_buffer = pdf_generator.generate()
+        
+        # Create response
+        response = HttpResponse(pdf_buffer, content_type='application/pdf')
+        filename = f'PDS_{form.name}_{form.id}.pdf'
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        
+        return response
+        
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        messages.error(request, f'Failed to generate PDF: {str(e)}')
+        return redirect('all_forms', form_id=form_id)
 
 @login_required
 def sign_form(request, form_id):

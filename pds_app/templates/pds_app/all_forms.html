@@ -5,7 +5,8 @@
 <div class="edit-form-container">
     <div class="form-actions">
         <a href="{% url 'edit_form' this_form.id %}" class="edit-btn">Edit Form</a>
-        <a href="{% url 'export_form' this_form.id %}" class="edit-btn">Export</a>
+        <a href="{% url 'export_form' this_form.id %}" class="edit-btn">XSLX Export</a>
+        <a href="{% url 'export_form_pdf' this_form.id %}" class="edit-btn">PDF Export</a>
         <a href="{% url 'sign_form' this_form.id %}" class="edit-btn" style="background: {% if this_form.is_signed %}#28a745{% else %}#ffc107{% endif %};">
             {% if this_form.is_signed %}✓ Signed{% else %}Sign Form{% endif %}
         </a>

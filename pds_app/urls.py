@@ -30,4 +30,7 @@ urlpatterns = [
 
     path('forms/<int:form_id>/sign/', views.sign_form, name='sign_form'),
     path('forms/<int:form_id>/remove-signature/', views.remove_signature, name='remove_signature'),
+
+    path('forms/export-pdf/<int:form_id>/', views.export_form_pdf, name='export_form_pdf'),
+
 ]
