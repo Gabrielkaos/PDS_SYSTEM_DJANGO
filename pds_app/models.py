@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.core.validators import EmailValidator
 from django.forms import ValidationError
+from django.core.validators import FileExtensionValidator
 from .validators import (
     validate_philippine_mobile, validate_birth_date, validate_philippine_zip,
     validate_tin, validate_sss, validate_philhealth, validate_past_date, validate_rating
@@ -500,6 +501,15 @@ class CompleteForm(models.Model):
     )
     signature_date = models.DateTimeField(blank=True, null=True)
     is_signed = models.BooleanField(default=False)
+
+    #2x2 ID Photo
+    id_photo = models.ImageField(
+        upload_to='id_photos/%Y/%m/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
+        help_text="2x2 ID Photo (Max 5MB, JPG/PNG only)"
+    )
 
     def __str__(self):
         return f"{self.user.username}"

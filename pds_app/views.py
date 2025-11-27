@@ -1018,10 +1018,6 @@ def edit_form(request, form_id):
             messages.error(request, "Form name must be less than 100 characters")
             return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=False, form_instance=form_instance))
         
-        if CompleteForm.objects.filter(user=request.user, name=form_name).exists():
-            messages.error(request, f'A form with the name "{form_name}" already exists')
-            return render(request, 'pds_app/edit_form.html', get_form_context(request, creating=False, form_instance=form_instance))
-        
         personal_form = PersonalInformationForm(request.POST, instance=form_instance.personal_information)
         family_form = FamilyBackgroundForm(request.POST, instance=form_instance.family_background)
         education_form = EducationalBackgroundForm(request.POST, instance=form_instance.educational_background)
@@ -1133,10 +1129,35 @@ def edit_form(request, form_id):
                 form_instance.learning_development.set(learning_developments)
 
                             
-                if 'form_name' in request.POST:
+                if 'form_name' in request.POST and request.POST.get("form_name").strip() != form_instance.name:
                     form_instance.name = request.POST["form_name"]
                     form_instance.save()
                     print("saved form name")
+
+                if 'id_photo' in request.FILES:
+                    uploaded_photo = request.FILES['id_photo']
+                    
+                    
+                    if uploaded_photo.size > 5 * 1024 * 1024:
+                        messages.error(request, 'Photo size must be less than 5MB')
+                    else:
+                        
+                        if form_instance.id_photo:
+                            form_instance.id_photo.delete(save=False)
+                        
+                        form_instance.id_photo = uploaded_photo
+                        print("Hello saved image")
+                        print(form_instance.id_photo)
+                        form_instance.save()
+                        messages.success(request, 'ID photo uploaded successfully')
+                
+                
+                if request.POST.get('remove_photo') == 'true':
+                    if form_instance.id_photo:
+                        form_instance.id_photo.delete(save=False)
+                        form_instance.id_photo = None
+                        form_instance.save()
+                        messages.success(request, 'ID photo removed')
 
 
                 messages.success(request, "Form edited successfully!")
@@ -1284,9 +1305,13 @@ def create_form(request):
                         )
                         learning_developments.append(learning)
 
+                if 'id_photo' in request.FILES:
+                    uploaded_photo = request.FILES['id_photo']
+
                 complete_form = CompleteForm.objects.create(
                     user=request.user,
                     name=form_name,
+                    id_photo=uploaded_photo,
                     personal_information=personal_inst,
                     family_background=family_inst,
                     educational_background=education_inst,
@@ -1296,6 +1321,8 @@ def create_form(request):
                 complete_form.work_experience.set(work_experiences)
                 complete_form.voluntary_work.set(voluntary_works)
                 complete_form.learning_development.set(learning_developments)
+
+                
 
                 messages.success(request, "Form created successfully!")
                 return redirect('edit_form',form_id=complete_form.id)

@@ -124,6 +124,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'pds_app/static'),
 ]
 
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 LOGIN_REDIRECT_URL = '/dashboard'  # Where to redirect after login
 LOGOUT_REDIRECT_URL = '/login/'  # Where to redirect after logout
 LOGIN_URL = '/login/'  # Where to redirect if login is required

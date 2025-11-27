@@ -30,6 +30,16 @@
                 {{ this_form.name }}
             </div>
         </fieldset>
+
+        
+        {% if this_form.id_photo and this_form.id_photo.name %}
+            <div class="id-photo-display">
+                <div class="photo-label">2x2 ID Photo:</div>
+                <img src="{{ this_form.id_photo.url }}" alt="ID Photo" class="id-photo-display-img">
+            </div>
+        {% endif %}
+        
+
         
         <h3 style="text-align:center;">Personal Information</h3>
         <fieldset>
@@ -599,4 +609,31 @@
 
 </div>
 
+<!-- for photo -->
+<style>
+.id-photo-display {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.photo-label {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.id-photo-display-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid #007BFF;
+    border-radius: 8px;
+}
+</style>
 {% endblock %}
