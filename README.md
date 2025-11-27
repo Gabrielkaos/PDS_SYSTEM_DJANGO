@@ -1,4 +1,9 @@
 # Personal Data Sheet System in Django
+
+### PDS Management App made in Django, complete forms and id photo and digital signature. Can import to excel and pdf. Complete CRUD operations and has a separate admin panel for managing users
+
+
+#### Sample page
 ![alt text](https://github.com/Gabrielkaos/PDS_SYSTEM_DJANGO/blob/main/page.png?raw=true)
 
 ## Installing and Running
@@ -34,12 +39,17 @@ python manage.py makemigrations pds_app
 python manage.py migrate
 ```
 
-### 5.) Run Server
+### 6.) Create SuperUser first
+```bash
+python manage.py createsuperuser
+```
+
+### 7.) Run Server
 ```bash
 python manage.py runserver
 ```
 
-### 7. ) Open Localhost on web browser
+### 8. ) Open Localhost on web browser
 ```bash
 http://127.0.0.1/
 ```
