@@ -23,7 +23,12 @@ Windows
 pip install -r requirements.txt
 ```
 
-### 4.) Make Migrations and Migrate
+### 4.) Create media
+```bash
+mkdir -p media/id_photos
+```
+
+### 5.) Make Migrations and Migrate
 ```bash
 python manage.py makemigrations pds_app
 python manage.py migrate
@@ -34,7 +39,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### 6. ) Open Localhost on web browser
+### 7. ) Open Localhost on web browser
 ```bash
 http://127.0.0.1/
 ```
