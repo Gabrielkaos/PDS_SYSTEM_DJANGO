@@ -33,23 +33,36 @@ pip install -r requirements.txt
 mkdir -p media/id_photos
 ```
 
-### 5.) Make Migrations and Migrate
+### 5.) Create database
+```bash
+sudo mysql -u root
+
+CREATE DATABASE pds_db DEFAULT CHARACTER SET utf8mb4;
+CREATE USER 'pds_user'@'localhost' IDENTIFIED BY 'pds_password';
+GRANT ALL PRIVILEGES on pds_db.* to 'pds_user'@'localhost';
+FLUSH PRIVELEGES;
+EXIT;
+
+sudo systemctl start mysql
+```
+
+### 6.) Make Migrations and Migrate
 ```bash
 python manage.py makemigrations pds_app
 python manage.py migrate
 ```
 
-### 6.) Create SuperUser first
+### 7.) Create SuperUser first
 ```bash
 python manage.py createsuperuser
 ```
 
-### 7.) Run Server
+### 8.) Run Server
 ```bash
 python manage.py runserver
 ```
 
-### 8. ) Open Localhost on web browser
+### 9. ) Open Localhost on web browser
 ```bash
 http://127.0.0.1/
 ```
