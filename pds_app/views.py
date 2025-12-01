@@ -25,11 +25,11 @@ def export_form_pdf(request, form_id):
     form = get_object_or_404(CompleteForm, id=form_id, user=request.user)
     
     try:
-        # Generate PDF
+        
         pdf_generator = PDSPDFGenerator(form)
         pdf_buffer = pdf_generator.generate()
         
-        # Create response
+        
         response = HttpResponse(pdf_buffer, content_type='application/pdf')
         filename = f'PDS_{form.name}_{form.id}.pdf'
         response['Content-Disposition'] = f'attachment; filename="{filename}"'

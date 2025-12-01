@@ -1,6 +1,6 @@
 # Personal Data Sheet System in Django
 
-### PDS Management App made in Django, complete forms and id photo and digital signature. Can import to excel and pdf. Complete CRUD operations and has a separate admin panel for managing users
+PDS Management App made in Django, complete forms and id photo and digital signature. Can import to excel and pdf. Complete CRUD operations and has a separate admin panel for managing users
 
 
 #### Sample page
